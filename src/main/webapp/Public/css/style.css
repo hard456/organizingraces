@@ -1,0 +1,9 @@
+.carousel-inside {
+    font-size: 30px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 2px;
+    background: deepskyblue;
+    color: white;
+    padding: 4px;
+}

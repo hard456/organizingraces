@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="sportevents:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="sportevents.war">
+      <element id="artifact" artifact-name="sportevents:war exploded" />
+    </root>
+  </artifact>
+</component>
