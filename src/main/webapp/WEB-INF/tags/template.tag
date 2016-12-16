@@ -1,6 +1,8 @@
-<%@tag description="Page template" pageEncoding="UTF-8" %>
+<%@ tag description="Page template" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -28,9 +30,9 @@
         <div style="margin: 0 auto; padding: 14px; max-width: 1000px; height: auto;">
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"
                   style="font-size:2em; color: white;"></span>
-            <span style="color: white; font-size: 35px">SportEvents</span>
+            <span style="color: white; font-size: 35px">OrienteeringRaces</span>
             <br>
-            <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR SPORT EVENTS</span>
+            <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>
     </div>
 </div>
@@ -68,16 +70,23 @@
 
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-
+                    <sec:authorize access="!isAuthenticated()">
                     <li><a href="${pageContext.request.contextPath}/registration">Registration</a></li>
+                    </sec:authorize>
 
-                    <li><a href="${pageContext.request.contextPath}/account"><span
-                            class="glyphicon glyphicon-user"></span> <!-- User --> </a></li>
-                    <li><a href=""><span
+                    <sec:authorize access="isAuthenticated()">
+                    <li><a href="${pageContext.request.contextPath}/userpage"><span
+                            class="glyphicon glyphicon-user"></span> <sec:authentication property="principal.username"/></a></li>
+                    </sec:authorize>
+
+                    <sec:authorize access="isAuthenticated()">
+                        <li><a href="${pageContext.request.contextPath}/logout"><span
                             class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 
-                    <li><a href="${pageContext.request.contextPath}/loginform"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-
+                    </sec:authorize>
+                    <sec:authorize access="!isAuthenticated()">
+                        <li><a href="${pageContext.request.contextPath}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </sec:authorize>
                 </ul>
             </div>
         </div>
