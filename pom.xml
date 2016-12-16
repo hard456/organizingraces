@@ -9,6 +9,9 @@
 
     <properties>
         <spring.version>4.3.1.RELEASE</spring.version>
+        <spring-orm-version>4.1.1.RELEASE</spring-orm-version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
+        <mysql.driver.version>5.1.30</mysql.driver.version>
     </properties>
 
 
@@ -48,6 +51,47 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring-orm-version}</version>
+        </dependency>
+
+        <!-- spring security dependencies -->
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>3.2.8.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>3.2.8.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>3.2.8.RELEASE</version>
+        </dependency>
+
+        <!-- hibernate dependencies -->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <!-- mysql driver -->
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.driver.version}</version>
+        </dependency>
+
+        <!-- SPRING TEST -->
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -61,6 +105,14 @@
             <artifactId>junit</artifactId>
             <version>4.11</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- TAG SECURITY -->
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>3.0.0.RELEASE</version>
         </dependency>
 
     </dependencies>
