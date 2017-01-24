@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class UserController {
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
-    public String home() {
+        @RequestMapping(value = "/",method = RequestMethod.GET)
+        public String home() {
         return "home";
     }
 

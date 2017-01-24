@@ -16,7 +16,6 @@
 
     </bean>
 
-
     <security:http auto-config="true" use-expressions="true">
         <!-- Interceptor urls -->
         <security:intercept-url pattern="/" access="permitAll" />
@@ -41,6 +40,7 @@
 
     <security:authentication-manager>
     <security:authentication-provider user-service-ref="loginService">
+        <security:password-encoder ref="bcryptEncoder"/>
     </security:authentication-provider>
     </security:authentication-manager>
 
@@ -76,6 +76,8 @@
     <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
     <mvc:annotation-driven/>
     <mvc:resources mapping="/images/**" location="Public/images/" />
