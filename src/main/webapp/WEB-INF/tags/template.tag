@@ -30,7 +30,7 @@
         <div style="margin: 0 auto; padding: 14px; max-width: 1000px; height: auto;">
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"
                   style="font-size:2em; color: white;"></span>
-            <span style="color: white; font-size: 35px">OrienteeringRaces</span>
+            <a href="${pageContext.request.contextPath}/"><span style="color: white; font-size: 35px">OrienteeringRaces</span></a>
             <br>
             <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>
@@ -93,6 +93,21 @@
     </nav>
 </div>
 
+<hr style="margin: 0; padding: 0;">
+
+<sec:authorize access="isAuthenticated()">
+    <nav class="navbar-default" data-offset-top="140" style="z-index:1000; margin: 0 auto; max-width: 1000px">
+    <div class="container-fluid" style="margin: 0 auto; background-color: white;">
+        <ul class="nav navbar-nav">
+            <li><a href="#">Create race</a></li>
+            <li><a href="#">Races</a></li>
+            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li>
+        </ul>
+    </div>
+    </nav>
+</sec:authorize>
+
 <!-- BODY -->
 
 <div id="body">
@@ -105,10 +120,10 @@
     <div class="container-fluid" style="background-color: cornflowerblue;">
         <div class="container" style="margin: 30px auto 30px auto; max-width: 970px;">
             <div class="row">
-                <div class="col-xs-11 col-md-11">
+                <div class="col-xs-10 col-md-11">
                     <span style="color: white; font-size: 15px">© 2016 Jan Palcút. All Rights Reserved.</span>
                 </div>
-                <div class="col-xs-1 col-md-1">
+                <div class="col-xs-2 col-md-1">
                     <a href="#header" style="float: right; margin-right: 15px;">
                         <span style="color:white" class="glyphicon glyphicon-chevron-up"></span>
                     </a>

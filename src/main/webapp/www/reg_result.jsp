@@ -5,6 +5,8 @@
 
 <t:template>
     <jsp:body>
-        <div style="margin: 35px auto 35px; text-align: center;">Access denied.</div>
+
+        <div style="margin: 35px auto 35px; text-align: center;">${message}</div>
+
     </jsp:body>
 </t:template>

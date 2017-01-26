@@ -5,6 +5,6 @@
 
 <t:template>
     <jsp:body>
-USER ${user}
+<div style="margin: 35px auto 35px; text-align: center;">USER ${user}</div>
     </jsp:body>
 </t:template>
