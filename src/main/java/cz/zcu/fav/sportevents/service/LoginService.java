@@ -27,13 +27,8 @@ public class LoginService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Not Found");
         }
-        List<SimpleGrantedAuthority> simpleGrantedAuthorities = buildSimpleGrantedAuthorities(user);
+        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), simpleGrantedAuthorities);
         return userDetails;
-
-    }
-
-    private List<SimpleGrantedAuthority> buildSimpleGrantedAuthorities(final User user) {
-        return new ArrayList<>();
     }
 }

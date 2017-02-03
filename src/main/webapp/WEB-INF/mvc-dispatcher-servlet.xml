@@ -3,10 +3,18 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:tx="http://www.springframework.org/schema/tx"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="cz.zcu.fav.sportevents"/>
 
@@ -51,21 +59,16 @@
         <property name="url" value="jdbc:mysql://localhost:3306/races?useUnicode=yes&amp;characterEncoding=UTF-8" />
         <property name="username" value="root" />
         <property name="password" value="" />
-        <property name="connectionProperties">
-            <props>
-                <prop key="hibernate.show_sql">
-                    true
-                </prop>
-                <prop key="hibernate.current_session_context_class">thread</prop>
-                <prop key="hibernate.enable_lazy_load_no_trans">
-                    true
-                </prop>
-            </props>
-        </property>
     </bean>
 
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+            </props>
+        </property>
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan" value="cz.zcu.fav.sportevents" />
     </bean>
@@ -74,17 +77,16 @@
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
-    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
-        <property name="sessionFactory" ref="sessionFactory"/>
-        <property name="checkWriteOperations" value="false"/>
-    </bean>
-
     <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
     <bean id="regService" class="cz.zcu.fav.sportevents.service.RegistrationService"/>
 
-    <mvc:annotation-driven/>
+    <bean id="userDAO" class="cz.zcu.fav.sportevents.dao.UserDAO"/>
+
+    <mvc:annotation-driven />
     <mvc:resources mapping="/images/**" location="Public/images/" />
     <mvc:resources mapping="/css/**" location="Public/css/" />
+
+    <tx:annotation-driven/>
 
 </beans>

@@ -43,8 +43,7 @@ public class RegistrationService {
 
     @Transactional
     public boolean checkEmail(User user){
-        List list;
-        list = userDAO.findByEmail(user.getEmail());
+        List<User> list = userDAO.findByEmail(user.getEmail());
         if(list.size() == 0){
             return true;
         }
@@ -53,7 +52,8 @@ public class RegistrationService {
 
     @Transactional
     public boolean checkUserName(User user){
-        if(userDAO.get(user.getLogin()) == null){
+        User u = userDAO.get(user.getLogin());
+        if(u == null){
             return true;
         }
         return false;
