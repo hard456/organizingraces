@@ -2,13 +2,10 @@ package cz.zcu.fav.sportevents.dao;
 
 import cz.zcu.fav.sportevents.model.User;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * Created by HARD on 12.12.2016.
@@ -44,13 +41,14 @@ public class UserDAO{
         session.save(object);
     }
 
-    public List findByEmail(String email){
-        String sql = "SELECT * FROM User WHERE email = :email";
+    public User findByEmail(String email){
         Session session = sessionFactory.getCurrentSession();
-        Query query = session.createSQLQuery(sql);
-        query.setParameter("email", email);
-        List results = query.list();
-        return results;
+        Criteria criteria = session.createCriteria(User.class)
+                .add(Restrictions.eq("email",email));
+
+        criteria.setMaxResults(1);
+        User user = (User)criteria.uniqueResult();
+        return user;
     }
 /*
     public void saveOrUpdate(final User object) {

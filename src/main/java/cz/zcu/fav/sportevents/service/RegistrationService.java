@@ -7,8 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 public class RegistrationService {
 
@@ -43,8 +41,7 @@ public class RegistrationService {
 
     @Transactional
     public boolean checkEmail(User user){
-        List<User> list = userDAO.findByEmail(user.getEmail());
-        if(list.size() == 0){
+        if(userDAO.findByEmail(user.getEmail()) == null){
             return true;
         }
         return false;
@@ -52,8 +49,7 @@ public class RegistrationService {
 
     @Transactional
     public boolean checkUserName(User user){
-        User u = userDAO.get(user.getLogin());
-        if(u == null){
+        if(userDAO.get(user.getLogin()) == null){
             return true;
         }
         return false;
