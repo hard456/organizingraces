@@ -8,7 +8,6 @@
 	<servlet>
 		<servlet-name>mvc-dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
@@ -24,7 +23,6 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
 	</context-param>
-
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -53,11 +51,21 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
-
-		<!-- apply Spring Security authentication to error-pages -->
-		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
 
+	<error-page>
+		<error-code>400</error-code>
+		<location>/error/400</location>
+	</error-page>
 
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/404</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/500</location>
+	</error-page>
 
 </web-app>

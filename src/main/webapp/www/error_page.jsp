@@ -5,6 +5,6 @@
 
 <t:template>
     <jsp:body>
-        ERROR PAGE
+        <div style="margin: 35px auto 35px; text-align: center;">ERROR ${error}</div>
     </jsp:body>
 </t:template>
