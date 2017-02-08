@@ -1,7 +1,7 @@
 package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.model.User;
-import cz.zcu.fav.sportevents.service.RegistrationService;
+import cz.zcu.fav.sportevents.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
         @Autowired
-        private RegistrationService regService;
+        private UserService userService;
 
         @RequestMapping(value = "/",method = RequestMethod.GET)
         public String home() {
@@ -51,7 +51,7 @@ public class UserController {
         @RequestMapping(value = {"/userpage"}, method = RequestMethod.GET)
         public ModelAndView userPage() {
             ModelAndView model = new ModelAndView();
-            model.addObject("user", getUser());
+            model.addObject("user", getUser().getLogin());
             model.setViewName("user");
             return model;
         }
@@ -65,7 +65,7 @@ public class UserController {
             return "redirect:/";
         }
 
-        private String getUser() {
+        public String getLoginName() {
             String userName = null;
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principal instanceof UserDetails) {
@@ -76,28 +76,51 @@ public class UserController {
             return userName;
         }
 
+        public User getUser(){
+            return userService.getUser(getLoginName());
+        }
+
         @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
         public ModelAndView addUser(@RequestParam(value="passwordAgain") String passwordAgain, User user) {
             ModelAndView model = new ModelAndView();
             model.setViewName("reg_result");
-            if(!regService.checkSizeParameters(user)){
+            if(!regParametersSize(user)){
                 model.addObject("message", "Wrong input size: Password(8-256), Login(3-32), Firstname(2-32), Lastname(2-32), email(6-32)");
                 return model;
             }
-            else if (!regService.checkUserName(user)) {
+            else if (!userService.checkUserName(user)) {
                 model.addObject("message", "Name already used.");
                 return model;
-            } else if (!regService.checkEmail(user)) {
+            } else if (!userService.checkEmail(user)) {
                 model.addObject("message", "Email already used.");
                 return model;
             } else if (!user.getPassword().equals(passwordAgain)) {
                 model.addObject("message", "Passwords are not identical.");
                 return model;
             } else {
-                regService.addUser(user, passwordAgain);
+                userService.addUser(user);
                 model.addObject("message", "Registration OK");
                 return model;
             }
+        }
+
+        private boolean regParametersSize(User user){
+        if(user.getLogin().length() > 32 || user.getLogin().length() < 3){
+            return false;
+        }
+        else if(user.getEmail().length() > 32 || user.getEmail().length() < 6){
+            return false;
+        }
+        else if(user.getFirstname().length() > 32 || user.getFirstname().length() < 2){
+            return false;
+        }
+        else if(user.getSurname().length() > 32 || user.getSurname().length() < 2){
+            return false;
+        }
+        else if(user.getPassword().length() > 256 || user.getEmail().length() < 8){
+            return false;
+        }
+        return true;
         }
 
 }

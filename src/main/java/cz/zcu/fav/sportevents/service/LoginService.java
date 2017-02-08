@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@Service("loginService")
+@Service(value = "loginService")
 public class LoginService implements UserDetailsService {
 
     @Autowired
@@ -31,4 +30,5 @@ public class LoginService implements UserDetailsService {
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), simpleGrantedAuthorities);
         return userDetails;
     }
+
 }

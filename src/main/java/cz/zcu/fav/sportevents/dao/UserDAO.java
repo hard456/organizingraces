@@ -7,10 +7,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Created by HARD on 12.12.2016.
- */
-
 
 public class UserDAO{
 

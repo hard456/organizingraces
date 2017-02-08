@@ -29,8 +29,12 @@
         <security:intercept-url pattern="/" access="permitAll" />
         <security:intercept-url pattern="/userpage" access="isAuthenticated()" />
         <security:intercept-url pattern="/logout" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/create_race" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/my_races" access="isAuthenticated()"/>
         <security:intercept-url pattern="/registration" access="!isAuthenticated()"/>
         <security:intercept-url pattern="/login" access="!isAuthenticated()"/>
+        <security:intercept-url pattern="/error/**" access="none"/>
+
         <security:form-login login-page="/login"
                              default-target-url="/userpage"
                              login-processing-url="/j_spring_security_check"
@@ -40,7 +44,7 @@
         />
         <!-- Logout -->
         <security:logout logout-success-url="/logout" />
-        <security:access-denied-handler error-page="/error"/>
+        <security:access-denied-handler error-page="/accessdenied"/>
         <!-- enable csrf protection -->
         <security:csrf/>
     </security:http>
@@ -79,9 +83,8 @@
 
     <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
-    <bean id="regService" class="cz.zcu.fav.sportevents.service.RegistrationService"/>
-
     <bean id="userDAO" class="cz.zcu.fav.sportevents.dao.UserDAO"/>
+    <bean id="raceDAO" class="cz.zcu.fav.sportevents.dao.RaceDAO"/>
 
     <mvc:annotation-driven />
     <mvc:resources mapping="/images/**" location="Public/images/" />

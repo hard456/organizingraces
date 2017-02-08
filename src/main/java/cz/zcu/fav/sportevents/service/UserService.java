@@ -8,35 +8,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class RegistrationService {
+public class UserService {
 
     @Autowired
     private UserDAO userDAO;
 
     @Transactional(readOnly = false)
-    public void addUser(User user, String passwordAgain){
+    public void addUser(User user){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         userDAO.save(user);
-    }
-
-    public boolean checkSizeParameters(User user){
-        if(user.getLogin().length() > 32 || user.getLogin().length() < 3){
-            return false;
-        }
-        else if(user.getEmail().length() > 32 || user.getEmail().length() < 6){
-            return false;
-        }
-        else if(user.getFirstname().length() > 32 || user.getFirstname().length() < 2){
-            return false;
-        }
-        else if(user.getSurname().length() > 32 || user.getSurname().length() < 2){
-            return false;
-        }
-        else if(user.getPassword().length() > 256 || user.getEmail().length() < 8){
-            return false;
-        }
-        return true;
     }
 
     @Transactional
@@ -53,6 +34,11 @@ public class RegistrationService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public User getUser(String login){
+        return userDAO.get(login);
     }
 
 }

@@ -67,7 +67,10 @@
                             <span>About project</span>
                         </a>
                     </li>
-
+                    <sec:authorize access="isAuthenticated()">
+                    <li><a href="${pageContext.request.contextPath}/create_race">Create race</a></li>
+                    <li><a href="${pageContext.request.contextPath}/my_races">My races</a></li>
+                    </sec:authorize>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <sec:authorize access="!isAuthenticated()">
@@ -94,19 +97,6 @@
 </div>
 
 <hr style="margin: 0; padding: 0;">
-
-<sec:authorize access="isAuthenticated()">
-    <nav class="navbar-default" data-offset-top="140" style="z-index:1000; margin: 0 auto; max-width: 1000px">
-    <div class="container-fluid" style="margin: 0 auto; background-color: white;">
-        <ul class="nav navbar-nav">
-            <li><a href="#">Create race</a></li>
-            <li><a href="#">Races</a></li>
-            <li><a href="#">Page 2</a></li>
-            <li><a href="#">Page 3</a></li>
-        </ul>
-    </div>
-    </nav>
-</sec:authorize>
 
 <!-- BODY -->
 
