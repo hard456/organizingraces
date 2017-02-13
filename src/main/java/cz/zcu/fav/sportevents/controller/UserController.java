@@ -51,7 +51,7 @@ public class UserController {
         @RequestMapping(value = {"/userpage"}, method = RequestMethod.GET)
         public ModelAndView userPage() {
             ModelAndView model = new ModelAndView();
-            model.addObject("user", getUser().getLogin());
+            model.addObject("user", getUser());
             model.setViewName("user");
             return model;
         }

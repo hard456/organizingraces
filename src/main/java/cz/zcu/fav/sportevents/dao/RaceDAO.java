@@ -29,4 +29,21 @@ public class RaceDAO {
         return criteria.list();
     }
 
+    public Race getRaceByUserId(int userId, String name){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Race.class)
+                .add(Restrictions.eq("userId", userId))
+                .add(Restrictions.eq("name",name));
+        criteria.setMaxResults(1);
+        return (Race)criteria.uniqueResult();
+    }
+
+    public Race getRaceById(int id){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Race.class)
+                .add(Restrictions.eq("id",id));
+        criteria.setMaxResults(1);
+        return (Race)criteria.uniqueResult();
+    }
+
 }

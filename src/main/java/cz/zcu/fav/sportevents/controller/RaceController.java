@@ -40,28 +40,130 @@ public class RaceController {
     public ModelAndView createEvent(@RequestParam("name") String name) {
 
         ModelAndView model = new ModelAndView();
-        model.setViewName("test");
+        model.setViewName("race_create_result");
 
         Race race = new Race();
         race.setName(name);
         race.setUserId(userController.getUser().getId());
         race.setEvaluation(false);
 
-        model.addObject("name",race.getName());
-        model.addObject("evaluation",race.isEvaluation());
-        model.addObject("userid",race.getUserId());
-
-        raceService.createRace(race);
-
+        if(raceService.isExistRaceByUserId(race.getUserId(),name)){
+            model.addObject("result","The race already exists.");
+        }
+        else{
+            raceService.createRace(race);
+            model.addObject("result","The race was created.");
+        }
         return model;
     }
 
     @RequestMapping(value = "/race/{id}", method = RequestMethod.GET)
     public ModelAndView race(@PathVariable("id") int race_id){
         ModelAndView model = new ModelAndView();
-        model.setViewName("race");
-        model.addObject("id",race_id);
-        return model;
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else{
+            model.setViewName("race");
+            model.addObject("user",userController.getUser());
+            model.addObject("race",race);
+            return model;
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/results", method = RequestMethod.GET)
+    public ModelAndView results(@PathVariable("id") int race_id){
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else {
+            if(race.isEvaluation()){
+                model.addObject("race",race);
+                model.addObject("user",userController.getUser());
+                model.setViewName("results");
+                return model;
+            }
+            else{
+                model.addObject("error","401");
+                model.setViewName("error_page");
+                return model;
+            }
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/contestants/solo", method = RequestMethod.GET)
+    public ModelAndView contestants(@PathVariable("id") int race_id){
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else {
+            model.addObject("race",race);
+            model.addObject("user",userController.getUser());
+            model.setViewName("contestants_solo");
+            return model;
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/contestants/teams", method = RequestMethod.GET)
+    public ModelAndView teams(@PathVariable("id") int race_id){
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else {
+            model.addObject("race",race);
+            model.addObject("user",userController.getUser());
+            model.setViewName("teams");
+            return model;
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/contestants/full_list", method = RequestMethod.GET)
+    public ModelAndView contestants_list(@PathVariable("id") int race_id){
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else {
+            model.addObject("race",race);
+            model.addObject("user",userController.getUser());
+            model.setViewName("contestants_list");
+            return model;
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/registration", method = RequestMethod.GET)
+    public ModelAndView race_registration(@PathVariable("id") int race_id){
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error_page");
+            return model;
+        }
+        else {
+            model.addObject("race",race);
+            model.addObject("user",userController.getUser());
+            model.setViewName("race_registration");
+            return model;
+        }
     }
 
 }

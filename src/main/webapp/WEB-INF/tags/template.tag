@@ -96,8 +96,6 @@
     </nav>
 </div>
 
-<hr style="margin: 0; padding: 0;">
-
 <!-- BODY -->
 
 <div id="body">

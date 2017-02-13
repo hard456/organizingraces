@@ -24,4 +24,17 @@ public class RaceService {
         return raceDAO.listByUserId(id);
     }
 
+    @Transactional
+    public boolean isExistRaceByUserId(int id, String name){
+        if(raceDAO.getRaceByUserId(id,name) == null){
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
+    public Race getRaceById(int id){
+        return raceDAO.getRaceById(id);
+    }
+
 }
