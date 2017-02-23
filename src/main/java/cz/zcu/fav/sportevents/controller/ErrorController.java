@@ -13,7 +13,7 @@ public class ErrorController {
     @RequestMapping(value = {"/error/{error_code}"}, method = RequestMethod.GET)
     public ModelAndView loginPage(@PathVariable int error_code) {
         ModelAndView model = new ModelAndView();
-        model.setViewName("error_page");
+        model.setViewName("error/error_page");
         model.addObject("error",error_code);
         return model;
     }

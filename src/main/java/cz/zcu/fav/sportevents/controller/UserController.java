@@ -30,21 +30,21 @@ public class UserController {
         @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
         public ModelAndView loginPage() {
             ModelAndView model = new ModelAndView();
-            model.setViewName("login");
+            model.setViewName("user/login");
             return model;
         }
 
         @RequestMapping(value = {"/registration"}, method = RequestMethod.GET)
         public ModelAndView registrationPage() {
             ModelAndView model = new ModelAndView();
-            model.setViewName("registration");
+            model.setViewName("user/registration");
             return model;
         }
 
         @RequestMapping(value = {"/accessdenied"}, method = RequestMethod.GET)
         public ModelAndView accessDeniedPage() {
             ModelAndView model = new ModelAndView();
-            model.setViewName("accessdenied");
+            model.setViewName("user/accessdenied");
             return model;
         }
 
@@ -52,7 +52,7 @@ public class UserController {
         public ModelAndView userPage() {
             ModelAndView model = new ModelAndView();
             model.addObject("user", getUser());
-            model.setViewName("user");
+            model.setViewName("user/user");
             return model;
         }
 

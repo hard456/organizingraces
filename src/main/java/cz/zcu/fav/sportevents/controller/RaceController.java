@@ -1,6 +1,9 @@
 package cz.zcu.fav.sportevents.controller;
 
+import cz.zcu.fav.sportevents.model.Contestant;
 import cz.zcu.fav.sportevents.model.Race;
+import cz.zcu.fav.sportevents.model.User;
+import cz.zcu.fav.sportevents.service.ContestantService;
 import cz.zcu.fav.sportevents.service.RaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,9 @@ public class RaceController {
 
     @Autowired
     RaceService raceService;
+
+    @Autowired
+    ContestantService contestantService;
 
     @RequestMapping(value = "/create_race",method = RequestMethod.GET)
     public String createRace() {
@@ -63,7 +69,7 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else{
@@ -80,7 +86,7 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else {
@@ -92,7 +98,7 @@ public class RaceController {
             }
             else{
                 model.addObject("error","401");
-                model.setViewName("error_page");
+                model.setViewName("error/error_page");
                 return model;
             }
         }
@@ -104,12 +110,13 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else {
             model.addObject("race",race);
             model.addObject("user",userController.getUser());
+            model.addObject("contestants",contestantService.getSoloContestants(race_id));
             model.setViewName("contestants_solo");
             return model;
         }
@@ -121,7 +128,7 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else {
@@ -138,7 +145,7 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else {
@@ -155,7 +162,7 @@ public class RaceController {
         Race race = raceService.getRaceById(race_id);
         if(race == null){
             model.addObject("error","404");
-            model.setViewName("error_page");
+            model.setViewName("error/error_page");
             return model;
         }
         else {
@@ -164,6 +171,43 @@ public class RaceController {
             model.setViewName("race_registration");
             return model;
         }
+
+    }
+
+    @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
+    public ModelAndView addSoloContestant(@RequestParam("category") String category, @PathVariable("id") int race_id){
+
+        Contestant contestant;
+        contestant = userToContestant(userController.getUser());
+        contestant.setPaid(false);
+        contestant.setCategory(category);
+        contestant.setRaceId(race_id);
+        contestantService.saveContestant(contestant);
+
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+
+        if(race == null){
+            model.addObject("error","404");
+            model.setViewName("error/error_page");
+            return model;
+        }
+        else {
+            model.addObject("race",race);
+            model.addObject("user",userController.getUser());
+            model.addObject("result","Registration completed successfully.");
+            model.setViewName("race_registration");
+            return model;
+        }
+
+    }
+
+    private Contestant userToContestant(User user){
+        Contestant contestant = new Contestant();
+        contestant.setEmail(user.getEmail());
+        contestant.setFirstname(user.getFirstname());
+        contestant.setLastname(user.getSurname());
+        return contestant;
     }
 
 }

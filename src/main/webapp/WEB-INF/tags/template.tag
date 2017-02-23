@@ -30,7 +30,7 @@
         <div style="margin: 0 auto; padding: 14px; max-width: 1000px; height: auto;">
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"
                   style="font-size:2em; color: white;"></span>
-            <a href="${pageContext.request.contextPath}/"><span style="color: white; font-size: 35px">OrienteeringRaces</span></a>
+            <a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">OrienteeringRaces</span></a>
             <br>
             <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>

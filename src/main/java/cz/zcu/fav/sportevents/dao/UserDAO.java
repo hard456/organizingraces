@@ -6,21 +6,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-
+@Repository
 public class UserDAO{
 
     @Autowired
     SessionFactory sessionFactory;
-
-   /* public User load(final String id) {
-        return hibernateTemplate.load(User.class,id);
-    }
-
-    public List<User> getAll() {
-        return hibernateTemplate.loadAll(User.class);
-    }
-*/
 
     public User get(final String login) {
         Session session = sessionFactory.getCurrentSession();
@@ -46,21 +38,5 @@ public class UserDAO{
         User user = (User)criteria.uniqueResult();
         return user;
     }
-/*
-    public void saveOrUpdate(final User object) {
-        hibernateTemplate.saveOrUpdate(object);
-    }
 
-    public void delete(final User object) {
-        hibernateTemplate.delete(object);
-    }
-
-    public Long count() {
-        return new Long(hibernateTemplate.loadAll(User.class).size());
-    }
-
-    public void flush() {
-        hibernateTemplate.flush();
-    }
-*/
 }

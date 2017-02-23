@@ -16,12 +16,12 @@
             <form name="addSoloContestant" action="<c:url value="/race/${race.id}/addSoloContestant" />" method="POST">
 
                 <div style="margin: 0 auto 20px; max-width: 250px;">
-                <select name="category" style="max-width: 250px">
-                    <option selected value="NOT FROM WEST BOHEMIA UNIVERSITY">NOT FROM WEST BOHEMIA UNIVERSITY</option>
-                    <option value="FAV">FAV</option>
-                    <option value="FEL">FEL</option>
-                    <option value="OTHERS">OTHERS</option>
-                </select>
+                    <select name="category" style="max-width: 250px">
+                        <option selected value="NOT FROM WEST BOHEMIA UNIVERSITY">NOT FROM WEST BOHEMIA UNIVERSITY</option>
+                        <option value="FAV">FAV</option>
+                        <option value="FEL">FEL</option>
+                        <option value="OTHERS">OTHERS</option>
+                    </select>
                 </div>
 
                 <div style="text-align: center;">
@@ -33,8 +33,6 @@
 
             </form>
         </div>
-
-        ${result}
 
     </jsp:body>
 </t:template>

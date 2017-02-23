@@ -6,7 +6,7 @@
     <jsp:body>
 
         <c:forEach var="listValue" items="${list}">
-                    <div style="text-align: center"><a href="${pageContext.request.contextPath}/race/${listValue.id}"> ${listValue.name}</a></div><br>
+                    <div style="text-align: center;"><a href="${pageContext.request.contextPath}/race/${listValue.id}" style="text-decoration: none; color: grey;" class="link_hover"> ${listValue.name}</a></div><br>
         </c:forEach>
 
     </jsp:body>
