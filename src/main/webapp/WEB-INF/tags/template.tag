@@ -53,20 +53,16 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="${pageContext.request.contextPath}/guide">
-                            <span>Guide</span>
+                        <a href="${pageContext.request.contextPath}/avaible_races">
+                            <span>Avaible races</span>
                         </a>
                     </li>
                     <li>
-                        <a href="">
-                            <span>Supported Sports</span>
+                        <a href="${pageContext.request.contextPath}/evaluated_races">
+                            <span>Evaluated races</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="">
-                            <span>About project</span>
-                        </a>
-                    </li>
+
                     <sec:authorize access="isAuthenticated()">
                     <li><a href="${pageContext.request.contextPath}/create_race">Create race</a></li>
                     <li><a href="${pageContext.request.contextPath}/my_races">My races</a></li>

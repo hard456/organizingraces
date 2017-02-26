@@ -45,4 +45,18 @@ public class RaceDAO {
         return (Race)criteria.uniqueResult();
     }
 
+    public List<Race> getRacesToRegistration(){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Race.class)
+                .add(Restrictions.eq("evaluation",false));
+        return criteria.list();
+    }
+
+    public List<Race> getEvalutedRaces(){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Race.class)
+                .add(Restrictions.eq("evaluation",true));
+        return criteria.list();
+    }
+
 }

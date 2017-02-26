@@ -14,7 +14,7 @@ public class Race implements Serializable{
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 32)
     private String name;
 
     @Column(name = "evaluation", nullable = false)
@@ -23,6 +23,9 @@ public class Race implements Serializable{
 
     @Column(name = "user_id", nullable = false)
     private int userId;
+
+    @Column(name = "team_size", nullable = false)
+    private int teamSize;
 
     public int getId() {
         return id;
@@ -38,6 +41,14 @@ public class Race implements Serializable{
 
     public int getUserId() {
         return userId;
+    }
+
+    public int getTeamSize() {
+        return teamSize;
+    }
+
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
     }
 
     public void setName(String name) {

@@ -1,3 +1,4 @@
+
 package cz.zcu.fav.sportevents.service;
 
 import cz.zcu.fav.sportevents.dao.RaceDAO;
@@ -33,8 +34,18 @@ public class RaceService {
     }
 
     @Transactional
+    public List<Race> getRacesToRegistration(){
+        return raceDAO.getRacesToRegistration();
+    }
+
+    @Transactional
     public Race getRaceById(int id){
         return raceDAO.getRaceById(id);
+    }
+
+    @Transactional
+    public List<Race> getEvalutedRaces(){
+        return raceDAO.getEvalutedRaces();
     }
 
 }

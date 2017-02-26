@@ -43,17 +43,16 @@ public class RaceController {
     }
 
     @RequestMapping(value = "/create_event",method = RequestMethod.POST)
-    public ModelAndView createEvent(@RequestParam("name") String name) {
+    public ModelAndView createEvent(Race race) {
 
         ModelAndView model = new ModelAndView();
         model.setViewName("race_create_result");
 
-        Race race = new Race();
-        race.setName(name);
+
         race.setUserId(userController.getUser().getId());
         race.setEvaluation(false);
 
-        if(raceService.isExistRaceByUserId(race.getUserId(),name)){
+        if(raceService.isExistRaceByUserId(race.getUserId(),race.getName())){
             model.addObject("result","The race already exists.");
         }
         else{
@@ -208,6 +207,26 @@ public class RaceController {
         contestant.setFirstname(user.getFirstname());
         contestant.setLastname(user.getSurname());
         return contestant;
+    }
+
+    @RequestMapping(value = "/avaible_races",method = RequestMethod.GET)
+    public ModelAndView avaibleRaces() {
+        ModelAndView model = new ModelAndView();
+        List<Race> list;
+        list = raceService.getRacesToRegistration();
+        model.setViewName("avaible_races");
+        model.addObject("races",list);
+        return model;
+    }
+
+    @RequestMapping(value = "/evaluated_races",method = RequestMethod.GET)
+    public ModelAndView evaluatedRaces() {
+        ModelAndView model = new ModelAndView();
+        List<Race> list;
+        list = raceService.getEvalutedRaces();
+        model.setViewName("evaluted_races");
+        model.addObject("races",list);
+        return model;
     }
 
 }

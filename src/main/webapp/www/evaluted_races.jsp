@@ -5,8 +5,9 @@
 <t:template>
     <jsp:body>
 
+
         <div style="margin: 30px 0 30px 0;">
-            <c:forEach var="listValue" items="${list}">
+            <c:forEach var="listValue" items="${races}">
                 <div style="margin: 0 auto; max-width: 400px;">
                     <div class="row">
                         <div class="col-sm-8" style="margin-top: 6px">
@@ -15,8 +16,8 @@
                                class="link_hover"> ${listValue.name}</a>
                         </div>
                         <div class="col-sm-4">
-                            <a href="${pageContext.request.contextPath}/race/${listValue.id}/delete">
-                                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                            <a href="${pageContext.request.contextPath}/race/${listValue.id}/results">
+                                <button type="button" class="btn btn-success btn-sm">Results</button>
                             </a>
                         </div>
                     </div>
@@ -24,6 +25,7 @@
                 <br>
             </c:forEach>
         </div>
+
 
     </jsp:body>
 </t:template>
