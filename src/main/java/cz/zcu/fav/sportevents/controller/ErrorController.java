@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ErrorController {
 
-
     @RequestMapping(value = {"/error/{error_code}"}, method = RequestMethod.GET)
     public ModelAndView loginPage(@PathVariable int error_code) {
         ModelAndView model = new ModelAndView();
@@ -17,4 +16,5 @@ public class ErrorController {
         model.addObject("error",error_code);
         return model;
     }
+
 }
