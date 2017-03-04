@@ -1,0 +1,44 @@
+package cz.zcu.fav.sportevents.model;
+
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "contestant_category")
+public class ContestantCategory implements Serializable {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "default_category", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean defaultCategory;
+
+    @Column(name = "name", length = 32)
+    private String name;
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isDefaultCategory() {
+        return defaultCategory;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setDefaultCategory(boolean defaultCategory) {
+        this.defaultCategory = defaultCategory;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
