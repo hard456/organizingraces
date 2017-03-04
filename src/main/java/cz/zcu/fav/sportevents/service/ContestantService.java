@@ -24,4 +24,9 @@ public class ContestantService {
         return contestantDAO.getSoloContestants(race_id);
     }
 
+    @Transactional
+    public List<Contestant> getContestantsByRaceId(int race_id){
+        return contestantDAO.getContestantsByRaceId(race_id);
+    }
+
 }

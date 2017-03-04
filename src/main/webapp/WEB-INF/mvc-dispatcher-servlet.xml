@@ -87,6 +87,7 @@
     <mvc:annotation-driven />
     <mvc:resources mapping="/images/**" location="Public/images/" />
     <mvc:resources mapping="/css/**" location="Public/css/" />
+    <mvc:resources mapping="/js/**" location="Public/js/" />
 
     <tx:annotation-driven/>
 
