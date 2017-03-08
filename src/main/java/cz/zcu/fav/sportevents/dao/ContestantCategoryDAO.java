@@ -18,7 +18,7 @@ public class ContestantCategoryDAO {
 
     public List<ContestantCategory> getDefaultCategories(){
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(ContestantCategory.class).add(Restrictions.eq("defaultValue",true));
+        Criteria criteria = session.createCriteria(ContestantCategory.class).add(Restrictions.eq("defaultCategory",true));
         return criteria.list();
     }
 

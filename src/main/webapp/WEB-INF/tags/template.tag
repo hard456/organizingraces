@@ -30,7 +30,7 @@
         <div style="margin: 0 auto; padding: 14px; max-width: 1000px; height: auto;">
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"
                   style="font-size:2em; color: white;"></span>
-            <a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">OrienteeringRaces</span></a>
+            <a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">Orienteering Races</span></a>
             <br>
             <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>
@@ -54,7 +54,7 @@
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="${pageContext.request.contextPath}/avaible_races">
-                            <span>Avaible races</span>
+                            <span>Available races</span>
                         </a>
                     </li>
                     <li>
@@ -100,21 +100,21 @@
 
 <!-- FOOTER -->
 
-<div id="pagefooter">
-    <div class="container-fluid" style="background-color: cornflowerblue;">
-        <div class="container" style="margin: 30px auto 30px auto; max-width: 970px;">
-            <div class="row">
-                <div class="col-xs-10 col-md-11">
-                    <span style="color: white; font-size: 15px">© 2016 Jan Palcút. All Rights Reserved.</span>
-                </div>
-                <div class="col-xs-2 col-md-1">
-                    <a href="#header" style="float: right; margin-right: 15px;">
-                        <span style="color:white" class="glyphicon glyphicon-chevron-up"></span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<%--<div id="pagefooter">--%>
+    <%--<div class="container-fluid" style="background-color: cornflowerblue;">--%>
+        <%--<div class="container" style="margin: 30px auto 30px auto; max-width: 970px;">--%>
+            <%--<div class="row">--%>
+                <%--<div class="col-xs-10 col-md-11">--%>
+                    <%--<span style="color: white; font-size: 15px">© 2016 Jan Palcút. All Rights Reserved.</span>--%>
+                <%--</div>--%>
+                <%--<div class="col-xs-2 col-md-1">--%>
+                    <%--<a href="#header" style="float: right; margin-right: 15px;">--%>
+                        <%--<span style="color:white" class="glyphicon glyphicon-chevron-up"></span>--%>
+                    <%--</a>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+<%--</div>--%>
 </body>
 </html>

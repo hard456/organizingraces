@@ -10,7 +10,7 @@
                 <sec:authorize access="isAuthenticated()"><li><a href="${pageContext.request.contextPath}/race/${race.id}/registration">Race registration</a></li></sec:authorize>
                 <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/solo">Solo contestants</a></li>
                 <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/teams">Teams</a></li>
-                <c:if test="${race.userId eq user.id}"><li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/full_list">Contestants list</a></li></c:if>
+                <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/full_list">List of contestants</a></li>
                 <c:if test="${race.evaluation == true}"> <li><a href="${pageContext.request.contextPath}/race/${race.id}/results">Results</a></li></c:if>
             </ul>
         </div>

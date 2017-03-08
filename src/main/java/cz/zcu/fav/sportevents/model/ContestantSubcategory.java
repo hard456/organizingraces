@@ -12,6 +12,9 @@ public class ContestantSubcategory implements Serializable {
     @Column(name = "id")
     private int id;
 
+    @Column(name = "name", length = 32)
+    private String name;
+
     @Column(name = "category_id", nullable = false)
     private int categoryId;
 
@@ -23,7 +26,15 @@ public class ContestantSubcategory implements Serializable {
         return categoryId;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

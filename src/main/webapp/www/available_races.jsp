@@ -6,16 +6,16 @@
     <jsp:body>
         <div class="card-log" style="margin: 30px auto;">
             <c:choose>
-                <c:when test="${empty list}">
+                <c:when test="${empty races}">
                     <div style="max-width: 850px; margin: 0 auto;">
                         <div class="alert alert-warning">
-                            List of your races is empty.
+                            No races available.
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
                     <div style="margin: 0 auto; max-width: 400px;">
-                        <c:forEach var="listValue" varStatus="i" items="${list}">
+                        <c:forEach var="listValue" varStatus="i" items="${races}">
 
                             <div class="row">
                                 <div class="col-sm-8" style="margin-top: 6px;">
@@ -25,15 +25,14 @@
                                 </div>
                                 <div class="col-sm-4" style="text-align: right">
                                     <div class="hidden-xs">
-                                        <a href="${pageContext.request.contextPath}/race/${listValue.id}/delete">
-                                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                                        <a href="${pageContext.request.contextPath}/race/${listValue.id}/registration">
+                                            <button type="button" class="btn btn-success btn-sm">Registration</button>
                                         </a>
                                     </div>
                                     <div class="visible-xs">
-                                        <a href="${pageContext.request.contextPath}/race/${listValue.id}/delete">
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                                    style="margin-top: 5px; width: 100%">
-                                                Delete
+                                        <a href="${pageContext.request.contextPath}/race/${listValue.id}/registration">
+                                            <button type="button" class="btn btn-success btn-sm" style="margin-top: 5px; width: 100%">
+                                                Registration
                                             </button>
                                         </a>
                                     </div>

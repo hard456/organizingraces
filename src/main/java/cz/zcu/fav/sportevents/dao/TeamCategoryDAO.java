@@ -19,7 +19,7 @@ public class TeamCategoryDAO {
 
     public List<ContestantCategory> getDefaultCategories(){
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(TeamCategory.class).add(Restrictions.eq("defaultValue",true));
+        Criteria criteria = session.createCriteria(TeamCategory.class).add(Restrictions.eq("defaultCategory",true));
         return criteria.list();
     }
 
