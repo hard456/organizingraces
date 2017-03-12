@@ -14,11 +14,11 @@ public class TeamCategory implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "default_category", nullable = false)
+    @Column(name = "default_category")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean defaultCategory;
 
-    @Column(name = "name", nullable = false, length = 32)
+    @Column(name = "name", length = 32)
     private String name;
 
     public int getId() {
@@ -39,5 +39,9 @@ public class TeamCategory implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

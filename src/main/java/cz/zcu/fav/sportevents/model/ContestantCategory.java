@@ -14,7 +14,7 @@ public class ContestantCategory implements Serializable {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "default_category", nullable = false)
+    @Column(name = "default_category")
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean defaultCategory;
 

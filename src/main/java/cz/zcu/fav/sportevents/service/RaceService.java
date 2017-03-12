@@ -16,7 +16,7 @@ public class RaceService {
     RaceDAO raceDAO;
 
     @Transactional
-    public void createRace(Race race){
+    public void save(Race race){
         raceDAO.save(race);
     }
 
@@ -26,8 +26,8 @@ public class RaceService {
     }
 
     @Transactional
-    public boolean isExistRaceByUserId(int id, String name){
-        if(raceDAO.getRaceByUserId(id,name) == null){
+    public boolean isExistRaceByName(String name){
+        if(raceDAO.getRaceByUserId(name) == null){
             return false;
         }
         return true;

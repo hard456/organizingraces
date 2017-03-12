@@ -1,15 +1,18 @@
 package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.container.ContestantList;
-import cz.zcu.fav.sportevents.model.Contestant;
-import cz.zcu.fav.sportevents.model.Race;
-import cz.zcu.fav.sportevents.model.User;
+import cz.zcu.fav.sportevents.form.CreateRaceForm;
+import cz.zcu.fav.sportevents.model.*;
 import cz.zcu.fav.sportevents.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,6 +36,12 @@ public class RaceController {
     @Autowired
     RaceCooperationService raceCooperationService;
 
+    @Autowired
+    TeamSubcategoryService teamSubcategoryService;
+
+    @Autowired
+    ContestantSubcategoryService contestantSubcategoryService;
+
     @RequestMapping(value = "/create_race", method = RequestMethod.GET)
     public ModelAndView createRace() {
         ModelAndView model = new ModelAndView();
@@ -52,23 +61,189 @@ public class RaceController {
         return model;
     }
 
-    @RequestMapping(value = "/create_event", method = RequestMethod.POST)
-    public ModelAndView createEvent(Race race) {
-
-        ModelAndView model = new ModelAndView();
-        model.setViewName("race_create_result");
-
-
-        race.setUserId(userController.getUser().getId());
-        race.setEvaluation(false);
-
-        if (raceService.isExistRaceByUserId(race.getUserId(), race.getName())) {
-            model.addObject("result", "The race already exists.");
-        } else {
-            raceService.createRace(race);
-            model.addObject("result", "The race was created.");
+    private boolean validCreateEventData(CreateRaceForm createRaceForm) {
+        if (createRaceForm.getTeamRadio().equals("defaultValue")) {
+            if (!contestantCategoryService.exist(createRaceForm.getDefTeamCategoryId())) {
+                return false;
+            }
         }
-        return model;
+        if (createRaceForm.getConRadio().equals("defaultValue")) {
+            if (!contestantCategoryService.exist(createRaceForm.getDefConCategoryId())) {
+                return false;
+            }
+        }
+        if (createRaceForm.getTeamRadio().equals("own")) {
+            for (TeamSubcategory list : createRaceForm.getTeamSubCategories()) {
+                if (list.getName().isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        if (createRaceForm.getConRadio().equals("own")) {
+            for (ContestantSubcategory list : createRaceForm.getContestantSubCategories()) {
+                if (list.getName().isEmpty()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @RequestMapping(value = "/create_event", method = RequestMethod.POST)
+    public ModelAndView createEvent(@Valid @ModelAttribute("createRaceForm") CreateRaceForm createRaceForm, BindingResult result) {
+        ModelAndView model = new ModelAndView();
+        User user = userController.getUser();
+        if (user != null) {
+            model.setViewName("race_create_result");
+
+            if (result.hasErrors() || createRaceForm.getConRadio() == null || createRaceForm.getTeamRadio() == null) {
+                model.addObject("invalid", true);
+                return model;
+            } else {
+                Race race = new Race();
+                race.setName(HtmlUtils.htmlEscape(createRaceForm.getRace().getName(), "UTF-8"));
+                race.setTeamSize(createRaceForm.getRace().getTeamSize());
+                race.setUser(user);
+                if (!raceService.isExistRaceByName(race.getName())) {
+                    if (validCreateEventData(createRaceForm)) {
+
+                        List<ContestantSubcategory> conSubCategories = escapeConSubCategories(createRaceForm.getContestantSubCategories());
+                        List<TeamSubcategory> teamSubCategories = escapeTeamSubCategories(createRaceForm.getTeamSubCategories());
+
+                        if (createRaceForm.getConRadio().equals("none") && createRaceForm.getTeamRadio().equals("none")) {
+                            raceService.save(race);
+                        } else if (createRaceForm.getConRadio().equals("none") && createRaceForm.getTeamRadio().equals("defaultValue")) {
+                            race.setTeamCategory(teamCategoryService.getCategoryById(createRaceForm.getDefTeamCategoryId()));
+                            raceService.save(race);
+                        } else if (createRaceForm.getConRadio().equals("none") && createRaceForm.getTeamRadio().equals("own")) {
+                            if (teamSubCategories.size() >= 2) {
+                                TeamCategory category = new TeamCategory();
+                                teamCategoryService.save(category);
+                                teamSubCategories = setTeamCategoryIdToList(teamSubCategories, category.getId());
+                                teamSubcategoryService.saveList(teamSubCategories);
+                                race.setTeamCategory(category);
+                                raceService.save(race);
+                            } else {
+                                model.addObject("invalid", true);
+                                return model;
+                            }
+                        } else if (createRaceForm.getConRadio().equals("defaultValue") && createRaceForm.getTeamRadio().equals("none")) {
+                            race.setContestantCategory(contestantCategoryService.getCategoryById(createRaceForm.getDefConCategoryId()));
+                            raceService.save(race);
+                        } else if (createRaceForm.getConRadio().equals("defaultValue") && createRaceForm.getTeamRadio().equals("defaultValue")) {
+                            race.setTeamCategory(teamCategoryService.getCategoryById(createRaceForm.getDefTeamCategoryId()));
+                            race.setContestantCategory(contestantCategoryService.getCategoryById(createRaceForm.getDefConCategoryId()));
+                            raceService.save(race);
+                        } else if (createRaceForm.getConRadio().equals("defaultValue") && createRaceForm.getTeamRadio().equals("own")) {
+                            if (teamSubCategories.size() >= 2) {
+                                TeamCategory category = new TeamCategory();
+                                teamCategoryService.save(category);
+                                teamSubCategories = setTeamCategoryIdToList(teamSubCategories, category.getId());
+                                teamSubcategoryService.saveList(teamSubCategories);
+                                race.setTeamCategory(category);
+                                race.setContestantCategory(contestantCategoryService.getCategoryById(createRaceForm.getDefConCategoryId()));
+                                raceService.save(race);
+                            } else {
+                                model.addObject("invalid", true);
+                                return model;
+                            }
+                        } else if (createRaceForm.getConRadio().equals("own") && createRaceForm.getTeamRadio().equals("none")) {
+                            if (conSubCategories.size() >= 2) {
+                                ContestantCategory conCategory = new ContestantCategory();
+                                contestantCategoryService.save(conCategory);
+                                conSubCategories = setConCategoryIdToList(conSubCategories, conCategory.getId());
+                                contestantSubcategoryService.saveList(conSubCategories);
+                                race.setContestantCategory(conCategory);
+                                raceService.save(race);
+                            } else {
+                                model.addObject("invalid", true);
+                                return model;
+                            }
+                        } else if (createRaceForm.getConRadio().equals("own") && createRaceForm.getTeamRadio().equals("defaultValue")) {
+                            if (conSubCategories.size() >= 2) {
+                                ContestantCategory conCategory = new ContestantCategory();
+                                contestantCategoryService.save(conCategory);
+                                conSubCategories = setConCategoryIdToList(conSubCategories, conCategory.getId());
+                                contestantSubcategoryService.saveList(conSubCategories);
+                                race.setContestantCategory(conCategory);
+                                race.setTeamCategory(teamCategoryService.getCategoryById(createRaceForm.getDefTeamCategoryId()));
+                                raceService.save(race);
+                            } else {
+                                model.addObject("invalid", true);
+                                return model;
+                            }
+                        } else if (createRaceForm.getConRadio().equals("own") && createRaceForm.getTeamRadio().equals("own")) {
+                            if (teamSubCategories.size() >= 2 && conSubCategories.size() >= 2) {
+                                ContestantCategory conCategory = new ContestantCategory();
+                                contestantCategoryService.save(conCategory);
+                                conSubCategories = setConCategoryIdToList(conSubCategories, conCategory.getId());
+                                contestantSubcategoryService.saveList(conSubCategories);
+                                TeamCategory teamCategory = new TeamCategory();
+                                teamCategoryService.save(teamCategory);
+                                teamSubCategories = setTeamCategoryIdToList(teamSubCategories, teamCategory.getId());
+                                teamSubcategoryService.saveList(teamSubCategories);
+                                race.setContestantCategory(conCategory);
+                                race.setTeamCategory(teamCategory);
+                                raceService.save(race);
+                            } else {
+                                model.addObject("invalid", true);
+                                return model;
+                            }
+                        }
+                        model.addObject("result", true);
+                        return model;
+
+                    } else {
+                        model.addObject("invalid", true);
+                        return model;
+                    }
+
+                } else {
+                    model.addObject("result", false);
+                    return model;
+                }
+
+            }
+        } else {
+            model.setViewName("login");
+            return model;
+        }
+    }
+
+    private List<ContestantSubcategory> setConCategoryIdToList(List<ContestantSubcategory> conSubcategory, int id) {
+        List<ContestantSubcategory> newList = new ArrayList<>();
+        for (ContestantSubcategory list : conSubcategory) {
+            list.setContestantCategory(contestantCategoryService.getCategoryById(id));
+            newList.add(list);
+        }
+        return newList;
+    }
+
+    private List<TeamSubcategory> setTeamCategoryIdToList(List<TeamSubcategory> teamSubcategory, int id) {
+        List<TeamSubcategory> newList = new ArrayList<>();
+        for (TeamSubcategory list : teamSubcategory) {
+            list.setTeamCategory(teamCategoryService.getCategoryById(id));
+            newList.add(list);
+        }
+        return newList;
+    }
+
+    private List<TeamSubcategory> escapeTeamSubCategories(List<TeamSubcategory> teamSubcategory) {
+        List<TeamSubcategory> newList = new ArrayList<>();
+        for (TeamSubcategory list : teamSubcategory) {
+            list.setName(HtmlUtils.htmlEscape(list.getName(), "UTF-8"));
+            newList.add(list);
+        }
+        return newList;
+    }
+
+    private List<ContestantSubcategory> escapeConSubCategories(List<ContestantSubcategory> conSubcategory) {
+        List<ContestantSubcategory> newList = new ArrayList<>();
+        for (ContestantSubcategory list : conSubcategory) {
+            list.setName(HtmlUtils.htmlEscape(list.getName(), "UTF-8"));
+            newList.add(list);
+        }
+        return newList;
     }
 
     @RequestMapping(value = "/race/{id}", method = RequestMethod.GET)
@@ -120,12 +295,11 @@ public class RaceController {
         } else {
 
             User user;
-            if((user = userController.getUser()) != null){
-                if(raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
-                    model.addObject("race_cooperator",true);
-                }
-                else{
-                    model.addObject("race_cooperator",false);
+            if ((user = userController.getUser()) != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
                 }
             }
 
@@ -165,12 +339,11 @@ public class RaceController {
         } else {
 
             User user;
-            if((user = userController.getUser()) != null){
-                if(raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
-                    model.addObject("race_cooperator",true);
-                }
-                else{
-                    model.addObject("race_cooperator",false);
+            if ((user = userController.getUser()) != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
                 }
             }
 
@@ -196,14 +369,24 @@ public class RaceController {
         } else {
 
             User user;
-            if((user = userController.getUser()) != null){
-                if(raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
-                    model.addObject("race_cooperator",true);
-                }
-                else{
-                    model.addObject("race_cooperator",false);
+            if ((user = userController.getUser()) != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
                 }
             }
+
+//            if (race.getContestantCategoryId() != -1) {
+//                List<ContestantSubcategory> contestantSubcategories;
+//                contestantSubcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategoryId());
+//                model.addObject("con_categories", contestantSubcategories);
+//            }
+//            if (race.getTeamCategoryId() != -1) {
+//                List<TeamSubcategory> teamSubcategories;
+//                teamSubcategories = teamSubcategoryService.getListByCategoryId(race.getTeamCategoryId());
+//                model.addObject("team_categories", teamSubcategories);
+//            }
 
             model.addObject("race", race);
             model.addObject("user", user);
@@ -222,12 +405,18 @@ public class RaceController {
     }
 
     @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
-    public ModelAndView addSoloContestant(@RequestParam("category") String category, @PathVariable("id") int race_id) {
+    public ModelAndView addSoloContestant(@RequestParam(value = "category", required = false) String category,
+                                          @PathVariable("id") int race_id) {
 
         Contestant contestant;
         contestant = userToContestant(userController.getUser());
         contestant.setPaid(false);
-        contestant.setCategory(category);
+        if (category == null) {
+            contestant.setCategory("jaj");
+        } else {
+            contestant.setCategory(category);
+        }
+
         contestant.setRaceId(race_id);
         contestantService.saveContestant(contestant);
 

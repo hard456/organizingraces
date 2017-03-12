@@ -29,11 +29,14 @@
         <security:intercept-url pattern="/" access="permitAll" />
         <security:intercept-url pattern="/userpage" access="isAuthenticated()" />
         <security:intercept-url pattern="/logout" access="isAuthenticated()"/>
-        <security:intercept-url pattern="/create_race" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/create_race" access="isAuthenticated()" />
         <security:intercept-url pattern="/my_races" access="isAuthenticated()"/>
         <security:intercept-url pattern="/registration" access="!isAuthenticated()"/>
         <security:intercept-url pattern="/login" access="!isAuthenticated()"/>
         <security:intercept-url pattern="/error/**" access="none"/>
+
+        <security:intercept-url pattern="/create_event" access="none" method="GET"/>
+
         <security:intercept-url pattern="/race/{id}/registration" access="isAuthenticated()"/>
 
         <security:form-login login-page="/login"
@@ -83,6 +86,10 @@
     </bean>
 
     <bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    </bean>
 
     <mvc:annotation-driven />
     <mvc:resources mapping="/images/**" location="Public/images/" />

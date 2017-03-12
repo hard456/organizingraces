@@ -2,6 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <script src="/js/add_category_input.js" language="Javascript" type="text/javascript"></script>
 
@@ -13,10 +14,10 @@
 
                 <form name="createEventForm" action="<c:url value="/create_event" />" method="POST">
                     Race name:
-                    <input type="text" style="margin-bottom: 7px;" class="form-control"
-                           placeholder="Race name" maxlength="50" name="name">
+                    <input type="text" maxlength="32" style="margin-bottom: 7px;" class="form-control"
+                           placeholder="Race name" name="race.name">
                     Size of team:
-                    <select name="teamSize" class="form-control">
+                    <select name="race.teamSize" class="form-control">
                         <option value="1">1</option>
                         <option selected value="2">2</option>
                         <option value="3">3</option>
@@ -24,7 +25,6 @@
                         <option value="5">5</option>
                     </select>
 
-                    <c:if test="${con_categories ne null}">
 
                         <br><br><br><br>
 
@@ -34,20 +34,21 @@
 
                         <div class="radio row">
                             <div class="col-sm-4">
-                                <label><input type="radio" name="con_radio" checked="checked">None
+                                <label><input type="radio" name="conRadio" value="none" checked="checked">None
                                 </label>
                             </div>
                         </div>
+                    <c:if test="${con_categories ne null}">
                         <hr>
                         <div class="row">
                             <div class="radio col-sm-4">
-                                <label><input type="radio" name="con_radio">Use default
+                                <label><input type="radio" name="conRadio" value="defaultValue">Use default
                                     category</label>
                             </div>
                             <div class="col-sm-8">
-                                <select class="form-control">
+                                <select class="form-control" name="defTeamCategoryId">
                                     <c:forEach var="c" items="${con_categories}">
-                                        <option>${c.name}</option>
+                                        <option value="${c.id}">${c.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -56,23 +57,13 @@
                     <hr>
                     <div class="row">
                         <div class="radio col-sm-4">
-                            <label><input type="radio" name="con_radio">Create own categories</label>
+                            <label><input type="radio" name="conRadio" value="own">Create own categories</label>
                         </div>
-                            <%--<div class="col-sm-8">--%>
-                            <%--<c:if test="${con_categories ne null}">--%>
-                            <%--<select class="form-control">--%>
-                            <%--<c:forEach var="c" items="${con_categories}">--%>
-                            <%--<option>${c.name}</option>--%>
-                            <%--</c:forEach>--%>
-                            <%--</select>--%>
-                            <%--<br>--%>
-                            <%--</c:if>--%>
-                            <%--</div>--%>
                     </div>
                     Category 1:
-                    <input type="text" class="form-control" style="margin-bottom: 7px;">
+                    <input type="text" maxlength="20" class="form-control" style="margin-bottom: 7px;" name="contestantSubCategories[0].name"/>
                     Category 2:
-                    <input type="text" class="form-control" style="margin-bottom: 7px;">
+                    <input type="text" maxlength="20" class="form-control" name="contestantSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="con">
 
@@ -90,8 +81,6 @@
                         </div>
                     </div>
 
-                    <c:if test="${team_categories ne null}">
-
                         <br><br><br><br>
 
                         <div class="well well-lg">
@@ -100,20 +89,21 @@
 
                         <div class="row">
                             <div class="radio col-sm-4">
-                                <label><input type="radio" name="team_radio" checked="checked">None
+                                <label><input type="radio" name="teamRadio" checked="checked" value="none">None
                                 </label>
                             </div>
                         </div>
+                    <c:if test="${team_categories ne null}">
                         <hr>
                         <div class="row">
                             <div class="radio col-sm-4">
-                                <label><input type="radio" name="team_radio">Use default
+                                <label><input type="radio" name="teamRadio" value="defaultValue">Use default
                                     category</label>
                             </div>
                             <div class="col-sm-8">
-                                <select class="form-control">
+                                <select class="form-control" name="defConCategoryId">
                                     <c:forEach var="c" items="${team_categories}">
-                                        <option>${c.name}</option>
+                                        <option value="${c.id}">${c.name}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -122,24 +112,14 @@
                     <hr>
                     <div class="row">
                         <div class="radio col-sm-4">
-                            <label><input type="radio" name="team_radio">Create own categories</label>
+                            <label><input type="radio" name="teamRadio" value="own">Create own categories</label>
                         </div>
-                            <%--<div class="col-sm-8">--%>
-                            <%--<c:if test="${team_categories ne null}">--%>
-                            <%--<select class="form-control">--%>
-                            <%--<c:forEach var="c" items="${team_categories}">--%>
-                            <%--<option>${c.name}</option>--%>
-                            <%--</c:forEach>--%>
-                            <%--</select>--%>
-                            <%--<br>--%>
-                            <%--</c:if>--%>
-                            <%--</div>--%>
                     </div>
 
                     Category 1:
-                    <input type="text" class="form-control" style="margin-bottom: 7px;">
+                    <input type="text" maxlength="20" class="form-control" name="teamSubCategories[0].name" style="margin-bottom: 7px;">
                     Category 2:
-                    <input type="text" class="form-control" style="margin-bottom: 7px;">
+                    <input type="text" maxlength="20" class="form-control" name="teamSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="team">
 

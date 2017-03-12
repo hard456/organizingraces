@@ -23,15 +23,14 @@ public class RaceDAO {
     public List<Race> listByUserId(int id){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
-                .add(Restrictions.eq("userId",id));
+                .add(Restrictions.eq("user.id",id));
 
         return criteria.list();
     }
 
-    public Race getRaceByUserId(int userId, String name){
+    public Race getRaceByUserId(String name){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
-                .add(Restrictions.eq("userId", userId))
                 .add(Restrictions.eq("name",name));
         criteria.setMaxResults(1);
         return (Race)criteria.uniqueResult();

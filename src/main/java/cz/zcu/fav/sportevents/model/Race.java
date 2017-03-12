@@ -3,6 +3,9 @@ package cz.zcu.fav.sportevents.model;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -14,6 +17,7 @@ public class Race implements Serializable{
     @Column(name = "id")
     private int id;
 
+    @Size(min = 3, max = 32)
     @Column(name = "name", nullable = false, length = 32)
     private String name;
 
@@ -21,11 +25,26 @@ public class Race implements Serializable{
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean evaluation;
 
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
+    @Min(1)
+    @Max(5)
     @Column(name = "team_size", nullable = false)
-    private int teamSize;
+    private Integer teamSize;
+
+    @ManyToOne
+    @JoinColumn(name = "con_category_id")
+    private ContestantCategory contestantCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "team_category_id")
+    private TeamCategory teamCategory;
+
+    public ContestantCategory getContestantCategory() {
+        return contestantCategory;
+    }
 
     public int getId() {
         return id;
@@ -37,10 +56,6 @@ public class Race implements Serializable{
 
     public boolean isEvaluation() {
         return evaluation;
-    }
-
-    public int getUserId() {
-        return userId;
     }
 
     public int getTeamSize() {
@@ -59,8 +74,24 @@ public class Race implements Serializable{
         this.evaluation = evaluation;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public User getUser() {
+        return user;
+    }
+
+    public TeamCategory getTeamCategory() {
+        return teamCategory;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setTeamCategory(TeamCategory teamCategory) {
+        this.teamCategory = teamCategory;
+    }
+
+    public void setContestantCategory(ContestantCategory contestantCategory) {
+        this.contestantCategory = contestantCategory;
     }
 
 }

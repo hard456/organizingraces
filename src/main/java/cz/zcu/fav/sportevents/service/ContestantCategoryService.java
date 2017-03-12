@@ -19,4 +19,22 @@ public class ContestantCategoryService {
         return contestantCategoryDAO.getDefaultCategories();
     }
 
+    @Transactional
+    public boolean exist(int id){
+        if(contestantCategoryDAO.getCategoryById(id) != null){
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public ContestantCategory getCategoryById(int id){
+        return contestantCategoryDAO.getCategoryById(id);
+    }
+
+    @Transactional
+    public void save(ContestantCategory contestantCategory){
+        contestantCategoryDAO.save(contestantCategory);
+    }
+
 }

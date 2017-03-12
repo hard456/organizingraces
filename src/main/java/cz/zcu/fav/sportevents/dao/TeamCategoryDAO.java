@@ -23,4 +23,15 @@ public class TeamCategoryDAO {
         return criteria.list();
     }
 
+    public void save(TeamCategory teamCategory){
+        sessionFactory.getCurrentSession().save(teamCategory);
+    }
+
+    public TeamCategory getCategoryById(int id){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(TeamCategory.class).add(Restrictions.eq("id",id));
+        criteria.setMaxResults(1);
+        return (TeamCategory) criteria.uniqueResult();
+    }
+
 }

@@ -1,6 +1,7 @@
 package cz.zcu.fav.sportevents.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Entity
@@ -12,29 +13,32 @@ public class ContestantSubcategory implements Serializable {
     @Column(name = "id")
     private int id;
 
+    @Size(max = 20)
     @Column(name = "name", length = 32)
     private String name;
 
-    @Column(name = "category_id", nullable = false)
-    private int categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ContestantCategory contestantCategory;
 
     public int getId() {
         return id;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
+
+    public ContestantCategory getContestantCategory() {
+        return contestantCategory;
+    }
+
+    public void setContestantCategory(ContestantCategory contestantCategory) {
+        this.contestantCategory = contestantCategory;
+    }
+
 }

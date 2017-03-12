@@ -24,14 +24,17 @@
                             <div class="col-sm-6">
                                 Team name:<input class="form-control" name="name"/>
                             </div>
-                            <div class="col-sm-6">
-                                Team category:
-                                <select class="form-control" name="category">
-                                    <option selected value="Smrtelník">Smrtelník</option>
-                                    <option value="Orienťák">Orienťák</option>
-                                </select>
+                            <c:if test="${not empty team_categories}">
+                                <div class="col-sm-6">
+                                    Category:
+                                    <select class="form-control" name="category">
+                                        <c:forEach items="${team_categories}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
 
-                            </div>
+                                </div>
+                            </c:if>
                         </div>
 
                         <br>
@@ -67,15 +70,17 @@
                                                  name="contestants[${i.index}].email">
 
                                 </div>
-                                <div class="col-sm-4">
-                                    Category:
-                                    <select class="form-control" name="contestants[${i.index}].category">
-                                        <option selected value="NONE">NONE</option>
-                                        <option value="FAV">FAV</option>
-                                        <option value="FEL">FEL</option>
-                                    </select>
+                                <c:if test="${not empty con_categories}">
+                                    <div class="col-sm-4">
+                                        Category:
+                                        <select class="form-control" name="category">
+                                            <c:forEach items="${con_categories}" var="c">
+                                                <option value="${c.id}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
 
-                                </div>
+                                    </div>
+                                </c:if>
                                 <br>
                                 <div class="col-sm-4">
                                     <div class="checkbox">
@@ -113,46 +118,48 @@
 
                     <form:form action="/race/${race.id}/addTeamByAdmin" method="POST">
 
-                    <div class="row">
-                        <div class="col-sm-4">
-                            Firstname:<input class="form-control" name="firstname"/>
-                        </div>
-                        <div class="col-sm-4">
-                            Lastname:<input class="form-control"
-                                            type="text"
-                                            name="lastname">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                Firstname:<input class="form-control" name="firstname"/>
+                            </div>
+                            <div class="col-sm-4">
+                                Lastname:<input class="form-control"
+                                                type="text"
+                                                name="lastname">
 
-                        </div>
-                        <div class="col-sm-4">
-                            Phone:<input class="form-control"
-                                         type="text"
-                                         path="firstname">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            Email:<input class="form-control"
-                                         type="text"
-                                         name="email">
-
-                        </div>
-                        <div class="col-sm-4">
-                            Category:
-                            <select class="form-control" name="category">
-                                <option selected value="NONE">NONE</option>
-                                <option value="FAV">FAV</option>
-                                <option value="FEL">FEL</option>
-                            </select>
-
-                        </div>
-                        <br>
-                        <div class="col-sm-4">
-                            <div class="checkbox">
-                                <label><input type="checkbox" name="paid" value="true">Paid</label>
+                            </div>
+                            <div class="col-sm-4">
+                                Phone:<input class="form-control"
+                                             type="text"
+                                             path="firstname">
                             </div>
                         </div>
-                    </div>
-                    <hr>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                Email:<input class="form-control"
+                                             type="text"
+                                             name="email">
+
+                            </div>
+                            <c:if test="${not empty team_categories}">
+                                <div class="col-sm-4">
+                                    Category:
+                                    <select class="form-control" name="category">
+                                        <c:forEach items="${team_categories}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
+
+                                </div>
+                            </c:if>
+                            <br>
+                            <div class="col-sm-4">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="paid" value="true">Paid</label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
 
                         <div class="row">
                             <div class="col-sm-12" style="text-align: right">
@@ -174,14 +181,15 @@
                 <form name="addSoloContestant" action="<c:url value="/race/${race.id}/addSoloContestant" />"
                       method="POST">
 
-                    Category:<br>
+                    <c:if test="${not empty con_categories}">
+                        Category:
+                        <select class="form-control" name="category">
+                            <c:forEach items="${con_categories}" var="c">
+                                <option value="${c.id}">${c.name}</option>
+                            </c:forEach>
+                        </select>
 
-                    <select class="form-control" name="category">
-                        <option selected value="NONE">NONE</option>
-                        <option value="FAV">FAV</option>
-                        <option value="FEL">FEL</option>
-                        <option value="OTHERS">OTHERS</option>
-                    </select>
+                    </c:if>
                     <br>
                     <div class="alert alert-warning">Other informations about you will be take from your account.</div>
 
@@ -212,40 +220,41 @@
                             <div class="col-sm-6">
                                 Team name:<input class="form-control" name="name"/>
                             </div>
-                            <div class="col-sm-6">
-                                Team category:
-                                <select class="form-control" name="category">
-                                    <option selected value="Smrtelník">Smrtelník</option>
-                                    <option value="Orienťák">Orienťák</option>
-                                </select>
+                            <c:if test="${not empty team_categories}">
+                                <div class="col-sm-6">
+                                    Category:
+                                    <select class="form-control" name="category">
+                                        <c:forEach items="${team_categories}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
 
-                            </div>
+                                </div>
+                            </c:if>
                         </div>
 
                         <br>
                         You:
                         <br><br>
 
-                        <div class="row">
-                            <div class="col-sm-4">
-                                Category:
+
+                        <c:if test="${not empty con_categories}">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    Category:
+                                    <select class="form-control" name="category">
+                                        <c:forEach items="${con_categories}" var="c">
+                                            <option value="${c.id}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
+
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12">
-
-                                <select class="form-control" name="contestants[${i.index}].category">
-                                    <option selected value="NONE">NONE</option>
-                                    <option value="FAV">FAV</option>
-                                    <option value="FEL">FEL</option>
-                                </select>
-
-                            </div>
-                        </div>
+                        </c:if>
                         <br>
 
-                        <div class="alert alert-warning">Other informations about you will be take from your account.</div>
+                        <div class="alert alert-warning">Other informations about you will be take from your account.
+                        </div>
 
 
                         <c:forEach varStatus="i" begin="0" end="${race.teamSize-2}">
@@ -280,14 +289,17 @@
 
                                 </div>
 
-                                <div class="col-sm-4">
-                                    Category:<select class="form-control" name="contestants[${i.index}].category">
-                                        <option selected value="NONE">NONE</option>
-                                        <option value="FAV">FAV</option>
-                                        <option value="FEL">FEL</option>
-                                    </select>
+                                <c:if test="${not empty con_categories}">
+                                    <div class="col-sm-6">
+                                        Category:
+                                        <select class="form-control" name="category">
+                                            <c:forEach items="${con_categories}" var="c">
+                                                <option value="${c.id}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
 
-                                </div>
+                                    </div>
+                                </c:if>
                             </div>
                             <hr>
                         </c:forEach>

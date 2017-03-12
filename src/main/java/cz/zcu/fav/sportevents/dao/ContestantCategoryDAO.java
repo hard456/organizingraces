@@ -22,4 +22,15 @@ public class ContestantCategoryDAO {
         return criteria.list();
     }
 
+    public ContestantCategory getCategoryById(int id){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(ContestantCategory.class).add(Restrictions.eq("id",id));
+        criteria.setMaxResults(1);
+        return (ContestantCategory) criteria.uniqueResult();
+    }
+
+    public void save(ContestantCategory contestantCategory){
+        sessionFactory.getCurrentSession().save(contestantCategory);
+    }
+
 }
