@@ -14,7 +14,7 @@ public class UserDAO{
     @Autowired
     SessionFactory sessionFactory;
 
-    public User get(final String login) {
+    public User get(String login) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(User.class)
                 .add(Restrictions.eq("login",login));
@@ -33,6 +33,16 @@ public class UserDAO{
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(User.class)
                 .add(Restrictions.eq("email",email));
+
+        criteria.setMaxResults(1);
+        User user = (User)criteria.uniqueResult();
+        return user;
+    }
+
+    public User findByPhone(String phone){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(User.class)
+                .add(Restrictions.eq("phone",phone));
 
         criteria.setMaxResults(1);
         User user = (User)criteria.uniqueResult();
