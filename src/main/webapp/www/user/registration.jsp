@@ -9,6 +9,7 @@
                 <div style="margin: 0 auto; max-width: 250px;">Username:</div><input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control" placeholder="Username" maxlength="32" name="login">
                 <div style="margin: 0 auto; max-width: 250px;">Firstname:</div><input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control" placeholder="Firstname" maxlength="32" name="firstname">
                 <div style="margin: 0 auto; max-width: 250px;">Surname:</div><input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control" placeholder="Surname" maxlength="32" name="surname">
+                <div style="margin: 0 auto; max-width: 250px;">Phone:</div><input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control" placeholder="Phone" maxlength="16" name="phone">
                 <div style="margin: 0 auto; max-width: 250px;">Email:</div><input type="email" style="margin: 0 auto 20px; max-width: 250px;" class="form-control" placeholder="Email" maxlength="32" name="email">
                 <div style="margin: 0 auto; max-width: 250px;">Password:</div><input type="password" style="margin: 0 auto 7px; max-width: 250px;" class="form-control" placeholder="Password" maxlength="256" name="password">
                 <div style="margin: 0 auto; max-width: 250px;">Password again:</div><input type="password" style="margin: 0 auto 20px; max-width: 250px;" class="form-control" placeholder="Password again" name="passwordAgain">

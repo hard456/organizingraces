@@ -26,6 +26,7 @@ public class CreateRaceForm {
     @Pattern(regexp = "none|defaultValue|own")
     private String teamRadio;
 
+
     @Valid
     private Race race;
 
@@ -105,4 +106,5 @@ public class CreateRaceForm {
     public void setDefConCategoryId(Integer defConCategoryId) {
         this.defConCategoryId = defConCategoryId;
     }
+
 }

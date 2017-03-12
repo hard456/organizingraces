@@ -22,7 +22,7 @@ public class UserService {
 
     @Transactional
     public boolean checkEmail(User user){
-        if(userDAO.findByEmail(user.getEmail()) == null){
+        if(userDAO.findByEmail(user.getEmail()) != null){
             return true;
         }
         return false;
@@ -30,7 +30,7 @@ public class UserService {
 
     @Transactional
     public boolean checkUserName(User user){
-        if(userDAO.get(user.getLogin()) == null){
+        if(userDAO.get(user.getLogin()) != null){
             return true;
         }
         return false;
@@ -39,6 +39,14 @@ public class UserService {
     @Transactional
     public User getUser(String login){
         return userDAO.get(login);
+    }
+
+    @Transactional
+    public boolean checkPhone(User user){
+        if(userDAO.findByPhone(user.getPhone()) != null){
+            return true;
+        }
+        return false;
     }
 
 }

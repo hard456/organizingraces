@@ -27,6 +27,9 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
+    @Column(name = "phone", nullable = true, length = 32)
+    private String phone;
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -71,4 +74,11 @@ public class User implements Serializable {
         return id;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 }

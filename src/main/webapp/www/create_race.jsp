@@ -38,7 +38,7 @@
                                 </label>
                             </div>
                         </div>
-                    <c:if test="${con_categories ne null}">
+                    <c:if test="${not empty con_categories}">
                         <hr>
                         <div class="row">
                             <div class="radio col-sm-4">
@@ -46,7 +46,7 @@
                                     category</label>
                             </div>
                             <div class="col-sm-8">
-                                <select class="form-control" name="defTeamCategoryId">
+                                <select class="form-control" name="defConCategoryId">
                                     <c:forEach var="c" items="${con_categories}">
                                         <option value="${c.id}">${c.name}</option>
                                     </c:forEach>
@@ -93,7 +93,7 @@
                                 </label>
                             </div>
                         </div>
-                    <c:if test="${team_categories ne null}">
+                    <c:if test="${not empty team_categories}">
                         <hr>
                         <div class="row">
                             <div class="radio col-sm-4">
@@ -101,7 +101,7 @@
                                     category</label>
                             </div>
                             <div class="col-sm-8">
-                                <select class="form-control" name="defConCategoryId">
+                                <select class="form-control" name="defTeamCategoryId">
                                     <c:forEach var="c" items="${team_categories}">
                                         <option value="${c.id}">${c.name}</option>
                                     </c:forEach>

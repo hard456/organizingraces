@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ public class Race implements Serializable{
     @Column(name = "id")
     private int id;
 
+    @NotNull
     @Size(min = 3, max = 32)
     @Column(name = "name", nullable = false, length = 32)
     private String name;

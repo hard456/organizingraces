@@ -144,6 +144,14 @@
             <version>1.0.2</version>
         </dependency>
 
+        <!-- COMMONS VALIDATOR -->
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -13,7 +13,6 @@
                     <div class="alert alert-danger">
                         Data are invalid:<br>
                         Team name (3 - 32 length)<br>
-                        Categories (max 20 length)<br>
                         If you use custom categories (1 - 20 length)
                     </div>
                 </c:if>
