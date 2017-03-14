@@ -10,7 +10,7 @@
             <div style="max-width: 900px; margin: 0 auto;">
 
                 <c:choose>
-                    <c:when test="${race_cooperator eq true || race.userId eq user.id}">
+                    <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                         <c:choose>
                             <c:when test="${not empty contestants}">
                                 <div class="row hidden-xs"

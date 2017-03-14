@@ -10,6 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,6 +41,7 @@ public class UserController {
     @RequestMapping(value = {"/registration"}, method = RequestMethod.GET)
     public ModelAndView registrationPage() {
         ModelAndView model = new ModelAndView();
+        model.getModelMap().addAttribute("userRegistrationForm", new UserRegistrationForm());
         model.setViewName("user/registration");
         return model;
     }
@@ -83,10 +86,14 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
-    public ModelAndView addUser(HttpServletRequest request, UserRegistrationForm userRegistrationForm) {
+    public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("createRaceForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
         model.setViewName("user/reg_result");
-
+        if(bindingResult.hasErrors()){
+            model.addObject("invalid", true);
+            model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
+            return model;
+        }
         if(!validUserParameters(request)){
             model.addObject("invalid", true);
             model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");

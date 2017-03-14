@@ -12,7 +12,7 @@
 
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 800px; margin: 0 auto;">
-                <c:if test="${race_cooperator eq true || race.userId eq user.id}">
+                <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
 
                     <div class="well well-lg" style="background: lightgoldenrodyellow">
                         <div style="text-align: center;">ADMIN TEAM REGISTRATION</div>
