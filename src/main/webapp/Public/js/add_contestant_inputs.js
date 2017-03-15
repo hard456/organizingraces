@@ -5,30 +5,32 @@ function addContestant(divName, team_size) {
         if (counter == 0) {
             counter = team_size;
         }
-
-        var newdiv = document.createElement('div');
-        newdiv.setAttribute('id', counter);
-        //newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' class='form-control' name='contestants["+counter+"].firstname'>";
-
-        newdiv.innerHTML = "<div class='row'><div class='col-sm-4'>" +
-            "Teammate " + (counter + 1) + ":</div></div><br>" +
-            "<div class='row'><div class='col-sm-4'>Firstname:<input class='form-control' name='contestants[" + counter + "].firstname'/>" +
-            "</div><div class='col-sm-4'> Lastname:<input class='form-control' type='text' name='contestants[" + counter + "].lastname'>" +
-            "</div><div class='col-sm-4'>Phone:<input class='form-control'type='text'path='contestants[" + counter + "].firstname'>" +
-            "</div></div><div class='row'><div class='col-sm-4'>Email:<input class='form-control' type='text'name='contestants[" + counter + "].email'>" +
-            "</div><div class='col-sm-4'>Category:<select class='form-control' name='contestants[" + counter + "].category'>" +
-            "<option selected value='NONE'>NONE </option><option value='FAV'>FAV</option>" +
-            "<option value='FEL'>FEL</option></select></div><br><div class='col-sm-4'><div class='checkbox'><label><input type='checkbox' name='contestants[" + counter + "].paid' value='true'>Paid</label></div></div></div><hr>";
-
-        document.getElementById(divName).appendChild(newdiv);
+        document.getElementById('T' + counter).style.display = "inline";
+        document.getElementById(counter + 'firstname').setAttribute("name", "contestants[" + counter + "].firstname");
+        document.getElementById(counter + 'lastname').setAttribute("name", "contestants[" + counter + "].lastname");
+        document.getElementById(counter + 'phone').setAttribute("name", "contestants[" + counter + "].phone");
+        document.getElementById(counter + 'email').setAttribute("name", "contestants[" + counter + "].email");
+        var tmp = document.getElementById(counter + 'category');
+        if (tmp != null) {
+            tmp.setAttribute("name", "contestants[" + counter + "].category");
+        }
+        document.getElementById(counter + 'paid').setAttribute("name", "contestants[" + counter + "].phone");
         counter++;
     }
 }
 
 function removeContestant(team_size) {
     if (counter != 0 && counter != team_size) {
-        var elem = document.getElementById(counter - 1);
-        elem.parentNode.removeChild(elem);
+        document.getElementById('T' + (counter - 1)).style.display = "none";
+        document.getElementById((counter - 1) + 'firstname').setAttribute("name", "");
+        document.getElementById((counter - 1) + 'lastname').setAttribute("name", "");
+        document.getElementById((counter - 1) + 'phone').setAttribute("name", "");
+        document.getElementById((counter - 1) + 'email').setAttribute("name", "");
+        var tmp = document.getElementById((counter - 1) + 'category');
+        if (tmp != null) {
+            tmp.setAttribute("name", "");
+        }
+        document.getElementById((counter - 1) + 'paid').setAttribute("name", "");
         counter--;
     }
 }

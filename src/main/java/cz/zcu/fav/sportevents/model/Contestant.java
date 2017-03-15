@@ -23,15 +23,17 @@ public class Contestant implements Serializable{
     @Column(name = "email", nullable = false, length = 32)
     private String email;
 
-    @Column(name = "category", nullable = false, length = 32)
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "con_subcat_id")
+    private ContestantSubcategory category;
 
     @Column(name = "paid", nullable = false)
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean paid;
 
-    @Column(name = "race_id", nullable = false)
-    private int raceId;
+    @ManyToOne
+    @JoinColumn(name = "race_id")
+    private Race race;
 
     public int getId() {
         return id;
@@ -49,16 +51,8 @@ public class Contestant implements Serializable{
         return email;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
     public boolean isPaid() {
         return paid;
-    }
-
-    public int getRaceId() {
-        return raceId;
     }
 
     public void setFirstname(String firstname) {
@@ -73,15 +67,23 @@ public class Contestant implements Serializable{
         this.email = email;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setPaid(boolean paid) {
         this.paid = paid;
     }
 
-    public void setRaceId(int raceId) {
-        this.raceId = raceId;
+    public ContestantSubcategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ContestantSubcategory category) {
+        this.category = category;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
     }
 }

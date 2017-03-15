@@ -26,7 +26,6 @@ public class CreateRaceForm {
     @Pattern(regexp = "none|defaultValue|own")
     private String teamRadio;
 
-
     @Valid
     private Race race;
 

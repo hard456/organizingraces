@@ -86,7 +86,7 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
-    public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("createRaceForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
+    public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("userRegistrationForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
         model.setViewName("user/reg_result");
         if(bindingResult.hasErrors()){

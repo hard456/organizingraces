@@ -18,7 +18,7 @@ public class ContestantSubcategoryDAO {
 
     public List<ContestantSubcategory> getListByCategoryId(int category_id) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(ContestantSubcategory.class).add(Restrictions.eq("categoryId", category_id));
+        Criteria criteria = session.createCriteria(ContestantSubcategory.class).add(Restrictions.eq("contestantCategory.id", category_id));
         return criteria.list();
     }
 

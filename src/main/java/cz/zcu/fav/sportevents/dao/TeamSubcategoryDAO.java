@@ -18,7 +18,7 @@ public class TeamSubcategoryDAO {
 
     public List<TeamSubcategory> getListByCategoryId(int category_id) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(TeamSubcategory.class).add(Restrictions.eq("categoryId", category_id));
+        Criteria criteria = session.createCriteria(TeamSubcategory.class).add(Restrictions.eq("teamCategory.id", category_id));
         return criteria.list();
     }
 

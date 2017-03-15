@@ -2,6 +2,7 @@ package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.container.ContestantList;
 import cz.zcu.fav.sportevents.form.CreateRaceForm;
+import cz.zcu.fav.sportevents.form.SoloRegForm;
 import cz.zcu.fav.sportevents.model.*;
 import cz.zcu.fav.sportevents.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,17 +103,17 @@ public class RaceController {
         return true;
     }
 
-    private boolean validCreateRaceParameters(HttpServletRequest request){
-        if(!request.getParameterMap().containsKey("race.teamSize")){
+    private boolean validCreateRaceParameters(HttpServletRequest request) {
+        if (!request.getParameterMap().containsKey("race.teamSize")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("race.name")){
+        if (!request.getParameterMap().containsKey("race.name")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("conRadio")){
+        if (!request.getParameterMap().containsKey("conRadio")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("teamRadio")){
+        if (!request.getParameterMap().containsKey("teamRadio")) {
             return false;
         }
         return true;
@@ -128,7 +129,7 @@ public class RaceController {
                 model.addObject("invalid", true);
                 return model;
             }
-            if(!validCreateRaceParameters(request)){
+            if (!validCreateRaceParameters(request)) {
                 model.addObject("invalid", true);
                 return model;
             }
@@ -413,27 +414,20 @@ public class RaceController {
                 }
             }
 
-//            if (race.getContestantCategoryId() != -1) {
-//                List<ContestantSubcategory> contestantSubcategories;
-//                contestantSubcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategoryId());
-//                model.addObject("con_categories", contestantSubcategories);
-//            }
-//            if (race.getTeamCategoryId() != -1) {
-//                List<TeamSubcategory> teamSubcategories;
-//                teamSubcategories = teamSubcategoryService.getListByCategoryId(race.getTeamCategoryId());
-//                model.addObject("team_categories", teamSubcategories);
-//            }
+            if (race.getContestantCategory() != null) {
+                List<ContestantSubcategory> contestantSubcategories;
+                contestantSubcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId());
+                model.addObject("con_categories", contestantSubcategories);
+            }
+            if (race.getTeamCategory() != null) {
+                List<TeamSubcategory> teamSubcategories;
+                teamSubcategories = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
+                model.addObject("team_categories", teamSubcategories);
+            }
 
             model.addObject("race", race);
             model.addObject("user", user);
 
-            contestantList = new ContestantList();
-
-            for (int i = 0; i < race.getTeamSize(); i++) {
-                contestantList.add(new Contestant());
-            }
-
-            model.addObject("contestantList", contestantList);
             model.setViewName("race_registration");
             return model;
         }
@@ -441,44 +435,64 @@ public class RaceController {
     }
 
     @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
-    public ModelAndView addSoloContestant(@RequestParam(value = "category", required = false) String category,
-                                          @PathVariable("id") int race_id) {
-
-        Contestant contestant;
-        contestant = userToContestant(userController.getUser());
-        contestant.setPaid(false);
-        if (category == null) {
-            contestant.setCategory("jaj");
-        } else {
-            contestant.setCategory(category);
-        }
-
-        contestant.setRaceId(race_id);
-        contestantService.saveContestant(contestant);
+    public ModelAndView addSoloContestant(HttpServletRequest r,@Valid @ModelAttribute SoloRegForm soloRegForm, BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         ModelAndView model = new ModelAndView();
+
+        if (bindingResult.hasErrors()) {
+            model.addObject("result", "Something went wrong.");
+            model.setViewName("race_reg_result");
+            return model;
+        }
+
         Race race = raceService.getRaceById(race_id);
+        User user = userController.getUser();
 
         if (race == null) {
             model.addObject("error", "404");
             model.setViewName("error/error_page");
             return model;
-        } else {
-            model.addObject("race", race);
-            model.addObject("user", userController.getUser());
-            model.addObject("result", "Registration completed successfully.");
-            model.setViewName("race_registration");
-            return model;
         }
 
-    }
+        List<ContestantSubcategory> subcategories;
+        subcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId());
+        ContestantSubcategory conCategory = null;
+        if (subcategories != null) {
+            if (!r.getParameterMap().containsKey("category")) {
+                model.addObject("result", "Something went wrong.");
+                model.setViewName("race_reg_result");
+                return model;
+            }
+            conCategory = getObjectFromList(subcategories, soloRegForm.getCategory());
+            if (conCategory == null) {
+                model.addObject("result", "Something went wrong.");
+                model.setViewName("race_reg_result");
+                return model;
+            }
+        }
 
-    private Contestant userToContestant(User user) {
         Contestant contestant = new Contestant();
         contestant.setEmail(user.getEmail());
         contestant.setFirstname(user.getFirstname());
         contestant.setLastname(user.getSurname());
-        return contestant;
+        contestant.setPaid(false);
+        contestant.setCategory(conCategory);
+        contestant.setRace(race);
+        contestantService.saveContestant(contestant);
+
+        model.addObject("result", "Registration completed successfully.");
+        model.setViewName("race_reg_result");
+        return model;
+
+    }
+
+    private ContestantSubcategory getObjectFromList(List<ContestantSubcategory> list, int id) {
+        for (ContestantSubcategory item : list) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
     }
 
     @RequestMapping(value = "/avaible_races", method = RequestMethod.GET)
@@ -509,6 +523,5 @@ public class RaceController {
         model.addObject("c", contestants);
         return model;
     }
-
 
 }
