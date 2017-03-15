@@ -435,7 +435,7 @@ public class RaceController {
     }
 
     @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
-    public ModelAndView addSoloContestant(HttpServletRequest r,@Valid @ModelAttribute SoloRegForm soloRegForm, BindingResult bindingResult, @PathVariable("id") int race_id) {
+    public ModelAndView addSoloContestant(HttpServletRequest r,@Valid @ModelAttribute SoloRegForm soloRegForm, BindingResult bindingResult, @PathVariable("id") int race_id){
 
         ModelAndView model = new ModelAndView();
 
@@ -447,6 +447,12 @@ public class RaceController {
 
         Race race = raceService.getRaceById(race_id);
         User user = userController.getUser();
+
+        if(user == null){
+            model.addObject("error", "404");
+            model.setViewName("error/error_page");
+            return model;
+        }
 
         if (race == null) {
             model.addObject("error", "404");
