@@ -5,6 +5,12 @@
 
 <t:template>
     <jsp:body>
-        <div style="margin: 35px auto 35px; text-align: center;">Access denied.</div>
+        <div class="card-log" style="margin-top: 25px;">
+            <div style="max-width: 850px; margin: 0 auto;">
+                    <div class="alert alert-danger">
+                            Access denied
+                    </div>
+            </div>
+        </div>
     </jsp:body>
 </t:template>
