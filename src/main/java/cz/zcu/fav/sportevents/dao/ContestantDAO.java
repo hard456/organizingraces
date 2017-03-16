@@ -35,4 +35,11 @@ public class ContestantDAO {
         return criteria.list();
     }
 
+    public List<Contestant> getListByUserId(int user_id, int race_id) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Contestant.class)
+                .add(Restrictions.eq("user.id",user_id))
+                .add(Restrictions.eq("race.id",race_id));
+        return criteria.list();
+    }
 }

@@ -1,5 +1,7 @@
 package cz.zcu.fav.sportevents.model;
 
+import com.sun.istack.internal.Nullable;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -25,8 +27,10 @@ public class Team implements Serializable{
     @Column(name = "penalization")
     private int penalization;
 
-    @Column(name = "category", length = 32)
-    private String category;
+    @Nullable
+    @ManyToOne
+    @JoinColumn(name = "team_subcat_id")
+    private TeamSubcategory category;
 
     @Column(name = "start_time", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -36,8 +40,9 @@ public class Team implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date finishTime;
 
-    @Column(name = "race_id", nullable = false)
-    private int raceId;
+    @ManyToOne
+    @JoinColumn(name = "race_id")
+    private Race race;
 
     public int getId() {
         return id;
@@ -59,20 +64,12 @@ public class Team implements Serializable{
         return penalization;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
 
     public Date getFinishTime() {
         return finishTime;
-    }
-
-    public int getRaceId() {
-        return raceId;
     }
 
     public void setName(String name) {
@@ -91,10 +88,6 @@ public class Team implements Serializable{
         this.penalization = penalization;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
@@ -103,8 +96,19 @@ public class Team implements Serializable{
         this.finishTime = finishTime;
     }
 
-    public void setRaceId(int raceId) {
-        this.raceId = raceId;
+    public TeamSubcategory getCategory() {
+        return category;
     }
 
+    public void setCategory(TeamSubcategory category) {
+        this.category = category;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public void setRace(Race race) {
+        this.race = race;
+    }
 }

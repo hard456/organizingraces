@@ -26,4 +26,11 @@ public class ContestantSubcategoryDAO {
         sessionFactory.getCurrentSession().save(category);
     }
 
+    public ContestantSubcategory getSubCategoryById(int id){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(ContestantSubcategory.class).add(Restrictions.eq("id", id));
+        criteria.setMaxResults(1);
+        return (ContestantSubcategory) criteria.uniqueResult();
+    }
+
 }

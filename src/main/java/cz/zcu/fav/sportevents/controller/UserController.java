@@ -154,9 +154,9 @@ public class UserController {
             return false;
         } else if (user.getEmail().length() > 32 || user.getEmail().length() < 6) {
             return false;
-        } else if (user.getFirstname().length() > 32 || user.getFirstname().length() < 2) {
+        } else if (user.getFirstname().length() > 32 || user.getFirstname().length() < 3) {
             return false;
-        } else if (user.getSurname().length() > 32 || user.getSurname().length() < 2) {
+        } else if (user.getSurname().length() > 32 || user.getSurname().length() < 3) {
             return false;
         } else if (user.getPassword().length() > 256 || user.getEmail().length() < 8) {
             return false;
