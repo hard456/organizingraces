@@ -300,19 +300,19 @@
                     </div>
                 </div>
 
-                <form:form action="/race/${race.id}/addTeamByAdmin" method="POST">
+                <form:form action="/race/${race.id}/teamRegistration" method="POST">
 
                     <div class="row">
                         <c:if test="${race.teamSize gt 1}">
                             <div class="col-sm-6">
-                                Team name:<input class="form-control" name="name"/>
+                                Team name:<input class="form-control" name="teamName"/>
                             </div>
                         </c:if>
                         <c:if test="${not empty team_categories}">
                             <div class="col-sm-6">
-                                <c:if test="${race.teamSize gt 1}">Category:</c:if>
+                                <c:if test="${race.teamSize gt 1}">Team category:</c:if>
                                 <c:if test="${race.teamSize eq 1}">Race category:</c:if>
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="teamCategory">
                                     <c:forEach items="${team_categories}" var="c">
                                         <option value="${c.id}">${c.name}</option>
                                     </c:forEach>
@@ -331,7 +331,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 Contestant category:
-                                <select class="form-control" name="category">
+                                <select class="form-control" name="conCategory">
                                     <c:forEach items="${con_categories}" var="c">
                                         <option value="${c.id}">${c.name}</option>
                                     </c:forEach>
@@ -367,7 +367,7 @@
                                 <div class="col-sm-4">
                                     Phone:<input class="form-control"
                                                  type="text"
-                                                 path="contestants[${i.index}].firstname">
+                                                 name="contestants[${i.index}].phone">
                                 </div>
                             </div>
                             <div class="row">
@@ -381,7 +381,7 @@
                                 <c:if test="${not empty con_categories}">
                                     <div class="col-sm-4">
                                         Contestant category:
-                                        <select class="form-control" name="category">
+                                        <select class="form-control" name="teammateCategory[${i.index}]">
                                             <c:forEach items="${con_categories}" var="c">
                                                 <option value="${c.id}">${c.name}</option>
                                             </c:forEach>
