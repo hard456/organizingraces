@@ -35,6 +35,8 @@
         <security:intercept-url pattern="/login" access="!isAuthenticated()"/>
         <security:intercept-url pattern="/error/**" access="none"/>
 
+        <security:intercept-url pattern="/addSoloContestant" access="none" method="GET"/>
+        <security:intercept-url pattern="/teamRegistration" access="none" method="GET"/>
         <security:intercept-url pattern="/addUser" access="none" method="GET"/>
         <security:intercept-url pattern="/create_event" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/addSoloContestant" access="none" method="GET"/>
