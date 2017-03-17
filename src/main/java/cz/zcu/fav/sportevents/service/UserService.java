@@ -3,6 +3,8 @@ package cz.zcu.fav.sportevents.service;
 import cz.zcu.fav.sportevents.dao.UserDAO;
 import cz.zcu.fav.sportevents.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,18 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public User getLoginUser(){
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
+        return userDAO.get(userName);
     }
 
 }

@@ -4,6 +4,7 @@ import cz.zcu.fav.sportevents.model.Race;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -23,8 +24,8 @@ public class RaceDAO {
     public List<Race> listByUserId(int id){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
-                .add(Restrictions.eq("user.id",id));
-
+                .add(Restrictions.eq("user.id",id))
+                .addOrder(Order.desc("id"));
         return criteria.list();
     }
 
@@ -47,14 +48,16 @@ public class RaceDAO {
     public List<Race> getRacesToRegistration(){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
-                .add(Restrictions.eq("evaluation",false));
+                .add(Restrictions.eq("evaluation",false))
+                .addOrder(Order.desc("id"));
         return criteria.list();
     }
 
     public List<Race> getEvalutedRaces(){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
-                .add(Restrictions.eq("evaluation",true));
+                .add(Restrictions.eq("evaluation",true))
+                .addOrder(Order.desc("id"));
         return criteria.list();
     }
 

@@ -23,7 +23,7 @@ public class ContestantDAO {
 
     public List<Contestant> getSoloContestants(int race_id){
 
-        String sql = "SELECT c.* FROM contestant c LEFT JOIN race_registration r ON r.contestant_id = c.id WHERE r.contestant_id IS NULL AND c.race_id = :race_id";
+        String sql = "SELECT c.* FROM contestant c LEFT JOIN team t ON c.team_id = t.id WHERE c.team_id IS NULL AND c.race_id = :race_id";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createSQLQuery(sql).addEntity(Contestant.class).setParameter("race_id",race_id);
         return query.list();
@@ -31,7 +31,7 @@ public class ContestantDAO {
 
     public List<Contestant> getContestantsByRaceId(int race_id){
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Contestant.class).add(Restrictions.eq("raceId",race_id));
+        Criteria criteria = session.createCriteria(Contestant.class).add(Restrictions.eq("race.id",race_id));
         return criteria.list();
     }
 

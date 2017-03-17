@@ -38,7 +38,7 @@
                                         <div class="col-sm-2"><input type="text" value="${c.firstname}"
                                                                      class="form-control"
                                                                      style="margin-bottom: 5px;"></div>
-                                        <div class="col-sm-2"><input type="text" value="${c.category}"
+                                        <div class="col-sm-2"><input type="text" value="${c.category.name}"
                                                                      class="form-control"
                                                                      style="margin-bottom: 5px;"></div>
                                         <div class="col-sm-1">

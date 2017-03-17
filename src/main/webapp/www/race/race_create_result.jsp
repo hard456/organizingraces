@@ -6,7 +6,7 @@
 
 <t:template>
     <jsp:body>
-        ${er}
+
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 850px; margin: 0 auto;">
                 <c:if test="${invalid eq true}">

@@ -19,7 +19,7 @@
                     </c:when>
                     <c:otherwise>
                         <c:choose>
-                        <c:when test="${race_cooperator eq true || race.userId eq user.id}">
+                        <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                         <form:form action="/race/${race.id}/addTeamByAdmin" modelAttribute="contestantList"
                                    method="POST">
 
@@ -73,7 +73,7 @@
                                                                  style="margin-bottom: 5px;"></div>
                                     <div class="col-sm-3"><input type="text" value="${c.email}" class="form-control"
                                                                  style="margin-bottom: 5px;"></div>
-                                    <div class="col-sm-2"><input type="text" value="${c.category}" class="form-control"
+                                    <div class="col-sm-2"><input type="text" value="${c.category.name}" class="form-control"
                                                                  style="margin-bottom: 5px;"></div>
                                     <div class="col-sm-2" style="text-align: right">
                                         <button class="btn btn-danger btn-sm" type="submit" name="submit"
@@ -100,7 +100,7 @@
                                     <div class="col-sm-3">${c.firstname}</div>
                                     <div class="col-sm-3">${c.lastname}</div>
                                     <div class="col-sm-3">${c.email}</div>
-                                    <div class="col-sm-3">${c.category}</div>
+                                    <div class="col-sm-3">${c.category.name}</div>
                                 </div>
                                     <c:if test="${not i.last}"><hr></c:if>
                                 </c:forEach>

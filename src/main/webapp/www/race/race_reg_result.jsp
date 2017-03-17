@@ -22,9 +22,5 @@
             </div>
         </div>
 
-        <c:forEach var="c" items="${request}">
-            ${c.key},
-        </c:forEach>
-
     </jsp:body>
 </t:template>
