@@ -5,9 +5,9 @@ import cz.zcu.fav.sportevents.model.User;
 
 public class UserRegistrationForm {
 
-    User user;
+    private User user;
 
-    String passwordAgain;
+    private String passwordAgain;
 
     public User getUser() {
         return user;

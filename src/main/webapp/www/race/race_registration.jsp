@@ -2,8 +2,17 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<%--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
+
+<%--<head>--%>
+    <%--<meta name="_csrf" content="${_csrf.token}"/>--%>
+    <%--<meta name="_csrf_header" content="${_csrf.headerName}"/>--%>
+<%--</head>--%>
 
 <script src="/js/add_contestant_inputs.js" language="Javascript" type="text/javascript"></script>
+<script src="/js/admin_registration.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -21,19 +30,19 @@
                 </div>
             </div>
 
-            <form:form action="/race/${race.id}/addTeamByAdmin" modelAttribute="contestantList" method="POST">
+            <form:form id="adminTeamRegistrationForm" method="post">
 
             <div class="row">
                 <c:if test="${race.teamSize gt 1}">
                     <div class="col-sm-6">
-                        Team name:<input class="form-control" name="name"/>
+                        Team name:<input class="form-control" name="teamName" maxlength="32"/>
                     </div>
                 </c:if>
                 <c:if test="${not empty team_categories}">
                     <div class="col-sm-6">
                         <c:if test="${race.teamSize gt 1}">Team category:</c:if>
                         <c:if test="${race.teamSize eq 1}">Race category:</c:if>
-                        <select class="form-control" name="category">
+                        <select class="form-control" name="teamCategory">
                             <c:forEach items="${team_categories}" var="c">
                                 <option value="${c.id}">${c.name}</option>
                             </c:forEach>
@@ -68,10 +77,10 @@
                             Firstname:
                             <c:choose>
                             <c:when test="${i.index gt race.teamSize-1}">
-                                <input class="form-control" id="${i.index}firstname" name=""/>
+                                <input class="form-control" id="${i.index}firstname" name="" maxlength="32"/>
                             </c:when>
                             <c:otherwise>
-                                <input class="form-control" name="contestants[${i.index}].firstname"/>
+                                <input class="form-control" name="contestants[${i.index}].firstname" id="${i.index}firstname" maxlength="32"/>
                             </c:otherwise>
                             </c:choose>
 
@@ -80,10 +89,10 @@
                             Lastname:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
-                                    <input class="form-control" type="text" id="${i.index}lastname" name="">
+                                    <input class="form-control" type="text" id="${i.index}lastname" name="" maxlength="32">
                                 </c:when>
                                 <c:otherwise>
-                                    <input class="form-control" type="text" name="contestants[${i.index}].lastname">
+                                    <input class="form-control" type="text" name="contestants[${i.index}].lastname" id="${i.index}lastname" maxlength="32">
                                 </c:otherwise>
                             </c:choose>
 
@@ -92,10 +101,10 @@
                             Phone:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
-                                    <input class="form-control" type="text" id="${i.index}phone" name="">
+                                    <input class="form-control" type="text" id="${i.index}phone" name="" maxlength="32">
                                 </c:when>
                                 <c:otherwise>
-                                    <input class="form-control" type="text" name="contestants[${i.index}].phone">
+                                    <input class="form-control" type="text" name="contestants[${i.index}].phone" id="${i.index}phone" maxlength="16">
                                 </c:otherwise>
                             </c:choose>
 
@@ -106,10 +115,10 @@
                             Email:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
-                                    <input class="form-control" type="text" id="${i.index}email" name="">
+                                    <input class="form-control" type="text" id="${i.index}email" name="" maxlength="32">
                                 </c:when>
                                 <c:otherwise>
-                                    <input class="form-control" type="text" name="contestants[${i.index}].email">
+                                    <input class="form-control" type="text" name="contestants[${i.index}].email" id="${i.index}email" maxlength="32">
                                 </c:otherwise>
                             </c:choose>
 
@@ -126,7 +135,7 @@
                                         </select>
                                     </c:when>
                                     <c:otherwise>
-                                        <select class="form-control" name="category">
+                                        <select class="form-control" name="teammateCategory[${i.index}]" id="${i.index}category">
                                             <c:forEach items="${con_categories}" var="c">
                                                 <option value="${c.id}">${c.name}</option>
                                             </c:forEach>
@@ -144,7 +153,7 @@
                                     <label><input type="checkbox" id="${i.index}paid" name="" value="true">Paid</label>
                                 </c:when>
                                 <c:otherwise>
-                                <label><input type="checkbox" name="contestants[${i.index}].paid" value="true">Paid</label>
+                                <label><input type="checkbox" name="contestants[${i.index}].paid" value="true" id="${i.index}paid">Paid</label>
                                 </c:otherwise>
                                 </c:choose>
                             </div>
@@ -155,9 +164,6 @@
 
                 </c:forEach>
 
-                <div id="dynamicInput">
-
-                </div>
                 <div class="row">
                     <div class="col-sm-12" style="text-align: right">
                         <input type="button" class="btn btn-danger" value="-"
@@ -165,18 +171,14 @@
                                id="removeContestantButton">
 
                         <input type="button" class="btn btn-success" value="+"
-                               onClick="addContestant('dynamicInput',${race.teamSize});"
+                               onClick="addContestant(${race.teamSize});"
                                id="addContestantButton">
-                        <button class="btn btn-primary" type="submit" name="submit"><span
-                                style="color: white;">
-                                    <c:if test="${race.teamSize gt 1}">Team registration</c:if>
-                                    <c:if test="${race.teamSize eq 1}">Registration</c:if>
-                                </span></button>
+                        <input type="button" class="btn btn-primary" onclick="adminTeamRegistrationAjax(${race.id});" value="Registration">
                     </div>
                 </div>
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form:form>
+                    <div id="admin_team_result"></div>
                 <br><br><br><br>
 
 
@@ -189,29 +191,29 @@
                         <div style="text-align: center;">ADMIN SOLO REGISTRATION</div>
                     </div>
 
-                    <form:form action="/race/${race.id}/addTeamByAdmin" method="POST">
+                    <form:form id="adminSoloContestantForm" method="POST">
 
                         <div class="row">
                             <div class="col-sm-4">
-                                Firstname:<input class="form-control" name="firstname"/>
+                                Firstname:<input class="form-control" name="contestant.firstname" id="firstname" maxlength="32"/>
                             </div>
                             <div class="col-sm-4">
                                 Lastname:<input class="form-control"
                                                 type="text"
-                                                name="lastname">
+                                                name="contestant.lastname" id="lastname" maxlength="32">
 
                             </div>
                             <div class="col-sm-4">
                                 Phone:<input class="form-control"
                                              type="text"
-                                             path="firstname">
+                                             name="contestant.phone" id="phone" maxlength="16">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 Email:<input class="form-control"
                                              type="text"
-                                             name="email">
+                                             name="contestant.email" id="email" maxlength="32">
 
                             </div>
                             <c:if test="${not empty con_categories}">
@@ -228,7 +230,7 @@
                             <br>
                             <div class="col-sm-4">
                                 <div class="checkbox">
-                                    <label><input type="checkbox" name="paid" value="true">Paid</label>
+                                    <label><input type="checkbox" name="contestant.paid" value="true" id="paid">Paid</label>
                                 </div>
                             </div>
                         </div>
@@ -236,13 +238,12 @@
 
                         <div class="row">
                             <div class="col-sm-12" style="text-align: right">
-                                <button class="btn btn-primary" type="submit" name="submit"><span
-                                        style="color: white;">Solo registration</span></button>
+                                <input type="button" class="btn btn-primary" onclick="adminSoloRegistration(${race.id});" value="Solo registration">
                             </div>
                         </div>
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
                     </form:form>
+                    <div id="admin_solo_result"></div>
                     <br><br><br><br>
                 </c:if>
                 </c:if>
@@ -305,7 +306,7 @@
                     <div class="row">
                         <c:if test="${race.teamSize gt 1}">
                             <div class="col-sm-6">
-                                Team name:<input class="form-control" name="teamName"/>
+                                Team name:<input class="form-control" name="teamName" maxlength="32"/>
                             </div>
                         </c:if>
                         <c:if test="${not empty team_categories}">
@@ -356,25 +357,25 @@
                             <br>
                             <div class="row">
                                 <div class="col-sm-4">
-                                    Firstname:<input class="form-control" name="contestants[${i.index}].firstname"/>
+                                    Firstname:<input class="form-control" name="contestants[${i.index}].firstname" maxlength="32"/>
                                 </div>
                                 <div class="col-sm-4">
                                     Lastname:<input class="form-control"
                                                     type="text"
-                                                    name="contestants[${i.index}].lastname">
+                                                    name="contestants[${i.index}].lastname" maxlength="32">
 
                                 </div>
                                 <div class="col-sm-4">
                                     Phone:<input class="form-control"
                                                  type="text"
-                                                 name="contestants[${i.index}].phone">
+                                                 name="contestants[${i.index}].phone" maxlength="16">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">
                                     Email:<input class="form-control"
                                                  type="text"
-                                                 name="contestants[${i.index}].email">
+                                                 name="contestants[${i.index}].email" maxlength="32">
 
                                 </div>
 
@@ -408,8 +409,6 @@
 
             </div>
         </div>
-
-        ${result}
 
     </jsp:body>
 </t:template>

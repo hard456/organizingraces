@@ -1,6 +1,7 @@
 package cz.zcu.fav.sportevents.controller;
 
-import cz.zcu.fav.sportevents.container.ContestantList;
+import cz.zcu.fav.sportevents.form.AdminSoloRegForm;
+import cz.zcu.fav.sportevents.form.AdminTeamRegForm;
 import cz.zcu.fav.sportevents.form.SoloRegForm;
 import cz.zcu.fav.sportevents.form.TeamRegForm;
 import cz.zcu.fav.sportevents.model.*;
@@ -9,10 +10,7 @@ import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
@@ -48,7 +46,6 @@ public class RaceRegistrationController {
     public ModelAndView race_registration(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
         Race race = raceService.getRaceById(race_id);
-        ContestantList contestantList;
 
         if (race == null) {
             model.addObject("error", "404");
@@ -116,7 +113,7 @@ public class RaceRegistrationController {
             return model;
         }
 
-        if(contestantService.getListByUserAndRaceId(user.getId(),race.getId()).size() != 0){
+        if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
             model.addObject("invalid", true);
             model.addObject("result", "You can't register again to this race.");
             return model;
@@ -157,15 +154,6 @@ public class RaceRegistrationController {
 
     }
 
-    @RequestMapping(value = "/race/{id}/addTeamByAdmin", method = RequestMethod.POST)
-    public ModelAndView adminContestantsRegistration(@ModelAttribute("contestantList") ContestantList contestantList) {
-        List<Contestant> contestants = contestantList.getContestants();
-        ModelAndView model = new ModelAndView();
-        model.setViewName("others/test");
-        model.addObject("c", contestants);
-        return model;
-    }
-
     @RequestMapping(value = "/race/{id}/teamRegistration", method = RequestMethod.POST)
     public ModelAndView teamRegistration(HttpServletRequest r, @ModelAttribute("teamRegForm") TeamRegForm teamRegForm,
                                          BindingResult bindingResult, @PathVariable("id") int race_id) {
@@ -200,7 +188,7 @@ public class RaceRegistrationController {
             return model;
         }
 
-        if(contestantService.getListByUserAndRaceId(user.getId(),race.getId()).size() != 0){
+        if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
             model.addObject("invalid", true);
             model.addObject("result", "You can't register again to same race.");
             return model;
@@ -298,12 +286,14 @@ public class RaceRegistrationController {
                 }
             }
             teamService.save(team);
+
             for (Contestant c : contestants) {
                 c.setUser(user);
                 c.setRace(race);
                 c.setTeam(team);
                 contestantService.saveContestant(c);
             }
+
             creator.setTeam(team);
             contestantService.saveContestant(creator);
         } else {
@@ -366,7 +356,6 @@ public class RaceRegistrationController {
                     return false;
                 }
             }
-
         }
         return true;
     }
@@ -412,6 +401,206 @@ public class RaceRegistrationController {
             }
         }
         return null;
+    }
+
+    private List<Contestant> setPaidAttributeToConList(HttpServletRequest r, List<Contestant> c) {
+        for (int i = 0; i < c.size(); i++) {
+            if (r.getParameterMap().containsKey("contestants[" + i + "].paid")) {
+                c.get(i).setPaid(true);
+            }
+        }
+        return c;
+    }
+
+    @RequestMapping(value = "/race/{id}/adminSoloRegistration", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String addContestantByAdmin(HttpServletRequest request, @ModelAttribute AdminSoloRegForm adminSoloRegForm, BindingResult bindingResult,
+                                @PathVariable("id") int race_id) {
+
+        if (bindingResult.hasErrors()) {
+            return "fail";
+        }
+
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+
+        if (user == null || race == null) {
+            return "fail";
+        }
+
+        if ((race.getUser().getId() != user.getId()) && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            return "fail";
+        }
+
+        Contestant contestant = new Contestant();
+        contestant.setFirstname(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getFirstname(), "UTF-8"));
+        contestant.setLastname(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getLastname(), "UTF-8"));
+        contestant.setEmail(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getEmail(), "UTF-8"));
+        contestant.setPhone(adminSoloRegForm.getContestant().getPhone());
+        contestant.setRace(race);
+        contestant.setUser(user);
+
+        if (request.getParameterMap().containsKey("contestant.paid")) {
+            contestant.setPaid(true);
+        }
+
+        if (race.getContestantCategory() != null) {
+            if (!validAdminSoloRequestParameters(request, true)) {
+                return "fail";
+            }
+            ContestantSubcategory category;
+            category = contestantSubcategoryService.getCategoryWithRaceId(adminSoloRegForm.getCategory(), race.getContestantCategory().getId());
+            if (category == null) {
+                return "fail";
+            }
+            contestant.setCategory(category);
+        } else {
+            if (!validAdminSoloRequestParameters(request, false)) {
+                return "fail";
+            }
+        }
+
+        if (!validAdminSoloData(contestant)) {
+            return "invalid";
+        }
+
+        Team team = new Team();
+        team.setRace(race);
+        teamService.save(team);
+        contestant.setTeam(team);
+        contestantService.saveContestant(contestant);
+
+        return "ok";
+    }
+
+    public boolean validAdminSoloRequestParameters(HttpServletRequest r, boolean contestantCategory) {
+        if (!r.getParameterMap().containsKey("contestant.firstname")) {
+            return false;
+        }
+        if (!r.getParameterMap().containsKey("contestant.lastname")) {
+            return false;
+        }
+        if (!r.getParameterMap().containsKey("contestant.email")) {
+            return false;
+        }
+        if (!r.getParameterMap().containsKey("contestant.phone")) {
+            return false;
+        }
+        if (contestantCategory) {
+            if (!r.getParameterMap().containsKey("category")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validAdminSoloData(Contestant contestant) {
+        if (contestant.getLastname().length() > 32 || contestant.getLastname().length() < 3) {
+            return false;
+        }
+        if (contestant.getFirstname().length() > 32 || contestant.getFirstname().length() < 3) {
+            return false;
+        }
+        if (contestant.getEmail().length() > 0) {
+            if (!EmailValidator.getInstance().isValid(contestant.getEmail()) || contestant.getEmail().length() > 32 || contestant.getEmail().length() < 6) {
+                return false;
+            }
+        }
+        if (contestant.getPhone().length() > 0) {
+            if (!contestant.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @RequestMapping(value = "/race/{id}/adminTeamRegistration", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String addTeamByAdmin(HttpServletRequest request, @ModelAttribute("adminTeamRegForm") AdminTeamRegForm adminTeamRegForm,
+                          BindingResult bindingResult, @PathVariable("id") int race_id) {
+
+        System.out.println(request.getParameterMap());
+
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+
+        if (bindingResult.hasErrors()) {
+            return "fail";
+        }
+
+        Team team = new Team();
+
+        if (user == null) {
+            return "fail";
+        }
+
+        if (race == null) {
+            return "fail";
+        }
+
+        if (race.getTeamCategory() != null) {
+            if (!request.getParameterMap().containsKey("teamCategory")) {
+                return "fail";
+            }
+            List<TeamSubcategory> teamSubList;
+            teamSubList = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
+            team.setCategory(getTeamCategoryFromList(teamSubList, adminTeamRegForm.getTeamCategory()));
+            if (team.getCategory() == null) {
+                return "fail";
+            }
+        }
+
+        List<Contestant> contestants;
+
+        if (race.getContestantCategory() != null) {
+            if (!validConListParameters(request, adminTeamRegForm.getContestants().size(), true)) {
+                return "fail";
+            }
+            contestants = validContestantList(adminTeamRegForm.getContestants());
+            if (contestants == null) {
+                return "invalid";
+            }
+            contestants = setCategoriesToConList(contestants, adminTeamRegForm.getTeammateCategory(), race.getContestantCategory().getId());
+            if (contestants == null) {
+                return "fail";
+            }
+        } else {
+            if (!validConListParameters(request, adminTeamRegForm.getContestants().size(), false)) {
+                return "fail";
+            }
+            contestants = validContestantList(adminTeamRegForm.getContestants());
+            if (contestants == null) {
+                return "invalid";
+            }
+
+        }
+        if(race.getTeamSize() > 1){
+            if(!request.getParameterMap().containsKey("teamName")){
+                return "fail";
+            }
+            if (adminTeamRegForm.getTeamName().length() != 0) {
+                team.setName(HtmlUtils.htmlEscape(adminTeamRegForm.getTeamName(), "UTF-8"));
+                if (team.getName().length() < 3 || team.getName().length() > 32) {
+                    return "invalid";
+                }
+            }
+        }
+
+        team.setRace(race);
+        teamService.save(team);
+
+        contestants = setPaidAttributeToConList(request, contestants);
+
+        for (Contestant c : contestants) {
+            c.setRace(race);
+            c.setUser(user);
+            c.setTeam(team);
+            contestantService.saveContestant(c);
+        }
+
+        return "ok";
     }
 
 }

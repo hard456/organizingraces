@@ -1,9 +1,6 @@
 package cz.zcu.fav.sportevents.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -11,26 +8,29 @@ import java.io.Serializable;
 public class RaceCooperation implements Serializable{
 
     @Id
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Id
-    @Column(name = "race_id", nullable = false)
-    private int raceId;
+    @ManyToOne
+    @JoinColumn(name = "race_id")
+    private Race race;
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public int getRaceId() {
-        return raceId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public Race getRace() {
+        return race;
     }
 
-    public void setRaceId(int raceId) {
-        this.raceId = raceId;
+    public void setRace(Race race) {
+        this.race = race;
     }
+
 }

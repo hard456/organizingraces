@@ -1,6 +1,6 @@
 var counter = 0;
 
-function addContestant(divName, team_size) {
+function addContestant(team_size) {
     if (counter != team_size + 2) {
         if (counter == 0) {
             counter = team_size;
@@ -12,9 +12,9 @@ function addContestant(divName, team_size) {
         document.getElementById(counter + 'email').setAttribute("name", "contestants[" + counter + "].email");
         var tmp = document.getElementById(counter + 'category');
         if (tmp != null) {
-            tmp.setAttribute("name", "contestants[" + counter + "].category");
+            tmp.setAttribute("name", "teammateCategory[" + counter + "]");
         }
-        document.getElementById(counter + 'paid').setAttribute("name", "contestants[" + counter + "].phone");
+        document.getElementById(counter + 'paid').setAttribute("name", "contestants[" + counter + "].paid");
         counter++;
     }
 }

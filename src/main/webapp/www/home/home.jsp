@@ -65,7 +65,7 @@
                     <div class="jumbotron" style="background-color: white;">
                             <span class="glyphicon glyphicon-eye-close"
                                   style="font-size:2em; color: #ff0000;"></span><br>
-                        <span style="font-size: 15px; color: slategrey;">Private event avaible</span>
+                        <span style="font-size: 15px; color: slategrey;">Private event available</span>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4" style="text-align: center;">

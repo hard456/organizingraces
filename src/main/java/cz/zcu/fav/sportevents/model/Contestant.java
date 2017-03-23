@@ -37,10 +37,12 @@ public class Contestant implements Serializable{
     @JoinColumn(name = "con_subcat_id")
     private ContestantSubcategory category;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -49,6 +51,7 @@ public class Contestant implements Serializable{
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean paid;
 
+    @Nullable
     @ManyToOne
     @JoinColumn(name = "race_id")
     private Race race;

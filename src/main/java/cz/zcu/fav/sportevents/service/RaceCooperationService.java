@@ -26,4 +26,9 @@ public class RaceCooperationService {
         return false;
        }
 
+    @Transactional
+    public void saveCooperation(RaceCooperation raceCooperation){
+        raceCooperationDAO.save(raceCooperation);
+    }
+
 }

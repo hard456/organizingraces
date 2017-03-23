@@ -8,7 +8,7 @@ import com.sun.istack.internal.Nullable;
 public class SoloRegForm {
 
     @Nullable
-    Integer category;
+    private Integer category;
 
     public Integer getCategory() {
         return category;

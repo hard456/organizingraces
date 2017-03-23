@@ -61,4 +61,8 @@ public class RaceDAO {
         return criteria.list();
     }
 
+    public void delete(Race race){
+        sessionFactory.getCurrentSession().delete(race);
+    }
+
 }

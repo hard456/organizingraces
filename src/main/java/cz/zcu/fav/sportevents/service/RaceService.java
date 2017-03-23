@@ -48,4 +48,9 @@ public class RaceService {
         return raceDAO.getEvalutedRaces();
     }
 
+    @Transactional
+    public void deleteRace(Race race){
+        raceDAO.delete(race);
+    }
+
 }

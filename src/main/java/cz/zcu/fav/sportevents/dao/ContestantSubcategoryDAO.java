@@ -33,4 +33,13 @@ public class ContestantSubcategoryDAO {
         return (ContestantSubcategory) criteria.uniqueResult();
     }
 
+    public ContestantSubcategory getByIdAndRaceId(int id, int race_category){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(ContestantSubcategory.class)
+                .add(Restrictions.eq("id", id))
+                .add(Restrictions.eq("contestantCategory.id",race_category));
+        criteria.setMaxResults(1);
+        return (ContestantSubcategory) criteria.uniqueResult();
+    }
+
 }

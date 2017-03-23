@@ -26,6 +26,7 @@
 
     <security:http auto-config="true" use-expressions="true">
         <!-- Interceptor urls -->
+        <security:intercept-url pattern="/favicon.ico" access="permitAll" />
         <security:intercept-url pattern="/" access="permitAll" />
         <security:intercept-url pattern="/userpage" access="isAuthenticated()" />
         <security:intercept-url pattern="/logout" access="isAuthenticated()"/>
@@ -35,6 +36,8 @@
         <security:intercept-url pattern="/login" access="!isAuthenticated()"/>
         <security:intercept-url pattern="/error/**" access="none"/>
 
+        <security:intercept-url pattern="/race/{id}/delete" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/race/{id}/deleteRace" access="none" method="GET"/>
         <security:intercept-url pattern="/addSoloContestant" access="none" method="GET"/>
         <security:intercept-url pattern="/teamRegistration" access="none" method="GET"/>
         <security:intercept-url pattern="/addUser" access="none" method="GET"/>

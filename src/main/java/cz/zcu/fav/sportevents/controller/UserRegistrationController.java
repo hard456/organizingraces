@@ -33,12 +33,12 @@ public class UserRegistrationController {
     public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("userRegistrationForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
         model.setViewName("user/reg_result");
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addObject("invalid", true);
             model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
             return model;
         }
-        if(!validUserParameters(request)){
+        if (!validUserParameters(request)) {
             model.addObject("invalid", true);
             model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
             return model;
@@ -58,15 +58,18 @@ public class UserRegistrationController {
             model.addObject("invalid", true);
             model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
             return model;
-        } else if (userService.checkUserName(user)) {
+        }
+        if (userService.checkUserName(user)) {
             model.addObject("invalid", true);
             model.addObject("message", "Name already used");
             return model;
-        } else if (!EmailValidator.getInstance().isValid(user.getEmail())) {
+        }
+        if (!EmailValidator.getInstance().isValid(user.getEmail())) {
             model.addObject("invalid", true);
             model.addObject("message", "Email is in invalid format");
             return model;
-        } else if (!user.getPhone().isEmpty()) {
+        }
+        if (!user.getPhone().isEmpty()) {
             if (!user.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
                 model.addObject("invalid", true);
                 model.addObject("message", "Invalid phone format (only allowed):<br> +420123456789<br>+420 123 456 789<br>123 456 789<br>123456789");
@@ -77,11 +80,13 @@ public class UserRegistrationController {
                 model.addObject("message", "User with phone number already exists");
                 return model;
             }
-        } else if (userService.checkEmail(user)) {
+        }
+        if (userService.checkEmail(user)) {
             model.addObject("invalid", true);
             model.addObject("message", "Email already used");
             return model;
-        } else if (!user.getPassword().equals(passwordAgain)) {
+        }
+        if (!user.getPassword().equals(passwordAgain)) {
             model.addObject("invalid", true);
             model.addObject("message", "Passwords are not identical");
             return model;
@@ -102,32 +107,32 @@ public class UserRegistrationController {
             return false;
         } else if (user.getSurname().length() > 32 || user.getSurname().length() < 3) {
             return false;
-        } else if (user.getPassword().length() > 256 || user.getEmail().length() < 8) {
+        } else if (user.getPassword().length() > 256 || user.getPassword().length() < 8) {
             return false;
         }
         return true;
     }
 
-    private boolean validUserParameters(HttpServletRequest request){
-        if(!request.getParameterMap().containsKey("user.login")){
+    private boolean validUserParameters(HttpServletRequest request) {
+        if (!request.getParameterMap().containsKey("user.login")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("user.firstname")){
+        if (!request.getParameterMap().containsKey("user.firstname")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("user.surname")){
+        if (!request.getParameterMap().containsKey("user.surname")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("user.phone")){
+        if (!request.getParameterMap().containsKey("user.phone")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("user.email")){
+        if (!request.getParameterMap().containsKey("user.email")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("user.password")){
+        if (!request.getParameterMap().containsKey("user.password")) {
             return false;
         }
-        if(!request.getParameterMap().containsKey("passwordAgain")){
+        if (!request.getParameterMap().containsKey("passwordAgain")) {
             return false;
         }
         return true;
