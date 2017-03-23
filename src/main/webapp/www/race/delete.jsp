@@ -13,7 +13,7 @@
                 <c:choose>
                 <c:when test="${race.user.id eq user.id}">
 
-                    <div style="max-width: 850px; margin: 0 auto;">
+                    <div style="max-width: 650px; margin: 0 auto;">
 
                 <div class="well">
                     <div style="text-align: center;">
