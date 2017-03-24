@@ -4,13 +4,6 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<%--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>--%>
-
-<%--<head>--%>
-    <%--<meta name="_csrf" content="${_csrf.token}"/>--%>
-    <%--<meta name="_csrf_header" content="${_csrf.headerName}"/>--%>
-<%--</head>--%>
-
 <script src="/js/add_contestant_inputs.js" language="Javascript" type="text/javascript"></script>
 <script src="/js/admin_registration.js" language="Javascript" type="text/javascript"></script>
 

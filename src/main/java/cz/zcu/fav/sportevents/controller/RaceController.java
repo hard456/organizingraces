@@ -1,5 +1,6 @@
 package cz.zcu.fav.sportevents.controller;
 
+import cz.zcu.fav.sportevents.container.CooperatorAjaxResponse;
 import cz.zcu.fav.sportevents.model.Race;
 import cz.zcu.fav.sportevents.model.RaceCooperation;
 import cz.zcu.fav.sportevents.model.User;
@@ -84,6 +85,7 @@ public class RaceController {
             return model;
         } else {
             model.setViewName("race/race");
+            model.addObject("cooperators", raceCooperationService.getCooperatorsByRaceId(race_id));
             model.addObject("user", userService.getLoginUser());
             model.addObject("race", race);
             return model;
@@ -134,46 +136,94 @@ public class RaceController {
 
     }
 
-    @RequestMapping(value = "/race/{id}/addCooperator", method = RequestMethod.POST)
+    @RequestMapping(value = "/race/{id}/addCooperator", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
-    String addCooperator(HttpServletRequest request, @ModelAttribute("login") String login, @PathVariable("id") int race_id) {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("/race/add_cooperator_result");
+    CooperatorAjaxResponse addCooperator(HttpServletRequest request, @ModelAttribute("login") String login, @PathVariable("id") int race_id) {
         User user = userService.getLoginUser();
         Race race = raceService.getRaceById(race_id);
-
+        CooperatorAjaxResponse response = new CooperatorAjaxResponse();
         if (race == null || user == null) {
-            return "fail";
+           response.setValidation("fail");
+           return response;
         }
 
         if (!request.getParameterMap().containsKey("login")) {
-            return "fail";
+            response.setValidation("fail");
+            return response;
         }
 
         if (race.getUser().getId() != user.getId()) {
-            return "fail";
+            response.setValidation("fail");
+            return response;
         }
 
         User cooperator = userService.getUser(HtmlUtils.htmlEscape(login));
+
+        if(login.length() < 3 || login.length() > 32){
+            response.setValidation("fail");
+            return response;
+        }
+
         if (cooperator == null) {
-            return "wrongname";
+            response.setValidation("wrongname");
+            return response;
         }
 
         if (raceCooperationService.isUserRaceCooperator(race_id, cooperator.getId())) {
-            return "iscooperator";
+            response.setValidation("iscooperator");
+            return response;
         }
 
         if (user.getId() == cooperator.getId()) {
-            return "owner";
+            response.setValidation("owner");
+            return response;
         }
         RaceCooperation cooperation = new RaceCooperation();
         cooperation.setRace(race);
         cooperation.setUser(cooperator);
         raceCooperationService.saveCooperation(cooperation);
-        return "ok";
-
+        response.setValidation("ok");
+        response.setUser(cooperator);
+        return response;
 
     }
 
+    @RequestMapping(value = "/race/{id}/deleteCooperator", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody int deleteCooperator(HttpServletRequest request, @ModelAttribute("login") String login, @PathVariable("id") int race_id){
+        User user = userService.getLoginUser();
+        Race race = raceService.getRaceById(race_id);
+        if (race == null || user == null) {
+            return -1;
+        }
+
+        if (!request.getParameterMap().containsKey("login")) {
+            return -1;
+        }
+
+        if (race.getUser().getId() != user.getId()) {
+            return -1;
+        }
+
+        User cooperator = userService.getUser(HtmlUtils.htmlEscape(login));
+
+        if(login.length() < 3 || login.length() > 32){
+            return -1;
+        }
+
+        if (cooperator == null) {
+            return -1;
+        }
+
+        RaceCooperation cooperation;
+        cooperation = raceCooperationService.getCooperation(race_id, cooperator.getId());
+
+        if (cooperation == null) {
+            return -1;
+        }
+
+        raceCooperationService.delete(cooperation);
+
+        return cooperator.getId();
+    }
 }

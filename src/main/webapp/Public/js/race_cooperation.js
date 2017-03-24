@@ -1,31 +1,66 @@
 function addCooperator(race_id) {
 
     var form = $("#addCooperatorForm").serialize();
-
+    var tmp;
     $.ajax({
         type: "POST",
         url: "/race/" + race_id + "/addCooperator",
         data: form,
-        async: true,
-        dataType: "html",
-        success: function (data) {
-            if (data.localeCompare("ok") == 0) {
-                data = '<div class="alert alert-success">The cooperator was added.</div>'
+        dataType: "json",
+        success: function (response) {
+            if (response.validation.localeCompare("ok") == 0) {
+                tmp = "<div class='alert alert-success'>The cooperator was added.</div>";
+                $("#deleteCooperatorForm").append("<hr>" +
+                    "<div id='U" + response.user.id + "'>" +"<div class='row'>" +
+                    "<div class='col-sm-9' name='login'>" + response.user.login +
+                    "</div>" +
+                    "<div class='col-sm-3' style='text-align: right;'>" +
+                    "<input type='button' class='btn btn-danger' onclick='deleteCooperator(" + race_id + ");' value='Delete cooperator'>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>");
             }
-            if (data.localeCompare("fail") == 0) {
-                data = '<div class="alert alert-danger">Something went wrong.</div>'
+            if (response.validation.localeCompare("fail") == 0) {
+                tmp = '<div class="alert alert-danger">Something went wrong.</div>'
             }
-            if (data.localeCompare("wrongname") == 0) {
-                data = '<div class="alert alert-danger">User is not exist.</div>'
+            if (response.validation.localeCompare("wrongname") == 0) {
+                tmp = '<div class="alert alert-danger">User is not exist.</div>'
             }
-            if (data.localeCompare("owner") == 0) {
-                data = '<div class="alert alert-danger">You can not add yourself.</div>'
+            if (response.validation.localeCompare("owner") == 0) {
+                tmp = '<div class="alert alert-danger">You can not add yourself.</div>'
             }
-            if (data.localeCompare("iscooperator") == 0) {
-                data = '<div class="alert alert-danger">User is already cooperator.</div>'
+            if (response.validation.localeCompare("iscooperator") == 0) {
+                tmp = '<div class="alert alert-danger">User is already cooperator.</div>'
             }
-            $('#add_cooperator_result').html(data);
+
+            $('#add_cooperator_result').html(tmp);
             $('#addCooperatorForm').get(0).reset();
         }
     });
+}
+
+function deleteCooperator(race_id, login) {
+
+    //nutnost pro poslání CSRF
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    var form = {login:login};
+
+    $(document).ajaxSend(function(e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
+
+    $.ajax({
+        type: "POST",
+        url: "/race/" + race_id + "/deleteCooperator",
+        data: form,
+        dataType: "json",
+        success: function (response) {
+            if (response != -1) {
+                $('#C' + response).remove();
+            }
+        }
+    });
+
 }

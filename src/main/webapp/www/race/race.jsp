@@ -4,6 +4,12 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<head>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+
 <script src="/js/race_cooperation.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
@@ -47,7 +53,7 @@
                         </div>
                     </div>
 
-                    <form:form id="addCooperatorForm" method="POST">
+                    <form:form id="addCooperatorForm" onsubmit="return false;">
                         <div class="row">
                             <div class="col-sm-6">Cooperator login:</div>
                         </div>
@@ -58,7 +64,8 @@
                                        name="login" maxlength="32">
                             </div>
                             <div class="col-sm-3" style="text-align: right;">
-                                <input type="button" class="btn btn-primary" onclick="addCooperator(${race.id});" value="Add cooperator">
+                                <input type="button" class="btn btn-primary" onclick="addCooperator(${race.id});"
+                                       value="Add cooperator" >
                             </div>
                         </div>
                     </form:form>
@@ -69,9 +76,38 @@
 
                     <div class="well">
                         <div style="text-align: center;">
+                            LIST OF COOPERATORS
+                        </div>
+                    </div>
+
+                    <form:form id="deleteCooperatorForm" method="POST">
+                        <c:forEach items="${cooperators}" varStatus="i">
+                            <div id="C${cooperators.get(i.index).user.id}">
+                                <div class="row">
+                                    <div class="col-sm-9" name="login">
+                                            ${cooperators.get(i.index).user.login}
+                                    </div>
+                                    <div class="col-sm-3" style="text-align: right;">
+                                        <input type="button" class="btn btn-danger"
+                                               onclick="deleteCooperator(${race.id},'${cooperators.get(i.index).user.login}');" value="Delete cooperator">
+                                    </div>
+
+                                </div>
+                                <c:if test="${not i.last}">
+                                    <hr>
+                                </c:if>
+                            </div>
+                        </c:forEach>
+                    </form:form>
+
+                    <br><br><br><br>
+
+                    <div class="well">
+                        <div style="text-align: center;">
                             DELETE THE RACE
                         </div>
                     </div>
+
 
                     <form:form action="/race/${race.id}/deleteRace" method="POST">
                         <div class="row">
@@ -88,6 +124,7 @@
                                         style="color: white;">Delete race</span></button>
                             </div>
                         </div>
+                        <br><br><br><br>
                     </form:form>
 
                 </c:if>

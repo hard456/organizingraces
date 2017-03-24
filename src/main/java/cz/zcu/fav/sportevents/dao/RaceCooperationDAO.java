@@ -20,11 +20,10 @@ public class RaceCooperationDAO {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(RaceCooperation.class)
                 .add(Restrictions.eq("race.id", race_id));
-        criteria.setMaxResults(1);
         return criteria.list();
     }
 
-    public RaceCooperation isUserRaceCooperator(int race_id, int user_id) {
+    public RaceCooperation getCooperation(int race_id, int user_id) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(RaceCooperation.class)
                 .add(Restrictions.eq("race.id", race_id))
@@ -37,4 +36,7 @@ public class RaceCooperationDAO {
         sessionFactory.getCurrentSession().save(cooperation);
     }
 
+    public void delete(RaceCooperation cooperation) {
+        sessionFactory.getCurrentSession().delete(cooperation);
+    }
 }
