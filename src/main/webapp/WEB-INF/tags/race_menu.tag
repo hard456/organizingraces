@@ -8,7 +8,7 @@
             <ul class="nav navbar-nav">
                 <li><a href="/race/${race.id}">Event</a></li>
                 <sec:authorize access="isAuthenticated()"><li><a href="${pageContext.request.contextPath}/race/${race.id}/registration">Race registration</a></li></sec:authorize>
-                <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/solo">Solo contestants</a></li>
+                <c:if test="${race.teamSize gt 1}"><li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/solo">Solo contestants</a></li></c:if>
                 <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/teams">Teams</a></li>
                 <li><a href="${pageContext.request.contextPath}/race/${race.id}/contestants/full_list">List of contestants</a></li>
                 <c:if test="${race.evaluation == true}"> <li><a href="${pageContext.request.contextPath}/race/${race.id}/results">Results</a></li></c:if>

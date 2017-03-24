@@ -12,6 +12,8 @@
             <div style="max-width: 850px; margin: 0 auto;">
 
                 <c:choose>
+                    <c:when test="${race.teamSize gt 1}">
+                <c:choose>
                     <c:when test="${empty contestants}">
                         <div class="alert alert-warning">
                             List of solo contestants is empty!
@@ -106,6 +108,13 @@
                                 </c:forEach>
                             </c:otherwise>
                         </c:choose>
+                    </c:otherwise>
+                </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="alert alert-danger">
+                            This section is not supported.
+                        </div>
                     </c:otherwise>
                 </c:choose>
 
