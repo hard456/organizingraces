@@ -465,10 +465,6 @@ public class RaceRegistrationController {
             return "invalid";
         }
 
-        Team team = new Team();
-        team.setRace(race);
-        teamService.save(team);
-        contestant.setTeam(team);
         contestantService.saveContestant(contestant);
 
         return "ok";
