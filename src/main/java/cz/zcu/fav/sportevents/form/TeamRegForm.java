@@ -8,9 +8,6 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by HARD on 14.03.2017.
- */
 public class TeamRegForm {
 
     @Valid

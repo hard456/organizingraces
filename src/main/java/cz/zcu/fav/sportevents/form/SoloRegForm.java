@@ -2,9 +2,7 @@ package cz.zcu.fav.sportevents.form;
 
 import com.sun.istack.internal.Nullable;
 
-/**
- * Created by HARD on 15.03.2017.
- */
+
 public class SoloRegForm {
 
     @Nullable
