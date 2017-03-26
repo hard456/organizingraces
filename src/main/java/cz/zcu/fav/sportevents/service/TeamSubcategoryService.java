@@ -26,4 +26,9 @@ public class TeamSubcategoryService {
         }
     }
 
+    @Transactional
+    public TeamSubcategory getSubcategoryById(int id){
+        return teamSubcategoryDAO.getSubcategoryById(id);
+    }
+
 }

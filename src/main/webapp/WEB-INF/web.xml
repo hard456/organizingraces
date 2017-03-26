@@ -24,8 +24,6 @@
 		<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
 	</context-param>
 
-
-
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -69,5 +67,10 @@
 		<error-code>500</error-code>
 		<location>/error/500</location>
 	</error-page>
+
+	<session-config>
+		<!-- SESSION EXPIRED TIMEOUT -->
+		<session-timeout>0</session-timeout>
+	</session-config>
 
 </web-app>

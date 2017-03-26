@@ -119,20 +119,24 @@ public class RaceRegistrationController {
             return model;
         }
 
-        List<ContestantSubcategory> subcategories;
-        subcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId());
         ContestantSubcategory conCategory = null;
-        if (subcategories != null) {
-            if (!r.getParameterMap().containsKey("category")) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
-            }
-            conCategory = getConCategoryFromList(subcategories, soloRegForm.getCategory());
-            if (conCategory == null) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+
+        if(race.getContestantCategory() != null){
+            List<ContestantSubcategory> subcategories;
+            subcategories = contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId());
+
+            if (subcategories != null) {
+                if (!r.getParameterMap().containsKey("category")) {
+                    model.addObject("invalid", true);
+                    model.addObject("result", "Something went wrong.");
+                    return model;
+                }
+                conCategory = getConCategoryFromList(subcategories, soloRegForm.getCategory());
+                if (conCategory == null) {
+                    model.addObject("invalid", true);
+                    model.addObject("result", "Something went wrong.");
+                    return model;
+                }
             }
         }
 
@@ -149,7 +153,7 @@ public class RaceRegistrationController {
         contestantService.saveContestant(contestant);
 
         model.addObject("invalid", false);
-        model.addObject("result", "Registration completed successfully.");
+        model.addObject("result", "Registration successfully completed.");
         return model;
 
     }

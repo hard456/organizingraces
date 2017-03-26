@@ -35,4 +35,19 @@ public class ContestantService {
         return con;
     }
 
+    @Transactional
+    public Contestant getContestantById(int id){
+        return contestantDAO.getContestantById(id);
+    }
+
+    @Transactional
+    public void delete(Contestant contestant) {
+        contestantDAO.delete(contestant);
+    }
+
+    @Transactional
+    public void update(Contestant contestant){
+        contestantDAO.update(contestant);
+    }
+
 }

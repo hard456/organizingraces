@@ -3,6 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
+<head>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+
+<script src="/js/create_team.js" language="Javascript" type="text/javascript"></script>
+
 <t:template>
     <jsp:body>
 
@@ -13,103 +21,125 @@
 
                 <c:choose>
                     <c:when test="${race.teamSize gt 1}">
-                <c:choose>
-                    <c:when test="${empty contestants}">
-                        <div class="alert alert-warning">
-                            List of solo contestants is empty!
-                        </div>
-                    </c:when>
-                    <c:otherwise>
                         <c:choose>
-                        <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
-                        <form:form action="/race/${race.id}/addTeamByAdmin" modelAttribute="contestantList"
-                                   method="POST">
-
-                            <div class="row hidden-xs">
-                                <div class="col-sm-5">
-                                    Team name:
+                            <c:when test="${empty contestants}">
+                                <div class="alert alert-warning">
+                                    List of solo contestants is empty!
                                 </div>
-                                <div class="col-sm-5">
-                                    Team category:
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <div class="visible-xs">Team name:</div>
-                                    <input class="form-control" style="margin-bottom: 5px;" name="name"
-                                           placeholder="Team name"/>
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="visible-xs">Category:</div>
-                                    <select class="form-control" style="margin-bottom: 5px;" name="category">
-                                        <option selected value="Smrtelník">Smrtelník</option>
-                                        <option value="Orienťák">Orienťák</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-2" style="text-align: right;">
-                                    <button class="btn btn-primary visible-xs" type="submit" name="submit"
-                                            style="margin-bottom: 5px; width: 100%"><span
-                                            style="color: white;">Team registration</span></button>
-                                    <button class="btn btn-primary hidden-xs" type="submit" name="submit"
-                                            style="margin-bottom: 5px;"><span
-                                            style="color: white;">Registration</span></button>
-                                </div>
-                            </div>
-
-                            <br><br>
-
-                            <c:forEach var="c" varStatus="i" items="${contestants}">
-
-                                <div class="row">
-
-                                    <div class="col-sm-1">
-                                        <button class="btn btn-success btn-sm" type="submit" name="submit"
-                                                style="margin-bottom: 5px;"><span
-                                                style="color: white;">+</span></button>
-                                    </div>
-
-                                    <div class="col-sm-2"><input type="text" value="${c.firstname}" class="form-control"
-                                                                 style="margin-bottom: 5px;"></div>
-                                    <div class="col-sm-2"><input type="text" value="${c.lastname}" class="form-control"
-                                                                 style="margin-bottom: 5px;"></div>
-                                    <div class="col-sm-3"><input type="text" value="${c.email}" class="form-control"
-                                                                 style="margin-bottom: 5px;"></div>
-                                    <div class="col-sm-2"><input type="text" value="${c.category.name}" class="form-control"
-                                                                 style="margin-bottom: 5px;"></div>
-                                    <div class="col-sm-2" style="text-align: right">
-                                        <button class="btn btn-danger btn-sm" type="submit" name="submit"
-                                                style="margin-bottom: 5px;"><span
-                                                style="color: white;">Delete</span></button>
-                                    </div>
-                                </div>
-                                <c:if test="${not i.last}"><hr></c:if>
-                            </c:forEach>
-
-                        </form:form>
-                        </c:when>
+                            </c:when>
                             <c:otherwise>
-                                <div class="row hidden-xs"
-                                     style="background: lightcoral; padding: 5px 0 5px 0; color: white; text-align: center;">
-                                    <div class="col-sm-3">Firstname</div>
-                                    <div class="col-sm-3">Lastname</div>
-                                    <div class="col-sm-3">Email</div>
-                                    <div class="col-sm-3">Category</div>
-                                </div>
-                                <br>
-                                <c:forEach var="c" varStatus="i" items="${contestants}">
-                                <div class="row" style="text-align: center;">
-                                    <div class="col-sm-3">${c.firstname}</div>
-                                    <div class="col-sm-3">${c.lastname}</div>
-                                    <div class="col-sm-3">${c.email}</div>
-                                    <div class="col-sm-3">${c.category.name}</div>
-                                </div>
-                                    <c:if test="${not i.last}"><hr></c:if>
-                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
+
+                                        <div id="create_team_result"></div>
+
+                                        <form:form id="createTeamForm" method="POST">
+
+                                            <div class="row hidden-xs">
+                                                <div class="col-sm-5">
+                                                    Team name:
+                                                </div>
+                                                <c:if test="${race.teamCategory ne null}">
+                                                <div class="col-sm-5">
+                                                    Team category:
+                                                </div>
+                                                </c:if>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-5">
+                                                    <div class="visible-xs">Team name:</div>
+                                                    <input class="form-control" style="margin-bottom: 5px;" name="teamName"
+                                                           placeholder="Team name" maxlength="32"/>
+                                                </div>
+                                                <c:if test="${race.teamCategory ne null}">
+                                                <div class="col-sm-5">
+                                                    <div class="visible-xs">Category:</div>
+                                                    <select class="form-control" style="margin-bottom: 5px;"
+                                                            name="teamCategory">
+                                                        <c:forEach items="${team_categories}" var="c">
+                                                            <option selected value="${c.id}">${c.name}</option>
+                                                        </c:forEach>
+
+                                                    </select>
+                                                </div>
+                                                </c:if>
+                                                <div class="col-sm-2" style="text-align: right;">
+                                                    <input type="button" class="btn btn-primary visible-xs"
+                                                           onclick="createTeamAjax(${race.id});" value="Registration"
+                                                           style="margin-bottom: 5px; width: 100%">
+                                                    <input type="button" class="btn btn-primary hidden-xs"
+                                                           onclick="createTeamAjax(${race.id});" value="Registration"
+                                                           style="margin-bottom: 5px;">
+                                                </div>
+                                            </div>
+
+                                            <br><br>
+
+                                            <c:forEach var="c" varStatus="i" items="${contestants}">
+                                                <div id="C${c.id}">
+                                                    <div class="row">
+
+                                                        <div class="col-sm-1">
+                                                            <input type="button" id="B${c.id}"
+                                                                   class="btn btn-success btn-sm"
+                                                                   onclick="addToTeamList(${c.id});" value="+"
+                                                                   style="margin-bottom: 5px;  width: 28px; text-align: center; vertical-align: center;">
+                                                        </div>
+
+                                                        <div class="col-sm-2"><input type="text" value="${c.firstname}"
+                                                                                     class="form-control"
+                                                                                     style="margin-bottom: 5px;"></div>
+                                                        <div class="col-sm-2"><input type="text" value="${c.lastname}"
+                                                                                     class="form-control"
+                                                                                     style="margin-bottom: 5px;"></div>
+                                                        <div class="col-sm-3"><input type="text" value="${c.email}"
+                                                                                     class="form-control"
+                                                                                     style="margin-bottom: 5px;"></div>
+                                                        <div class="col-sm-2"><input type="text"
+                                                                                     value="${c.category.name}"
+                                                                                     class="form-control"
+                                                                                     style="margin-bottom: 5px;"></div>
+                                                        <div class="col-sm-2" style="text-align: right">
+                                                            <input type="button" class="btn btn-danger btn-md"
+                                                                   value="Delete"
+                                                                   style="margin-bottom: 5px;" onclick="deleteSoloContestant(${c.id},${race.id});">
+                                                        </div>
+
+                                                        <input type="text" hidden="true" id="ID${c.id}" name="contestants[${i.index}]">
+                                                    </div>
+                                                    <c:if test="${not i.last}">
+                                                        <hr>
+                                                    </c:if>
+                                                </div>
+                                            </c:forEach>
+                                            <%--<div id="dialog" title="Delete contestant" hidden="hidden">Would you like to delete contestant?</div>--%>
+                                        </form:form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="row hidden-xs"
+                                             style="background: lightcoral; padding: 5px 0 5px 0; color: white; text-align: center;">
+                                            <div class="col-sm-3">Firstname</div>
+                                            <div class="col-sm-3">Lastname</div>
+                                            <div class="col-sm-3">Email</div>
+                                            <div class="col-sm-3">Category</div>
+                                        </div>
+                                        <br>
+                                        <c:forEach var="c" varStatus="i" items="${contestants}">
+                                            <div class="row" style="text-align: center;">
+                                                <div class="col-sm-3">${c.firstname}</div>
+                                                <div class="col-sm-3">${c.lastname}</div>
+                                                <div class="col-sm-3">${c.email}</div>
+                                                <div class="col-sm-3">${c.category.name}</div>
+                                            </div>
+                                            <c:if test="${not i.last}">
+                                                <hr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
-                    </c:otherwise>
-                </c:choose>
                     </c:when>
                     <c:otherwise>
                         <div class="alert alert-danger">

@@ -24,13 +24,13 @@ function addCooperator(race_id) {
                 tmp = '<div class="alert alert-danger">Something went wrong.</div>'
             }
             if (response.validation.localeCompare("wrongname") == 0) {
-                tmp = '<div class="alert alert-danger">User is not exist.</div>'
+                tmp = '<div class="alert alert-danger">The user is not exist.</div>'
             }
             if (response.validation.localeCompare("owner") == 0) {
                 tmp = '<div class="alert alert-danger">You can not add yourself.</div>'
             }
             if (response.validation.localeCompare("iscooperator") == 0) {
-                tmp = '<div class="alert alert-danger">User is already cooperator.</div>'
+                tmp = '<div class="alert alert-danger">Theuser is already cooperator.</div>'
             }
 
             $('#add_cooperator_result').html(tmp);

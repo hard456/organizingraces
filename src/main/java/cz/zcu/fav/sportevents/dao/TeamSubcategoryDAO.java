@@ -26,4 +26,11 @@ public class TeamSubcategoryDAO {
         sessionFactory.getCurrentSession().save(category);
     }
 
+    public TeamSubcategory getSubcategoryById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(TeamSubcategory.class)
+                .add(Restrictions.eq("id", id));
+        criteria.setMaxResults(1);
+        return (TeamSubcategory) criteria.uniqueResult();
+    }
 }

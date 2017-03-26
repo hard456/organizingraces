@@ -35,12 +35,26 @@
                                                                      style="margin-bottom: 5px;"></div>
                                         <div class="col-sm-2"><input type="text" value="${c.email}" class="form-control"
                                                                      style="margin-bottom: 5px;"></div>
-                                        <div class="col-sm-2"><input type="text" value="${c.firstname}"
+                                        <div class="col-sm-2"><input type="text" value="${c.phone}"
                                                                      class="form-control"
                                                                      style="margin-bottom: 5px;"></div>
-                                        <div class="col-sm-2"><input type="text" value="${c.category.name}"
-                                                                     class="form-control"
-                                                                     style="margin-bottom: 5px;"></div>
+                                        <div class="col-sm-2">
+                                            <c:if test="${race.contestantCategory ne null}">
+                                            <select name="category" class="form-control">
+                                                <c:forEach items="${categories}" var="category">
+                                                    <c:choose>
+                                                        <c:when test="${category.id eq c.category.id}">
+                                                            <option selected value="${category.id}">${category.name}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${category.id}">${category.name}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
+                                                </c:forEach>
+                                            </select>
+                                            </c:if>
+                                        </div>
                                         <div class="col-sm-1">
                                             <c:choose>
                                                 <c:when test="${c.paid eq true}">

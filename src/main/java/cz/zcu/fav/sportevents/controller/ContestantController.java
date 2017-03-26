@@ -2,10 +2,7 @@ package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.model.Race;
 import cz.zcu.fav.sportevents.model.User;
-import cz.zcu.fav.sportevents.service.ContestantService;
-import cz.zcu.fav.sportevents.service.RaceCooperationService;
-import cz.zcu.fav.sportevents.service.RaceService;
-import cz.zcu.fav.sportevents.service.UserService;
+import cz.zcu.fav.sportevents.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +24,9 @@ public class ContestantController {
 
     @Autowired
     ContestantService contestantService;
+
+    @Autowired
+    ContestantSubcategoryService contestantSubcategoryService;
 
     @RequestMapping(value = "/race/{id}/contestants/full_list", method = RequestMethod.GET)
     public ModelAndView contestants_list(@PathVariable("id") int race_id) {
@@ -51,6 +51,9 @@ public class ContestantController {
             model.addObject("contestants", contestantService.getContestantsByRaceId(race_id));
             model.addObject("race", race);
             model.addObject("user", user);
+            if(race.getContestantCategory() != null){
+                model.addObject("categories", contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId()));
+            }
 
             model.setViewName("race/contestants_list");
             return model;

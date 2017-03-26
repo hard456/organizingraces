@@ -42,4 +42,20 @@ public class ContestantDAO {
                 .add(Restrictions.eq("race.id",race_id));
         return criteria.list();
     }
+
+    public Contestant getContestantById(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Contestant.class)
+                .add(Restrictions.eq("id",id));
+        criteria.setMaxResults(1);
+        return (Contestant) criteria.uniqueResult();
+    }
+
+    public void delete(Contestant contestant) {
+        sessionFactory.getCurrentSession().delete(contestant);
+    }
+
+    public void update(Contestant contestant) {
+        sessionFactory.getCurrentSession().update(contestant);
+    }
 }
