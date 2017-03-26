@@ -2,6 +2,13 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<head>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+
+<script src="/js/contestant_list.js" language="Javascript" type="text/javascript"></script>
+
 <t:template>
     <jsp:body>
 
@@ -58,14 +65,14 @@
                                         <div class="col-sm-1">
                                             <c:choose>
                                                 <c:when test="${c.paid eq true}">
-                                                    <button class="btn btn-success btn-sm" type="submit" name="submit"
-                                                            style="margin-bottom: 5px; width: 100%"><span
-                                                            style="color: white;">YES</span></button>
+                                                    <input id="P${c.id}" class="btn btn-success btn-sm" type="button"
+                                                            style="margin-bottom: 5px; width: 100%; color: white;" onclick="changePaidValue(${race.id},${c.id})"
+                                                            value="YES">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <button class="btn btn-danger btn-sm" type="submit" name="submit"
-                                                            style="margin-bottom: 5px; width: 100%"><span
-                                                            style="color: white;">NO</span></button>
+                                                    <input id="P${c.id}" class="btn btn-danger btn-sm" type="button"
+                                                            style="margin-bottom: 5px; width: 100%; color: white;" onclick="changePaidValue(${race.id},${c.id})"
+                                                            value="NO">
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
