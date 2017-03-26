@@ -66,7 +66,7 @@ public class ContestantController {
     @RequestMapping(value = "/race/{id}/contestants/changePaidValue", method = RequestMethod.POST)
     public
     @ResponseBody
-    int changePaidStatus(HttpServletRequest r, @ModelAttribute("contestantId") int contestantId,
+    int changePaidStatus(HttpServletRequest r, @ModelAttribute("contestantId") Integer contestantId,
                          BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         User user = userService.getLoginUser();
