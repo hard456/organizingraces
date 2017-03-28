@@ -1,14 +1,18 @@
 package cz.zcu.fav.sportevents.controller;
 
+import cz.zcu.fav.sportevents.form.UpdateContestantForm;
 import cz.zcu.fav.sportevents.model.Contestant;
+import cz.zcu.fav.sportevents.model.ContestantSubcategory;
 import cz.zcu.fav.sportevents.model.Race;
 import cz.zcu.fav.sportevents.model.User;
 import cz.zcu.fav.sportevents.service.*;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,4 +107,120 @@ public class ContestantController {
         }
 
     }
+
+    @RequestMapping(value = "/race/{id}/contestants/updateContestant", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    boolean updateContestant(HttpServletRequest r, @ModelAttribute UpdateContestantForm updateContestantForm,
+                         BindingResult bindingResult, @PathVariable("id") int race_id) {
+
+        User user = userService.getLoginUser();
+        Race race = raceService.getRaceById(race_id);
+
+
+        if (bindingResult.hasErrors()) {
+            return false;
+        }
+
+        if (user == null || race == null) {
+            return false;
+        }
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            return false;
+        }
+
+        if(race.getContestantCategory() != null){
+            if(!validUpdateContestantParameters(r, true)){
+                return false;
+            }
+        }
+        else{
+            if(!validUpdateContestantParameters(r, false)){
+                return false;
+            }
+        }
+
+        Contestant contestant = contestantService.getContestantById(updateContestantForm.getConId());
+
+        if(contestant == null || contestant.getRace().getId() != race.getId()){
+            return false;
+        }
+
+        Contestant newContestant = new Contestant();
+        newContestant.setFirstname(HtmlUtils.htmlEscape(updateContestantForm.getContestant().getFirstname(),"UTF-8"));
+        newContestant.setLastname(HtmlUtils.htmlEscape(updateContestantForm.getContestant().getLastname(),"UTF-8"));
+        newContestant.setEmail(HtmlUtils.htmlEscape(updateContestantForm.getContestant().getEmail(),"UTF-8"));
+        newContestant.setPhone(updateContestantForm.getContestant().getPhone().replaceAll("\\s+",""));
+        newContestant.setTeam(contestant.getTeam());
+        newContestant.setId(contestant.getId());
+        newContestant.setRace(race);
+        newContestant.setUser(contestant.getUser());
+        newContestant.setPaid(contestant.isPaid());
+
+        if(!validContestantData(newContestant)){
+            return false;
+        }
+
+        if(race.getContestantCategory() != null){
+            ContestantSubcategory category = contestantSubcategoryService.getSubCategoryById(updateContestantForm.getConCategory());
+            if(category == null || (category.getContestantCategory().getId() != race.getContestantCategory().getId())){
+                return false;
+            }
+            newContestant.setCategory(category);
+        }
+
+        contestantService.saveContestant(newContestant);
+        return true;
+    }
+
+    private boolean validContestantData(Contestant contestant) {
+        if(contestant.getFirstname().length() > 32 || contestant.getFirstname().length() < 3){
+            return false;
+        }
+        if(contestant.getLastname().length() > 32 || contestant.getLastname().length() < 3){
+            return false;
+        }
+        if(!contestant.getEmail().isEmpty()){
+            if(contestant.getEmail().length() > 32 || contestant.getEmail().length() < 6){
+                return false;
+            }
+            if(!EmailValidator.getInstance().isValid(contestant.getEmail())){
+                return false;
+            }
+        }
+        if(!contestant.getPhone().isEmpty()){
+            if (!contestant.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean validUpdateContestantParameters(HttpServletRequest r, boolean conCategory) {
+        if(!r.getParameterMap().containsKey("contestant.firstname")){
+            return false;
+        }
+        if(!r.getParameterMap().containsKey("contestant.lastname")){
+            return false;
+        }
+        if(!r.getParameterMap().containsKey("contestant.email")){
+            return false;
+        }
+        if(!r.getParameterMap().containsKey("contestant.phone")){
+            return false;
+        }
+        if(conCategory){
+            if(!r.getParameterMap().containsKey("conCategory")){
+                return false;
+            }
+        }
+        if(!r.getParameterMap().containsKey("conId")){
+            return false;
+        }
+        return true;
+    }
+
+
 }

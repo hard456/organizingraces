@@ -10,15 +10,14 @@ function addCooperator(race_id) {
         success: function (response) {
             if (response.validation.localeCompare("ok") == 0) {
                 tmp = "<div class='alert alert-success'>The cooperator was added.</div>";
-                $("#deleteCooperatorForm").append("<hr>" +
-                    "<div id='U" + response.user.id + "'>" +"<div class='row'>" +
-                    "<div class='col-sm-9' name='login'>" + response.user.login +
-                    "</div>" +
-                    "<div class='col-sm-3' style='text-align: right;'>" +
-                    "<input type='button' class='btn btn-danger' onclick='deleteCooperator(" + race_id + ");' value='Delete cooperator'>" +
-                    "</div>" +
-                    "</div>" +
-                    "</div>");
+                $("#deleteCooperatorForm").append('<div id="C' + response.user.id + '">' + '<hr>' +'<div class="row">' +
+                    '<div class="col-sm-9" name="login">' + response.user.login +
+                    '</div>' +
+                    '<div class="col-sm-3" style="text-align: right;">' +
+                    '<input id="U'+response.user.id+'" type="button" class="btn btn-danger" onclick="deleteCooperator(' + race_id + ', \'' + response.user.login + '\');" value="Delete cooperator">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>');
             }
             if (response.validation.localeCompare("fail") == 0) {
                 tmp = '<div class="alert alert-danger">Something went wrong.</div>'

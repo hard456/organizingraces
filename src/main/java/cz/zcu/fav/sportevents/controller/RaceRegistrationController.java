@@ -113,10 +113,12 @@ public class RaceRegistrationController {
             return model;
         }
 
-        if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
-            model.addObject("invalid", true);
-            model.addObject("result", "You can't register again to this race.");
-            return model;
+        if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id,user.getId())) {
+            if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
+                model.addObject("invalid", true);
+                model.addObject("result", "You can't register again to this race.");
+                return model;
+            }
         }
 
         ContestantSubcategory conCategory = null;
@@ -192,11 +194,14 @@ public class RaceRegistrationController {
             return model;
         }
 
-        if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
-            model.addObject("invalid", true);
-            model.addObject("result", "You can't register again to same race.");
-            return model;
+        if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
+            if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
+                model.addObject("invalid", true);
+                model.addObject("result", "You can't register again to same race.");
+                return model;
+            }
         }
+
 
         if (race.getTeamCategory() != null) {
             if (!r.getParameterMap().containsKey("teamCategory")) {

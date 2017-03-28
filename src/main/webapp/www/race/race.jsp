@@ -17,7 +17,7 @@
 
         <t:race_menu/>
 
-        <div style="margin: 30px 0 30px 0;">
+        <div class="card-log" style="margin: 30px 0 30px 0;">
             <div style="margin: 0 auto; max-width: 650px;">
 
                 <div class="well">
