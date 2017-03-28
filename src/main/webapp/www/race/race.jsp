@@ -63,9 +63,15 @@
                                        type="text"
                                        name="login" maxlength="32">
                             </div>
-                            <div class="col-sm-3" style="text-align: right;">
-                                <input type="button" class="btn btn-primary" onclick="addCooperator(${race.id});"
-                                       value="Add cooperator" >
+                            <div class="col-sm-3">
+                                <div class="hidden-xs" style="text-align: right;">
+                                    <input type="button" class="btn btn-primary" onclick="addCooperator(${race.id});"
+                                           value="Add cooperator">
+                                </div>
+                                <div class="visible-xs">
+                                    <input type="button" class="btn btn-primary" onclick="addCooperator(${race.id});"
+                                           value="Add cooperator" style="margin-top: 5px; width: 100%">
+                                </div>
                             </div>
                         </div>
                     </form:form>
@@ -87,9 +93,17 @@
                                     <div class="col-sm-9" name="login">
                                             ${cooperators.get(i.index).user.login}
                                     </div>
-                                    <div class="col-sm-3" style="text-align: right;">
-                                        <input type="button" class="btn btn-danger"
-                                               onclick="deleteCooperator(${race.id},'${cooperators.get(i.index).user.login}');" value="Delete cooperator">
+                                    <div class="col-sm-3">
+                                        <div class="hidden-xs" style="text-align: right;">
+                                            <input type="button" class="btn btn-danger"
+                                                   onclick="deleteCooperator(${race.id},'${cooperators.get(i.index).user.login}');"
+                                                   value="Delete cooperator">
+                                        </div>
+                                        <div class="visible-xs">
+                                            <input type="button" class="btn btn-danger"
+                                                   onclick="deleteCooperator(${race.id},'${cooperators.get(i.index).user.login}');"
+                                                   value="Delete cooperator" style="margin-top: 5px; width: 100%">
+                                        </div>
                                     </div>
 
                                 </div>
@@ -119,9 +133,16 @@
                                        type="password"
                                        name="password">
                             </div>
-                            <div class="col-sm-3" style="text-align: right;">
-                                <button class="btn btn-danger" type="submit" name="submit"><span
-                                        style="color: white;">Delete race</span></button>
+                            <div class="col-sm-3">
+                                <div class="hidden-xs" style="text-align: right;">
+                                    <button class="btn btn-danger" type="submit" name="submit"><span
+                                            style="color: white;">Delete race</span></button>
+                                </div>
+                                <div class="visible-xs">
+                                    <button class="btn btn-danger" type="submit" name="submit"
+                                            style="margin-top: 5px; width: 100%">
+                                        <span style="color: white;">Delete race</span></button>
+                                </div>
                             </div>
                         </div>
                         <br><br><br><br>
@@ -130,6 +151,6 @@
                 </c:if>
             </div>
         </div>
-
+        </div>
     </jsp:body>
 </t:template>
