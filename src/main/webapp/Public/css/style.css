@@ -37,3 +37,7 @@
 .link_hover:hover {
     color: black !important;
 }
+
+input:disabled {
+    background: white !important;
+}

@@ -90,7 +90,7 @@
                         <c:forEach items="${cooperators}" varStatus="i">
                             <div id="C${cooperators.get(i.index).user.id}">
                                 <div class="row">
-                                    <div class="col-sm-9" name="login">
+                                    <div class="col-sm-9" name="login" style="margin-top: 7px;">
                                             ${cooperators.get(i.index).user.login}
                                     </div>
                                     <div class="col-sm-3">

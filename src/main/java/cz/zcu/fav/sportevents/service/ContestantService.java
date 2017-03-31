@@ -50,4 +50,21 @@ public class ContestantService {
         contestantDAO.update(contestant);
     }
 
+    @Transactional
+    public void removeTeamByTeamId(int teamId){
+        List<Contestant> contestants = contestantDAO.getContestantsByTeamId(teamId);
+        for (Contestant c:contestants) {
+            c.setTeam(null);
+            contestantDAO.update(c);
+        }
+    }
+
+    @Transactional
+    public void deleteContestantsByTeamId(int teamId){
+        List<Contestant> contestants = contestantDAO.getContestantsByTeamId(teamId);
+        for (Contestant c:contestants) {
+            contestantDAO.delete(c);
+        }
+    }
+
 }

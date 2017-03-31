@@ -58,4 +58,12 @@ public class ContestantDAO {
     public void update(Contestant contestant) {
         sessionFactory.getCurrentSession().update(contestant);
     }
+
+    public List<Contestant> getContestantsByTeamId(int teamId){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Contestant.class)
+                .add(Restrictions.eq("team.id",teamId));
+        return criteria.list();
+    }
+
 }

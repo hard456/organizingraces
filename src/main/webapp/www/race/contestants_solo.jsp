@@ -88,17 +88,17 @@
 
                                                         <div class="col-sm-2"><input type="text" value="${c.firstname}"
                                                                                      class="form-control"
-                                                                                     style="margin-bottom: 5px;"></div>
+                                                                                     style="margin-bottom: 5px;" disabled></div>
                                                         <div class="col-sm-2"><input type="text" value="${c.lastname}"
                                                                                      class="form-control"
-                                                                                     style="margin-bottom: 5px;"></div>
+                                                                                     style="margin-bottom: 5px;" disabled></div>
                                                         <div class="col-sm-3"><input type="text" value="${c.email}"
                                                                                      class="form-control"
-                                                                                     style="margin-bottom: 5px;"></div>
+                                                                                     style="margin-bottom: 5px;" disabled></div>
                                                         <div class="col-sm-2"><input type="text"
                                                                                      value="${c.category.name}"
                                                                                      class="form-control"
-                                                                                     style="margin-bottom: 5px;"></div>
+                                                                                     style="margin-bottom: 5px;" disabled></div>
                                                         <div class="col-sm-2" style="text-align: right">
                                                             <input type="button" class="btn btn-danger btn-md"
                                                                    value="Delete"
@@ -112,7 +112,6 @@
                                                     </c:if>
                                                 </div>
                                             </c:forEach>
-                                            <%--<div id="dialog" title="Delete contestant" hidden="hidden">Would you like to delete contestant?</div>--%>
                                         </form:form>
                                     </c:when>
                                     <c:otherwise>

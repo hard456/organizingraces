@@ -181,7 +181,7 @@ public class SoloContestantController {
             response.setValidation("Something went wrong.");
             return response;
         }
-
+        team.setRace(race);
         teamService.save(team);
         assignTeamToContestants(contestants,team);
 
