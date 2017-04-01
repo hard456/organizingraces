@@ -40,11 +40,19 @@ public class TeamController {
             model.setViewName("error/error_page");
             return model;
         } else {
+            User user = userService.getLoginUser();
             model.addObject("race", race);
-            model.addObject("user", userService.getLoginUser());
+            model.addObject("user", user);
             model.setViewName("race/teams");
             model.addObject("teams", teamService.getTeamsByRaceId(race_id));
             model.addObject("contestants", contestantService.getContestantsByRaceId(race_id));
+            if (user != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
+                }
+            }
             return model;
         }
     }
