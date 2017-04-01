@@ -27,19 +27,19 @@
                 </div>
 
                 <div class="row" style="margin-bottom: 5px;">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         Race name:
+
+                   <input type="text" class="form-control" style="width: 100%"
+                                                       value="${race.name}" disabled>
                     </div>
-                    <div class="col-sm-6">
-                            ${race.name}
-                    </div>
+
                 </div>
                 <div class="row">
-                    <div class="col-sm-6">
-                        Default size of team:
-                    </div>
-                    <div class="col-sm-6">
-                            ${race.teamSize}
+                    <div class="col-sm-12">
+                        Size of team:
+                      <input type="text" class="form-control" style="width: 100%"
+                                                       value="${race.teamSize}" disabled>
                     </div>
                 </div>
 
