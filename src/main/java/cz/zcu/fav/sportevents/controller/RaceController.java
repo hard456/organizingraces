@@ -84,10 +84,18 @@ public class RaceController {
             model.setViewName("error/error_page");
             return model;
         } else {
+            User user = userService.getLoginUser();
             model.setViewName("race/race");
             model.addObject("cooperators", raceCooperationService.getCooperatorsByRaceId(race_id));
-            model.addObject("user", userService.getLoginUser());
+            model.addObject("user", user);
             model.addObject("race", race);
+            if (user != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
+                }
+            }
             return model;
         }
     }
@@ -226,4 +234,55 @@ public class RaceController {
 
         return cooperator.getId();
     }
+
+    @RequestMapping(value = "/race/{id}/changeRegistration", method = RequestMethod.POST)
+    public @ResponseBody int changeRegistration(@PathVariable("id") int race_id){
+        User user = userService.getLoginUser();
+        Race race = raceService.getRaceById(race_id);
+
+        if (race == null || user == null) {
+            return -1;
+        }
+
+        if (race.getUser().getId() != user.getId()) {
+            return -1;
+        }
+
+        if(race.isRegistration()){
+            race.setRegistration(false);
+            raceService.update(race);
+            return 0;
+        }
+        else{
+            race.setRegistration(true);
+            raceService.update(race);
+            return 1;
+        }
+    }
+
+    @RequestMapping(value = "/race/{id}/changeEvaluation", method = RequestMethod.POST)
+    public @ResponseBody int changeEvaluation(@PathVariable("id") int race_id){
+        User user = userService.getLoginUser();
+        Race race = raceService.getRaceById(race_id);
+
+        if (race == null || user == null) {
+            return -1;
+        }
+
+        if (race.getUser().getId() != user.getId()) {
+            return -1;
+        }
+
+        if(race.isEvaluation()){
+            race.setEvaluation(false);
+            raceService.update(race);
+            return 0;
+        }
+        else{
+            race.setEvaluation(true);
+            raceService.update(race);
+            return 1;
+        }
+    }
+
 }

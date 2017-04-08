@@ -4,13 +4,12 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<head>
+
     <meta name="_csrf" content="${_csrf.token}"/>
-    <!-- default header name is X-CSRF-TOKEN -->
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-</head>
 
 <script src="/js/race_cooperation.js" language="Javascript" type="text/javascript"></script>
+<script src="/js/race_settings.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -30,20 +29,142 @@
                     <div class="col-sm-12">
                         Race name:
 
-                   <input type="text" class="form-control" style="width: 100%"
-                                                       value="${race.name}" disabled>
+                        <input type="text" class="form-control" style="width: 100%"
+                               value="${race.name}" disabled>
                     </div>
 
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                         Size of team:
-                      <input type="text" class="form-control" style="width: 100%"
-                                                       value="${race.teamSize}" disabled>
+                        <input type="text" class="form-control" style="width: 100%"
+                               value="${race.teamSize}" disabled>
                     </div>
                 </div>
 
+                <c:if test="${race_cooperator eq true}">
+                    <br><br><br><br>
+
+                    <div class="well">
+                        <div style="text-align: center;">
+                            RACE SETTINGS
+                        </div>
+                    </div>
+
+                    <form:form onsubmit="return false;">
+                        <div class="row">
+                            <div class="col-sm-9" style="margin-top: 7px;">
+                                Registration
+                            </div>
+                            <div class="col-sm-3">
+                                <c:choose>
+                                    <c:when test="${race.registration eq true}">
+                                        <div>
+                                            <input type="button" class="btn btn-success"
+                                                   onclick="changeRegistration(${race.id});"
+                                                   value="Enabled" style="width: 100%">
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="text-align: right;">
+                                            <input type="button" class="btn btn-danger"
+                                                   onclick="changeRegistration(${race.id});"
+                                                   value="Disabled" style="width: 100%">
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-9" style="margin-top: 7px;">
+                                Results
+                            </div>
+                            <div class="col-sm-3">
+                                <c:choose>
+                                    <c:when test="${race.evaluation eq true}">
+                                        <div>
+                                            <input type="button" class="btn btn-success"
+                                                   value="Evaluated" style="width: 100%">
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div>
+                                            <input type="button" class="btn btn-danger"
+                                                   value="Not evaluated" style="width: 100%">
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+
+
+                            </div>
+                        </div>
+                    </form:form>
+                </c:if>
+
                 <c:if test="${race.user.id eq user.id}">
+
+                    <br><br><br><br>
+
+                    <div class="well">
+                        <div style="text-align: center;">
+                            RACE SETTINGS
+                        </div>
+                    </div>
+
+                    <form:form onsubmit="return false;">
+                        <div class="row">
+                            <div class="col-sm-9" style="margin-top: 7px;">
+                                Registration
+                            </div>
+                            <div class="col-sm-3">
+                                <c:choose>
+                                    <c:when test="${race.registration eq true}">
+                                        <div>
+                                            <input id="registration_b" type="button" class="btn btn-success"
+                                                   onclick="changeRegistration(${race.id});"
+                                                   value="Enabled" style="width: 100%">
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="text-align: right;">
+                                            <input id="registration_b" type="button" class="btn btn-danger"
+                                                   onclick="changeRegistration(${race.id});"
+                                                   value="Disabled" style="width: 100%">
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-9" style="margin-top: 7px;">
+                                Results
+                            </div>
+                            <div class="col-sm-3">
+                                <c:choose>
+                                    <c:when test="${race.evaluation eq true}">
+                                        <div>
+                                            <input id="evaluation_b" type="button" class="btn btn-success"
+                                                   onclick="changeEvalution(${race.id});"
+                                                   value="Evaluated" style="width: 100%">
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div>
+                                            <input id="evaluation_b" type="button" class="btn btn-danger"
+                                                   onclick="changeEvalution(${race.id});"
+                                                   value="Not evaluated" style="width: 100%">
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+
+
+                            </div>
+                        </div>
+                    </form:form>
+
+                    <div id="setting_result"></div>
 
                     <br><br><br><br>
 

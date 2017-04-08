@@ -53,4 +53,9 @@ public class RaceService {
         raceDAO.delete(race);
     }
 
+    @Transactional
+    public void update(Race race){
+        raceDAO.update(race);
+    }
+
 }

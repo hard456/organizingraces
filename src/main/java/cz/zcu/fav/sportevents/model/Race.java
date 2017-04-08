@@ -27,6 +27,10 @@ public class Race implements Serializable{
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean evaluation;
 
+    @Column(name = "registration", nullable = false)
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean registration;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -96,4 +100,19 @@ public class Race implements Serializable{
         this.contestantCategory = contestantCategory;
     }
 
+    public void setTeamSize(Integer teamSize) {
+        this.teamSize = teamSize;
+    }
+
+    public boolean isRegistration() {
+        return registration;
+    }
+
+    public void setRegistration(boolean registration) {
+        this.registration = registration;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

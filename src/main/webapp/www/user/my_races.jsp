@@ -15,6 +15,11 @@
                 </c:when>
                 <c:otherwise>
                     <div style="margin: 0 auto; max-width: 400px;">
+                        <div class="row hidden-xs" style="background: steelblue; color: white; padding: 5px 0 5px 0; margin-bottom: 10px;">
+                            <div class="col-sm-4">
+                                Race name
+                            </div>
+                        </div>
                         <c:forEach var="listValue" varStatus="i" items="${list}">
 
                             <div class="row">

@@ -65,4 +65,7 @@ public class RaceDAO {
         sessionFactory.getCurrentSession().delete(race);
     }
 
+    public void update(Race race) {
+        sessionFactory.getCurrentSession().update(race);
+    }
 }

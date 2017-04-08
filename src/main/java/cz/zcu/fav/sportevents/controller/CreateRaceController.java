@@ -65,6 +65,7 @@ public class CreateRaceController {
             race.setName(HtmlUtils.htmlEscape(createRaceForm.getRace().getName(), "UTF-8"));
             race.setTeamSize(createRaceForm.getRace().getTeamSize());
             race.setUser(user);
+            race.setRegistration(true);
 
             if (race.getName().length() > 32 || race.getName().length() < 3) {
                 model.addObject("invalid", true);

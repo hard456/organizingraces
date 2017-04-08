@@ -16,7 +16,7 @@
         http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <context:component-scan base-package="cz.zcu.fav.sportevents"/>
+    <context:component-scan base-package="cz.zcu.fav.sportevents" />
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/www/"/>
@@ -54,6 +54,7 @@
         <security:intercept-url pattern="/race/{id}/addSoloContestant" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/teamRegistration" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/registration" access="isAuthenticated()"/>
+
 
         <!-- LOGIN -->
         <security:form-login login-page="/login"
@@ -113,6 +114,10 @@
 
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    </bean>
+
+    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+          id="multipartResolver"> <property name="maxUploadSize" value="1000000" />
     </bean>
 
     <mvc:annotation-driven />

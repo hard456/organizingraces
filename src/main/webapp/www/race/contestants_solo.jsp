@@ -3,10 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<head>
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-</head>
+<meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 
 <script src="/js/create_team.js" language="Javascript" type="text/javascript"></script>
 
@@ -92,9 +90,21 @@
                                                         <div class="col-sm-2"><input type="text" value="${c.lastname}"
                                                                                      class="form-control"
                                                                                      style="margin-bottom: 5px;" disabled></div>
-                                                        <div class="col-sm-3"><input type="text" value="${c.email}"
-                                                                                     class="form-control"
-                                                                                     style="margin-bottom: 5px;" disabled></div>
+                                                        <div class="col-sm-3">
+                                                            <c:if test="${not empty c.email && not empty c.phone}">
+                                                            <input type="text" value="${c.email}, ${c.phone}" class="form-control" style="margin-bottom: 5px;" disabled>
+                                                            </c:if>
+                                                            <c:if test="${not empty c.email && empty c.phone}">
+                                                                <input type="text" value="${c.email}" class="form-control" style="margin-bottom: 5px;" disabled>
+                                                            </c:if>
+                                                            <c:if test="${empty c.email && not empty c.phone}">
+                                                                <input type="text" value="${c.phone}" class="form-control" style="margin-bottom: 5px;" disabled>
+                                                            </c:if>
+                                                            <c:if test="${empty c.email && empty c.phone}">
+                                                                <input type="text" value="" class="form-control" style="margin-bottom: 5px;" disabled>
+                                                            </c:if>
+                                                        </div>
+
                                                         <div class="col-sm-2"><input type="text"
                                                                                      value="${c.category.name}"
                                                                                      class="form-control"

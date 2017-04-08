@@ -8,6 +8,7 @@ function addCooperator(race_id) {
         data: form,
         dataType: "json",
         success: function (response) {
+            console.log(response.validation);
             if (response.validation.localeCompare("ok") == 0) {
                 tmp = "<div class='alert alert-success'>The cooperator was added.</div>";
                 $("#deleteCooperatorForm").append('<div id="C' + response.user.id + '">' + '<hr>' +'<div class="row">' +

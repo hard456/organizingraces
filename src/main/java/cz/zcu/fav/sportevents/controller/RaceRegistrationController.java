@@ -119,6 +119,11 @@ public class RaceRegistrationController {
                 model.addObject("result", "You can't register again to this race.");
                 return model;
             }
+            if(!race.isRegistration()){
+                model.addObject("invalid", true);
+                model.addObject("result", "Registration disabled.");
+                return model;
+            }
         }
 
         ContestantSubcategory conCategory = null;
@@ -198,6 +203,11 @@ public class RaceRegistrationController {
             if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
                 model.addObject("invalid", true);
                 model.addObject("result", "You can't register again to same race.");
+                return model;
+            }
+            if(!race.isRegistration()){
+                model.addObject("invalid", true);
+                model.addObject("result", "Registration disabled.");
                 return model;
             }
         }
