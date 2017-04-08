@@ -39,4 +39,11 @@ public class RaceCooperationDAO {
     public void delete(RaceCooperation cooperation) {
         sessionFactory.getCurrentSession().delete(cooperation);
     }
+
+    public List<RaceCooperation> getCooperationsByUserId(int userId) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(RaceCooperation.class)
+                .add(Restrictions.eq("user.id", userId));
+        return criteria.list();
+    }
 }
