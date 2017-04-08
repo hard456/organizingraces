@@ -5,9 +5,20 @@
 
 <t:template>
     <jsp:body>
-        <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" style="margin: 35px auto 35px;"/>
-        <div style="margin: 35px auto 0; text-align: center;">USER ${user.login}</div>
-        <div style="margin: 5px auto 0; text-align: center;">${user.firstname} ${user.surname}</div>
-        <div style="margin: 5px auto 35px; text-align: center;">${user.email}</div>
+        <div class="card-log" style="margin-top: 35px;">
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="well" style="text-align: center;">My profile</div>
+                        Login:
+                        <input type="text" class="form-control" value="${user.login}" style="margin-bottom: 10px;">
+                        Firstname:
+                        <input type="text" class="form-control" value="${user.firstname}" style="margin-bottom: 10px;">
+                        Lastname:
+                        <input type="text" class="form-control" value="${user.surname}" style="margin-bottom: 10px;">
+                        Email:
+                        <input type="text" class="form-control" value="${user.email}" style="margin-bottom: 10px;">
+                        Phone:
+                        <input type="text" class="form-control" value="${user.phone}" style="margin-bottom: 5px;">
+            </div>
+        </div>
     </jsp:body>
 </t:template>

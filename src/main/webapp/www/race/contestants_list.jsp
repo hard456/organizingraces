@@ -24,8 +24,8 @@
                                 <div class="row hidden-xs"
                                      style="background: lightcoral; padding: 5px 0 5px 0; color: white;">
                                     <div class="col-sm-2">Firstname</div>
-                                    <div class="col-sm-2">Lastname)</div>
-                                    <div class="col-sm-2">Email)</div>
+                                    <div class="col-sm-2">Lastname</div>
+                                    <div class="col-sm-2">Email</div>
                                     <div class="col-sm-2">Phone</div>
                                     <div class="col-sm-2">Category</div>
                                     <div class="col-sm-1">Paid</div>
