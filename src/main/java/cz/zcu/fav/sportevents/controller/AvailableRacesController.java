@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 @Controller
-public class AvailaibleRacesController {
+public class AvailableRacesController {
 
     @Autowired
     RaceService raceService;

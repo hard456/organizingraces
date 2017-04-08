@@ -6,7 +6,7 @@
 <t:template>
     <jsp:body>
         <div class="card-log" style="margin-top: 35px;">
-            <div style="max-width: 600px; margin: 0 auto;">
+            <div style="max-width: 400px; margin: 0 auto;">
                 <div class="well" style="text-align: center;">My profile</div>
                         Login:
                         <input type="text" class="form-control" value="${user.login}" style="margin-bottom: 10px;">
@@ -15,9 +15,9 @@
                         Lastname:
                         <input type="text" class="form-control" value="${user.surname}" style="margin-bottom: 10px;">
                         Email:
-                        <input type="text" class="form-control" value="${user.email}" style="margin-bottom: 10px;">
+                        <input type="email" class="form-control" value="${user.email}" style="margin-bottom: 10px;">
                         Phone:
-                        <input type="text" class="form-control" value="${user.phone}" style="margin-bottom: 5px;">
+                        <input type="text" class="form-control" value="${user.phone}" style="margin-bottom: 10px;">
             </div>
         </div>
     </jsp:body>
