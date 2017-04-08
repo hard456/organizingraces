@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class RaceController {
@@ -28,36 +27,6 @@ public class RaceController {
 
     @Autowired
     private RaceCooperationService raceCooperationService;
-
-    @RequestMapping(value = "/my_races", method = RequestMethod.GET)
-    public ModelAndView myRaces() {
-        ModelAndView model = new ModelAndView();
-        List<Race> list;
-        list = raceService.listByUserId(userService.getLoginUser().getId());
-        model.setViewName("user/my_races");
-        model.addObject("list", list);
-        return model;
-    }
-
-    @RequestMapping(value = "/avaible_races", method = RequestMethod.GET)
-    public ModelAndView avaibleRaces() {
-        ModelAndView model = new ModelAndView();
-        List<Race> list;
-        list = raceService.getRacesToRegistration();
-        model.setViewName("others/available_races");
-        model.addObject("races", list);
-        return model;
-    }
-
-    @RequestMapping(value = "/evaluated_races", method = RequestMethod.GET)
-    public ModelAndView evaluatedRaces() {
-        ModelAndView model = new ModelAndView();
-        List<Race> list;
-        list = raceService.getEvalutedRaces();
-        model.setViewName("others/evaluated_races");
-        model.addObject("races", list);
-        return model;
-    }
 
     @RequestMapping(value = "/race/{id}/delete", method = RequestMethod.GET)
     public ModelAndView deleteRaceView(@PathVariable("id") int race_id) {
