@@ -4,7 +4,7 @@
 
 <t:template>
     <jsp:body>
-        <div style="margin: 0 auto; max-width: 400px;">
+        <div style="margin: 0 auto; max-width: 500px;">
             <div class="card-log" style="margin: 30px auto;">
                 <div class="row">
                     <div class="col-sm-6"><a data-toggle="tab" href="#my_races"><input type="button" style="width: 100%"

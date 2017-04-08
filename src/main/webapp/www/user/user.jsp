@@ -6,7 +6,7 @@
 <t:template>
     <jsp:body>
         <div class="card-log" style="margin-top: 35px;">
-            <div style="max-width: 400px; margin: 0 auto;">
+            <div style="max-width: 600px; margin: 0 auto;">
                 <div class="well" style="text-align: center;">My profile</div>
                         Login:
                         <input type="text" class="form-control" value="${user.login}" style="margin-bottom: 10px;">
