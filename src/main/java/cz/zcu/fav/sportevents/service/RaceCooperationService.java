@@ -42,4 +42,9 @@ public class RaceCooperationService {
         raceCooperationDAO.delete(cooperation);
     }
 
+    @Transactional
+    public List<RaceCooperation> getCooperationsByUserId(int userId){
+        return raceCooperationDAO.getCooperationsByUserId(userId);
+    }
+
 }
