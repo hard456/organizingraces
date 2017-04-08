@@ -28,19 +28,19 @@
                             <h4 class="modal-title">Import teams from EXCEL</h4>
                         </div>
                     </div>
-                        <div class="modal-body">
-                            <label class="btn btn-primary" for="my-file-selector">
-                                <input name="file" id="my-file-selector" type="file" style="display:none;"
-                                       onchange="$('#upload-file-info').html(this.files[0].name);"
-                                       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                Import XLSX file
-                            </label>
-                            <span id="upload-file-info"></span>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-primary" value="Import" onclick="importTeams(${race.id})">
-                            <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
-                        </div>
+                    <div class="modal-body">
+                        <label class="btn btn-primary" for="my-file-selector">
+                            <input name="file" id="my-file-selector" type="file" style="display:none;"
+                                   onchange="$('#upload-file-info').html(this.files[0].name);"
+                                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            Import XLSX file
+                        </label>
+                        <span id="upload-file-info"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-primary" value="Import" onclick="importTeams(${race.id})">
+                        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,35 +96,42 @@
         </div>
 
         <div class="card-log" style="margin-top: 25px;">
-            <div style="max-width: 800px; margin: 0 auto;">
-                <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                    <div class="hidden-xs" style="margin-bottom: 20px;">
-                        <c:choose>
-                            <c:when test="${race.teamSize > 1}">
-                                <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportTeams"
-                                           method="post">
-                                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
-                                           value="Import teams">
-                                    <c:if test="${teams.size() > 0}">
-                                        <input type="submit" class="btn btn-success" value="Export teams">
-                                    </c:if>
-                                </form:form>
-                            </c:when>
-                            <c:otherwise>
-                                <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportContestants"
-                                           method="post">
-                                    <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
-                                           value="Import teams">
-                                    <c:if test="${teams.size() > 0}">
-                                        <input type="submit" class="btn btn-success" value="Export teams">
-                                    </c:if>
-                                </form:form>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="visible-xs" style="margin-bottom: 20px;">
-                        <c:choose>
-                        <c:when test="${race.teamSize > 1}">
+        <c:choose>
+            <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
+                <div style="max-width: 650px; margin: 0 auto;">
+            </c:when>
+            <c:otherwise>
+                <div style="max-width: 500px; margin: 0 auto;">
+            </c:otherwise>
+        </c:choose>
+        <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+            <div class="hidden-xs" style="margin-bottom: 20px;">
+                <c:choose>
+                    <c:when test="${race.teamSize > 1}">
+                        <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportTeams"
+                                   method="post">
+                            <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
+                                   value="Import teams">
+                            <c:if test="${teams.size() > 0}">
+                                <input type="submit" class="btn btn-success" value="Export teams">
+                            </c:if>
+                        </form:form>
+                    </c:when>
+                    <c:otherwise>
+                        <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportContestants"
+                                   method="post">
+                            <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
+                                   value="Import teams">
+                            <c:if test="${teams.size() > 0}">
+                                <input type="submit" class="btn btn-success" value="Export teams">
+                            </c:if>
+                        </form:form>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            <div class="visible-xs" style="margin-bottom: 20px;">
+                <c:choose>
+                    <c:when test="${race.teamSize > 1}">
                         <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportTeams"
                                    method="post">
                             <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
@@ -133,99 +140,150 @@
                                 <input type="submit" class="btn btn-success" value="Export teams" style="width: 100%">
                             </c:if>
                         </form:form>
-                        </c:when>
-                        <c:otherwise> <form:form action="${pageContext.request.contextPath}/race/${race.id}/exportContestants"
-                                                 method="post">
-                            <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
-                                   value="Import teams" style="width: 100%">
-                            <c:if test="${teams.size() > 0}">
-                                <input type="submit" class="btn btn-success" value="Export teams" style="width: 100%">
-                            </c:if>
-                        </form:form></c:otherwise>
-                        </c:choose>
-                    </div>
-                </c:if>
+                    </c:when>
+                    <c:otherwise> <form:form
+                            action="${pageContext.request.contextPath}/race/${race.id}/exportContestants"
+                            method="post">
+                        <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#importTeams"
+                               value="Import teams" style="width: 100%">
+                        <c:if test="${teams.size() > 0}">
+                            <input type="submit" class="btn btn-success" value="Export teams" style="width: 100%">
+                        </c:if>
+                    </form:form></c:otherwise>
+                </c:choose>
+            </div>
+        </c:if>
 
-                <c:choose>
-                    <c:when test="${teams.size() > 0}">
-                        <c:forEach items="${teams}" var="team">
-                            <div class="well" id="T${team.id}">
-                                <div class="row" style="margin-bottom: 20px;">
-                                    <c:if test="${race.teamSize gt 1}">
+        <c:choose>
+            <c:when test="${teams.size() > 0}">
+                <c:forEach items="${teams}" var="team">
+                    <div class="well" id="T${team.id}">
+                        <c:if test="${race_cooperator eq true || race.user.id eq user.id || not empty race.teamCategory}">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <c:if test="${race.teamSize gt 1}">
+                                <c:choose>
+                                    <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                         <div class="col-sm-4" style="margin-bottom: 10px;">
                                             Team name:
                                             <input class="form-control" type="text" value="${team.name}" disabled>
                                         </div>
-                                    </c:if>
-                                    <c:if test="${race.teamCategory ne null}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="col-sm-6" style="margin-bottom: 10px;">
+                                            Team name:
+                                            <input class="form-control" type="text" value="${team.name}" disabled>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            </c:if>
+                            <c:if test="${race.teamCategory ne null}">
+                                <c:choose>
+                                    <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                         <div class="col-sm-4" style="margin-bottom: 10px;">
                                             Team category:
                                             <input class="form-control" type="text" value="${team.category.name}"
                                                    disabled>
                                         </div>
-                                    </c:if>
-                                    <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                                        <div class="col-sm-4 hidden-xs"
-                                             style="text-align: right; margin-top: 20px; float: right;">
-                                            <input type="button" value="Delete" class="btn btn-danger"
-                                                   data-toggle="modal" data-target="#deleteTeamModal"
-                                                   onclick="tagDeleteButtons(${race.id}, ${team.id})">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="col-sm-6" style="margin-bottom: 10px;">
+                                            Team category:
+                                            <input class="form-control" type="text" value="${team.category.name}"
+                                                   disabled>
                                         </div>
-                                        <div class="col-sm-4 visible-xs" style="text-align: right;">
-                                            <input type="button" value="Delete" class="btn btn-danger"
-                                                   style="width: 100%"
-                                                   data-toggle="modal" data-target="#deleteTeamModal"
-                                                   onclick="tagDeleteButtons(${race.id}, ${team.id})">
-                                        </div>
-                                    </c:if>
+                                    </c:otherwise>
+                                </c:choose>
+
+                            </c:if>
+                            <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+                                <div class="col-sm-4 hidden-xs"
+                                     style="text-align: right; margin-top: 20px; float: right;">
+                                    <input type="button" value="Delete" class="btn btn-danger"
+                                           data-toggle="modal" data-target="#deleteTeamModal"
+                                           onclick="tagDeleteButtons(${race.id}, ${team.id})">
                                 </div>
-                                <c:if test="${race.teamSize gt 1 || race.teamCategory ne null || race_cooperator eq true
+                                <div class="col-sm-4 visible-xs" style="text-align: right;">
+                                    <input type="button" value="Delete" class="btn btn-danger"
+                                           style="width: 100%"
+                                           data-toggle="modal" data-target="#deleteTeamModal"
+                                           onclick="tagDeleteButtons(${race.id}, ${team.id})">
+                                </div>
+                            </c:if>
+                        </div>
+                        </c:if>
+                        <c:if test="${race.teamSize gt 1 || race.teamCategory ne null || race_cooperator eq true
                         || race.user.id eq user.id}">
-                                    <hr>
-                                </c:if>
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        Members:
-                                    </div>
+                            <hr>
+                        </c:if>
+                        <c:if test="${race.teamSize gt 1 || race_cooperator eq true
+                        || race.user.id eq user.id}">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    Members:
                                 </div>
-                                <c:forEach items="${contestants}" var="c">
-                                    <c:if test="${c.team.id eq team.id}">
-                                        <div class="row">
+                            </div>
+                        </c:if>
+                        <c:forEach items="${contestants}" var="c">
+                            <c:if test="${c.team.id eq team.id}">
+                                <div class="row" style="margin-bottom: 7px;">
+                                    <c:choose>
+                                        <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                             <div class="col-sm-3">
                                                 <input class="form-control" type="text"
                                                        value="${c.firstname} ${c.lastname}"
                                                        disabled>
                                             </div>
-                                            <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                                            <div class="col-sm-3">
-                                                <input class="form-control" type="text" value="${c.email}" disabled>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <input class="form-control" type="text" value="${c.phone}"
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" type="text"
+                                                       value="${c.firstname} ${c.lastname}"
                                                        disabled>
                                             </div>
-                                            </c:if>
-                                            <c:if test="${race.contestantCategory ne null}">
+                                        </c:otherwise>
+                                    </c:choose>
+
+                                    <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+                                        <div class="col-sm-3">
+                                            <input class="form-control" type="text" value="${c.email}" disabled>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input class="form-control" type="text" value="${c.phone}"
+                                                   disabled>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${race.contestantCategory ne null}">
+                                        <c:choose>
+                                            <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                                 <div class="col-sm-3">
                                                     <input class="form-control" type="text" value="${c.category.name}"
                                                            disabled>
                                                 </div>
-                                            </c:if>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" type="text" value="${c.category.name}"
+                                                           disabled>
+                                                </div>
+                                            </c:otherwise>
+                                        </c:choose>
 
-                                        </div>
-                                        <hr style="margin: 10px 0 10px 0;">
                                     </c:if>
-                                </c:forEach>
-                            </div>
+
+                                </div>
+                            </c:if>
                         </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="alert alert-warning">
-                            List of teams / contestants is empty!
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
+                    </div>
+                </c:forEach>
+            </c:when>
+            <c:otherwise>
+                <div class="alert alert-warning">
+                    List of teams / contestants is empty!
+                </div>
+            </c:otherwise>
+        </c:choose>
+        </div>
         </div>
     </jsp:body>
 </t:template>

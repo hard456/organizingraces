@@ -21,15 +21,15 @@
 
                         <div class="item active"
                              style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside">Create your sport event</span>
+                            <span class="carousel-inside">Create your orienteering race</span>
                         </div>
 
                         <div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside" style="background: orange">Manage your sport event</span>
+                            <span class="carousel-inside" style="background: orange">Manage your orienteering race</span>
                         </div>
 
                         <div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside" style="background: #ff4ec9">Resolve your sport event</span>
+                            <span class="carousel-inside" style="background: #ff4ec9">Resolve your orienteering race</span>
                         </div>
 
                     </div>
@@ -55,34 +55,36 @@
                             <h3>Only registered user has permission to create events!</h3>
                         </div>
                         <div class="col-xs-12 col-md-3" style="text-align: center; margin-top: 15px;">
-                            <button type="button" class="btn btn-danger">Registration</button>
+                            <a href="${pageContext.request.contextPath}/registration">
+                                <button type="button" class="btn btn-danger">Registration</button>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-12 col-md-4" style="text-align: center;">
-                    <div class="jumbotron" style="background-color: white;">
-                            <span class="glyphicon glyphicon-eye-close"
-                                  style="font-size:2em; color: #ff0000;"></span><br>
-                        <span style="font-size: 15px; color: slategrey;">Private event available</span>
+                        <div class="jumbotron" style="background-color: white;">
+                            <span class="glyphicon glyphicon-floppy-saved"
+                                  style="font-size:2em; color: slategrey;"></span><br>
+                            <span style="font-size: 15px; color: slategrey;">Export data to excel</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-4" style="text-align: center;">
-                    <div class="jumbotron" style="background-color: white;">
-                        <span class="glyphicon glyphicon-share" style="font-size:2em; color: coral;"></span><br>
-                        <span style="font-size: 15px; color: slategrey;">Share your sport event</span>
+                    <div class="col-xs-12 col-md-4" style="text-align: center;">
+                        <div class="jumbotron" style="background-color: white;">
+                            <span class="glyphicon glyphicon-share" style="font-size:2em; color: coral;"></span><br>
+                            <span style="font-size: 15px; color: slategrey;">Share your sport event</span>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-4" style="text-align: center;">
-                    <div class="jumbotron" style="background-color: white;">
+                    <div class="col-xs-12 col-md-4" style="text-align: center;">
+                        <div class="jumbotron" style="background-color: white;">
                             <span class="glyphicon glyphicon-upload"
                                   style="font-size:2em; color: dodgerblue;"></span><br>
-                        <span style="font-size: 15px; color: slategrey;">Upload data from Excel</span>
+                            <span style="font-size: 15px; color: slategrey;">Upload data from Excel</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </jsp:body>
 </t:template>
