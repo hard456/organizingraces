@@ -11,6 +11,7 @@
         <script type="text/javascript" charset="utf8"
                 src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
 
+
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 1000px; margin: 0 auto;">
                 <c:choose>
@@ -101,7 +102,10 @@
                                         {
                                             "pagingType": "first_last_numbers",
                                             "sScrollX": "100%",
-
+                                            "dom": 'Bfrtip',
+                                            "buttons": [
+                                                'copy', 'csv', 'excel', 'pdf', 'print'
+                                            ]
                                         }
                                 );
                             });

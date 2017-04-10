@@ -38,7 +38,7 @@
                         <span id="upload-file-info"></span>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-primary" value="Import" onclick="importTeams(${race.id})">
+                        <input type="button" class="btn btn-primary" value="Import" onclick="importTeams(${race.id},${race.teamSize})">
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -99,6 +99,7 @@
         <c:choose>
             <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                 <div style="max-width: 650px; margin: 0 auto;">
+                <div id="importResult"></div>
             </c:when>
             <c:otherwise>
                 <div style="max-width: 500px; margin: 0 auto;">
