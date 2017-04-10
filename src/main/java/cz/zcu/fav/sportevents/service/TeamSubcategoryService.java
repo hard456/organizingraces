@@ -31,4 +31,8 @@ public class TeamSubcategoryService {
         return teamSubcategoryDAO.getSubcategoryById(id);
     }
 
+    @Transactional
+    public TeamSubcategory getSubcategoryByName(String teamCategory, int raceTeamCategory) {
+        return teamSubcategoryDAO.getSubcategoryByName(teamCategory,raceTeamCategory);
+    }
 }

@@ -33,4 +33,13 @@ public class TeamSubcategoryDAO {
         criteria.setMaxResults(1);
         return (TeamSubcategory) criteria.uniqueResult();
     }
+
+    public TeamSubcategory getSubcategoryByName(String teamCategory, int raceTeamCategory) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(TeamSubcategory.class)
+                .add(Restrictions.eq("name", teamCategory))
+                .add(Restrictions.eq("teamCategory.id", raceTeamCategory));
+        criteria.setMaxResults(1);
+        return (TeamSubcategory) criteria.uniqueResult();
+    }
 }

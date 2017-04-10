@@ -42,4 +42,12 @@ public class ContestantSubcategoryDAO {
         return (ContestantSubcategory) criteria.uniqueResult();
     }
 
+    public ContestantSubcategory getSubcategoryByName(String contestantCategory, int raceConCategory) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(ContestantSubcategory.class)
+                .add(Restrictions.eq("name", contestantCategory))
+                .add(Restrictions.eq("contestantCategory.id", raceConCategory));
+        criteria.setMaxResults(1);
+        return (ContestantSubcategory) criteria.uniqueResult();
+    }
 }
