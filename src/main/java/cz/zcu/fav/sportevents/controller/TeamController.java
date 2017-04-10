@@ -544,9 +544,13 @@ public class TeamController {
                 } else if (i == 5) {
                     if (race.getContestantCategory() != null) {
 
-                        if (cell == null || cell.getStringCellValue().length() == 0) {
+                        if(cell != null && cell.getStringCellValue().length() > 0){
+                            contestant.setContestantCategory(cell.getStringCellValue());
+                        }
+                        else{
                             return "empty contestant category [ROW:" + (row.getRowNum()+1) + "]";
                         }
+
                         if(!validConCategory(conCategories,cell.getStringCellValue())){
                             return "wrong contestant category [ROW:" + (row.getRowNum()+1) + "]";
                         }
@@ -559,7 +563,10 @@ public class TeamController {
                     }
                 } else if (i == 6) {
                     if (race.getTeamCategory() != null) {
-                        if (cell == null || cell.getStringCellValue().length() == 0) {
+                        if (cell != null && cell.getStringCellValue().length() > 0) {
+                            contestant.setTeamCategory(cell.getStringCellValue());
+                        }
+                        else{
                             return "empty team category [ROW:" + (row.getRowNum()+1) + "]";
                         }
                         if(!validTeamCategory(teamCategories,cell.getStringCellValue())){
@@ -594,18 +601,24 @@ public class TeamController {
             teamService.save(team);
             contestant.setFirstname(c.getFirstname());
             contestant.setLastname(c.getLastname());
-            contestant.setEmail(c.getEmail());
-            contestant.setPhone(c.getPhone());
+
+
             contestant.setRace(race);
             contestant.setUser(user);
             if(race.getContestantCategory() != null){
-                contestant.setCategory(contestantSubcategoryService.getSubcategoryByName(c.getContestantCategory(),race.getTeamCategory().getId()));
+                contestant.setCategory(contestantSubcategoryService.getSubcategoryByName(c.getContestantCategory(),race.getContestantCategory().getId()));
             }
             if(c.getPaid().equals("YES")){
                 contestant.setPaid(true);
             }
             else{
                 contestant.setPaid(false);
+            }
+            if(c.getPhone().length() > 0){
+                contestant.setPhone(c.getPhone());
+            }
+            if(c.getEmail().length() > 0){
+                contestant.setEmail(c.getEmail());
             }
             contestant.setTeam(team);
             contestantService.saveContestant(contestant);
@@ -777,7 +790,73 @@ public class TeamController {
             e.printStackTrace();
         }
 
+        for (TeamImportExcel team : teamImport) {
+            if(team.getSolo().equals("NO")){
+                Team newTeam = new Team();
+                if(team.getTeamName().length() > 0){
+                    newTeam.setName(team.getTeamName());
+                }
+                if(race.getTeamCategory() != null){
+                    String teamCategory = team.getCategory();
+                    newTeam.setCategory(teamSubcategoryService.getSubcategoryByName(teamCategory,race.getTeamCategory().getId()));
+                }
+                newTeam.setRace(race);
+                teamService.save(newTeam);
 
+                for (ContestantImportExcel contestant : team.getContestants()) {
+                    Contestant newContestant = new Contestant();
+                    newContestant.setFirstname(contestant.getFirstname());
+                    newContestant.setLastname(contestant.getLastname());
+                    newContestant.setFirstname(contestant.getFirstname());
+                    if(contestant.getEmail().length() > 0){
+                        newContestant.setEmail(contestant.getEmail());
+                    }
+                    if(contestant.getPhone().length() > 0){
+                        newContestant.setPhone(contestant.getPhone());
+                    }
+                    if(race.getContestantCategory() != null){
+                        String category = contestant.getContestantCategory();
+                        newContestant.setCategory(contestantSubcategoryService.getSubcategoryByName(category,race.getContestantCategory().getId()));
+                    }
+                    if(contestant.getPaid().equals("YES")){
+                        newContestant.setPaid(true);
+                    }
+                    else{
+                        newContestant.setPaid(false);
+                    }
+                    newContestant.setRace(race);
+                    newContestant.setUser(user);
+                    newContestant.setTeam(newTeam);
+                    contestantService.saveContestant(newContestant);
+                }
+
+            }
+            else{
+                Contestant newContestant = new Contestant();
+                newContestant.setFirstname(team.getContestants().get(0).getFirstname());
+                newContestant.setLastname(team.getContestants().get(0).getLastname());
+
+                if(race.getContestantCategory() != null){
+                    String category = team.getContestants().get(0).getContestantCategory();
+                    newContestant.setCategory(contestantSubcategoryService.getSubcategoryByName(category,race.getContestantCategory().getId()));
+                }
+                if(team.getContestants().get(0).getPaid().equals("YES")){
+                    newContestant.setPaid(true);
+                }
+                else{
+                    newContestant.setPaid(false);
+                }
+                if(team.getContestants().get(0).getEmail().length() > 0){
+                    newContestant.setEmail(team.getContestants().get(0).getEmail());
+                }
+                if(team.getContestants().get(0).getPhone().length() > 0){
+                    newContestant.setPhone(team.getContestants().get(0).getPhone());
+                }
+                newContestant.setUser(user);
+                newContestant.setRace(race);
+                contestantService.saveContestant(newContestant);
+            }
+        }
 
         return "ok";
     }

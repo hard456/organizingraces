@@ -36,7 +36,7 @@ function importTeams(raceId, size) {
                 success: function (response) {
                     console.log(response);
                     if (response.localeCompare("ok") == 0) {
-                        data = '<div class="alert alert-success">Excel file successfully imported.</div>';
+                        data = '<div class="alert alert-success">Excel file successfully imported. REFRESH PAGE!</div>';
                     }
                     else {
                         data = '<div class="alert alert-danger">Error: ' + response + '</div>';
