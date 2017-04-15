@@ -12,7 +12,7 @@
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 800px; margin: 0 auto;">
 
-                <form name="createEventForm" action="<c:url value="/create_event" />" method="POST">
+                <form:form name="createEventForm" action="${pageContext.request.contextPath}/create_event" method="POST">
                     Race name:
                     <input type="text" maxlength="32" style="margin-bottom: 7px;" class="form-control"
                            placeholder="Race name" name="race.name">
@@ -143,7 +143,7 @@
                                 style="color: white;">Create race</span></button>
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                </form>
+                </form:form>
             </div>
         </div>
 

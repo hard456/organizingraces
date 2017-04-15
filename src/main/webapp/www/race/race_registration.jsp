@@ -264,8 +264,7 @@
                                 <div style="text-align: center;">SOLO REGISTRATION</div>
                             </div>
 
-                            <form name="addSoloContestant" action="<c:url value="/race/${race.id}/addSoloContestant" />"
-                                  method="POST">
+                            <form:form name="addSoloContestant" action="${pageContext.request.contextPath}/race/${race.id}/addSoloContestant" method="POST">
 
                                 <c:if test="${not empty con_categories}">
                                     Contestant category:
@@ -292,7 +291,7 @@
 
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-                            </form>
+                            </form:form>
 
                             <br><br><br><br>
                         </c:if>
@@ -309,7 +308,7 @@
                             </div>
                         </div>
 
-                        <form:form action="/race/${race.id}/teamRegistration" method="POST">
+                        <form:form action="${pageContext.request.contextPath}/race/${race.id}/teamRegistration" method="POST">
 
                             <div class="row">
                                 <c:if test="${race.teamSize gt 1}">

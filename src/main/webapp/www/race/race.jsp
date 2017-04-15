@@ -244,7 +244,7 @@
                     </div>
 
 
-                    <form:form action="/race/${race.id}/deleteRace" method="POST">
+                    <form:form action="${pageContext.request.contextPath}/race/${race.id}/deleteRace" method="POST">
                         <div class="row">
                             <div class="col-sm-6">Password:</div>
                         </div>

@@ -6,7 +6,7 @@
 <t:template>
     <jsp:body>
         <div class="card-log" style="margin-top: 25px;">
-            <form:form action="/addUser" modelAttribute="userRegistrationForm" method="POST">
+            <form:form action="${pageContext.request.contextPath}/addUser" modelAttribute="userRegistrationForm" method="POST">
                 <div style="margin: 0 auto; max-width: 250px;">Username:</div>
                 <form:input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Username" maxlength="32" path="user.login"/>
