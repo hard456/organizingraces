@@ -34,7 +34,7 @@
 
         <%-- MODAL - SET DEADLINE TIME --%>
 
-        <div class="modal fade" id="deadlineTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal" id="deadlineTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog line_white" role="document">
                 <div class="modal-content">
@@ -67,7 +67,7 @@
 
         <%-- MODAL - SET START TIME FOR MORE TEAMS --%>
 
-        <div class="modal fade" id="startTimeTeamsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal" id="startTimeTeamsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog line_white" role="document">
                 <div class="modal-content">
@@ -82,9 +82,9 @@
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-danger" value="FOR ALL"
-                               onclick="setStartTimeForAll(${race.id})">
+                               onclick="setStartTimeForAll(${race.id})" data-dismiss="modal">
                         <input type="button" class="btn btn-danger" value="Next 10"
-                               onclick="setStartTimeNextTen(${race.id})">
+                               onclick="setStartTimeNextTen(${race.id})" data-dismiss="modal">
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -93,7 +93,7 @@
 
         <%-- MODAL - SET START TIME FOR ONE TEAM --%>
 
-        <div class="modal fade" id="setStartTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal" id="setStartTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog line_white" role="document">
                 <div class="modal-content">
@@ -112,9 +112,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" id="setStartTimeButton" value="Set time" class="btn btn-success"/>
+                        <input type="button" id="setStartTimeButton" value="Set time" class="btn btn-success" data-dismiss="modal"/>
                         <input type="button" class="btn btn-danger" value="Set global time"
-                               id="setGlobalStartTimeButton">
+                               id="setGlobalStartTimeButton" data-dismiss="modal">
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -123,7 +123,7 @@
 
         <%-- FINISH TIME MODAL --%>
 
-        <div class="modal fade" id="finishTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal" id="finishTimeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog line_white" role="document">
                 <div class="modal-content">
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" value="Set" class="btn btn-success" id="finishTimeButton"/>
+                        <input type="button" value="Set" class="btn btn-success" id="finishTimeButton" data-dismiss="modal"/>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -151,31 +151,71 @@
 
         <%-- POINTS MODAL --%>
 
-        <div class="modal fade" id="pointsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog line_white" role="document">
+        <div class="modal" id="pointsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                   aria-hidden="true">
+        <div class="modal-dialog line_white" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div style="margin-bottom: 15px;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Set points</h4>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="margin-bottom: 10px;">
+                            Points:
+                            <input type="text" id="pointsModalInput" class="form-control"/>
+                        </div>
+                        <div class="col-sm-12" style="margin-bottom: 10px;">
+                            Bonus points:
+                            <input type="text" id="bonusModalInput" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" value="Save" id="setPointsButton" data-dismiss="modal">
+                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <%-- RESULT DANGER MODAL --%>
+
+        <div class="modal" id="resultDangerModal" role="dialog">
+            <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-body">
                         <div style="margin-bottom: 15px;">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Set points</h4>
+                            <h4 class="modal-title">Delete result</h4>
+                        </div>
+                        <div id="resultDanger" style="margin-bottom: 10px;" class="alert alert-danger"></div>
+                        <div style="text-align: right">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Close"
+                                   style="margin-bottom: 5px;">
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <%-- RESULT SUCCESS MODAL --%>
+
+        <div class="modal" id="resultSuccessModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm-12" style="margin-bottom: 10px;">
-                                Points:
-                                <input type="text" id="pointsModalInput" class="form-control"/>
-                            </div>
-                            <div class="col-sm-12" style="margin-bottom: 10px;">
-                                Bonus points:
-                                <input type="text" id="bonusModalInput" class="form-control"/>
-                            </div>
+                        <div style="margin-bottom: 15px;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete result</h4>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-primary" value="Save" id="setPointsButton">
-                        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                        <div id="resultSuccess" style="margin-bottom: 10px;" class="alert alert-success"></div>
+                        <div style="text-align: right">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Close"
+                                   style="margin-bottom: 5px;">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -227,7 +267,6 @@
                                 <th>Category</th>
                                 <th>Points</th>
                                 <th>Bonus</th>
-                                <th>Penalization</th>
                                 <th>Start time</th>
                                 <th>Finish time</th>
                                 <th>Deadline time</th>
@@ -246,9 +285,6 @@
                                     <td id="bonus${team.id}" onclick="setPointsToModal(${race.id},${team.id})"
                                         data-toggle="modal" data-target="#pointsModal">
                                             ${team.bonus}
-                                    </td>
-                                    <td>
-                                            ${team.penalization}
                                     </td>
                                     <td id="startTime${team.id}" onclick="setStartTimeToModal(${race.id}, ${team.id})"
                                         data-toggle="modal" data-target="#setStartTimeModal">
@@ -293,8 +329,8 @@
                                             "sScrollX": "100%",
                                             dom: 'Bfrtip',
                                             columnDefs: [
-                                                {type: 'non-empty-string', targets: 5}, // define 'name' column as non-empty-string type
-                                                {type: 'non-empty-string', targets: 6}
+                                                {type: 'non-empty-string', targets: 4}, // define 'name' column as non-empty-string type
+                                                {type: 'non-empty-string', targets: 5}
                                             ],
                                             lengthMenu: [
                                                 [10, 25, 50, -1],
