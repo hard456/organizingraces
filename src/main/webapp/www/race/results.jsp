@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
 
 <t:template>
     <jsp:body>
@@ -8,62 +9,39 @@
         <t:race_menu/>
 
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
         <script type="text/javascript" charset="utf8"
                 src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8"
+                src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+        <script type="text/javascript" charset="utf8"
+                src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+        <script type="text/javascript" charset="utf8"
+                src="https://cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
 
 
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 1000px; margin: 0 auto;">
                 <c:choose>
                     <c:when test="${race.evaluation eq true || race_cooperator eq true || race.user.id eq user.id}">
-
-                        <%-- Import results modal --%>
-
-                        <div class="modal fade" id="importTeams" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog line_white" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <div style="margin-bottom: 15px;">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Import results from EXCEL</h4>
-                                        </div>
-                                    </div>
-                                    <div class="modal-body">
-                                        <label class="btn btn-primary" for="my-file-selector">
-                                            <input id="my-file-selector" type="file" style="display:none;"
-                                                   onchange="$('#upload-file-info').html(this.files[0].name);"
-                                                   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                            Import XLSX file
-                                        </label>
-                                        <span id="upload-file-info"></span>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <input type="button" class="btn btn-primary" value="Import">
-                                        <input type="button" class="btn btn-secondary" data-dismiss="modal"
-                                               value="Close">
-                                    </div>
+                        <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <a href="${pageContext.request.contextPath}/race/${race.id}/results"><input
+                                            type="button" style="width: 100%; margin-bottom: 5px;"
+                                            class="btn btn-primary" value="Show results"></a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="${pageContext.request.contextPath}/race/${race.id}/results/manage"><input
+                                            type="button" style="width: 100%; margin-bottom: 5px;"
+                                            class="btn btn-default" value="Set results"></a>
                                 </div>
                             </div>
-                        </div>
-
-                        <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                            <div class="hidden-xs" style="margin-bottom: 30px;">
-                                <c:if test="${teams.size() > 0}">
-                                    <input type="button" class="btn btn-success" value="Export results">
-                                </c:if>
-                            </div>
-                            <div class="visible-xs" style="margin-bottom: 20px;">
-                                <c:if test="${teams.size() > 0}">
-                                    <input type="button" class="btn btn-success" value="Export results"
-                                           style="width: 100%">
-                                </c:if>
-                            </div>
                         </c:if>
-
-                        <table id="myTable" class="display table table-bordered" cellspacing="0" width="100%">
-                            <thead class="table table-bordered">
+                        <br><br>
+                        <table id="myTable" class="display" cellspacing="0" width="100%">
+                            <thead>
                             <tr>
                                 <th>Rank</th>
                                 <th>Team</th>
@@ -74,7 +52,7 @@
                                 <th>Final Points</th>
                                 <th>Start time</th>
                                 <th>Finish time</th>
-                                <th>Action</th>
+                                    <%--<th>Action</th>--%>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,33 +61,97 @@
                                     <td>${i.index+1}</td>
                                     <td>${team.name}</td>
                                     <td>${team.category.name}</td>
-                                    <td>555</td>
+                                    <td>${team.points}</td>
                                     <td>${team.bonus}</td>
                                     <td>${team.penalization}</td>
-                                    <td>777</td>
-                                    <td>${team.startTime}</td>
-                                    <td>${team.finishTime}</td>
-                                    <td style="width: auto;"><input type="button" value="Action"
-                                                                    class="btn btn-primary"></td>
+                                    <td>${team.finalPoints}</td>
+                                    <td><joda:format value="${team.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                                    <td><joda:format value="${team.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                                        <%--<td style="width: auto;"><input type="button" value="Action"--%>
+                                        <%--class="btn btn-primary"></td>--%>
                                 </tr>
                             </c:forEach>
                             </tbody>
                         </table>
 
                         <script>
-                            $(document).ready(function () {
-                                $('#myTable').DataTable(
-                                        {
-                                            "pagingType": "first_last_numbers",
-                                            "sScrollX": "100%",
-                                            "dom": 'Bfrtip',
-                                            "buttons": [
-                                                'copy', 'csv', 'excel', 'pdf', 'print'
-                                            ]
-                                        }
-                                );
-                            });
+                            jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+                                "non-empty-string-asc": function (str1, str2) {
+                                    if(str1 == "")
+                                        return 1;
+                                    if(str2 == "")
+                                        return -1;
+                                    return ((str1 < str2) ? -1 : ((str1 > str2) ? 1 : 0));
+                                },
+
+                                "non-empty-string-desc": function (str1, str2) {
+                                    if(str1 == "")
+                                        return 1;
+                                    if(str2 == "")
+                                        return -1;
+                                    return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
+                                }
+                            } );
                         </script>
+
+                        <c:choose>
+                            <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#myTable').DataTable(
+                                                {
+                                                    "pagingType": "first_last_numbers",
+                                                    "sScrollX": "100%",
+                                                    dom: 'Bfrtip',
+                                                    lengthMenu: [
+                                                        [10, 25, 50, -1],
+                                                        ['10 rows', '25 rows', '50 rows', 'Show all']
+                                                    ],
+                                                    columnDefs: [
+                                                        {type: 'non-empty-string', targets: 7},
+                                                        {type: 'non-empty-string', targets: 8}
+                                                    ],
+                                                    buttons: [
+                                                        'pageLength',
+                                                        'excelHtml5',
+                                                        {
+                                                            extend: 'csvHtml5',
+                                                            charset: 'UTF-16LE',
+                                                            fieldSeparator: '\t',
+                                                            bom: true
+                                                        }
+                                                    ]
+                                                }
+                                        );
+                                    });
+                                </script>
+                            </c:when>
+                            <c:otherwise>
+                                <script>
+                                    $(document).ready(function () {
+                                        $('#myTable').DataTable(
+                                                {
+                                                    "pagingType": "first_last_numbers",
+                                                    "sScrollX": "100%",
+                                                    dom: 'Bfrtip',
+                                                    lengthMenu: [
+                                                        [10, 25, 50, -1],
+                                                        ['10 rows', '25 rows', '50 rows', 'Show all']
+                                                    ],
+                                                    columnDefs: [
+                                                        {type: 'non-empty-string', targets: 7},
+                                                        {type: 'non-empty-string', targets: 8}
+                                                    ],
+                                                    buttons: [
+                                                        'pageLength',
+                                                    ]
+                                                }
+                                        );
+                                    });
+                                </script>
+                            </c:otherwise>
+                        </c:choose>
+
                     </c:when>
                     <c:otherwise>
                         <div class="alert alert-warning">
