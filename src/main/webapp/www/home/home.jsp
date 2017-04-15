@@ -72,8 +72,8 @@
                     </div>
                     <div class="col-xs-12 col-md-4" style="text-align: center;">
                         <div class="jumbotron" style="background-color: white;">
-                            <span class="glyphicon glyphicon-share" style="font-size:2em; color: coral;"></span><br>
-                            <span style="font-size: 15px; color: slategrey;">Share your sport event</span>
+                            <span class="glyphicon glyphicon-sort-by-attributes" style="font-size:2em; color: coral;"></span><br>
+                            <span style="font-size: 15px; color: slategrey;">Sort and filter results</span>
                         </div>
                     </div>
                     <div class="col-xs-12 col-md-4" style="text-align: center;">
