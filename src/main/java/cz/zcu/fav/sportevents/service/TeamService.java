@@ -34,4 +34,9 @@ public class TeamService {
         teamDAO.delete(team);
     }
 
+    @Transactional
+    public void update(Team team){
+        teamDAO.update(team);
+    }
+
 }

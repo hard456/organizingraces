@@ -38,4 +38,8 @@ public class TeamDAO {
     public void delete(Team team) {
         sessionFactory.getCurrentSession().delete(team);
     }
+
+    public void update(Team team) {
+        sessionFactory.getCurrentSession().update(team);
+    }
 }
