@@ -8,7 +8,7 @@ function addCategory(counter_type) {
         if (counter_con < 18) {
             var newdiv = document.createElement('div');
             newdiv.setAttribute('id', "C" + counter_con);
-            newdiv.innerHTML = "Category " + (counter_con + 3) + ":" + "<input type='text' maxlength='20' class='form-control' style='margin-bottom: 7px' name='contestantSubCategories["+(counter_con+2)+"].name'>";
+            newdiv.innerHTML = "Category " + (counter_con + 3) + " <span style='color: darkgrey'>(1 - 20 length)</span>:" + "<input type='text' maxlength='20' class='form-control' style='margin-bottom: 7px' name='contestantSubCategories["+(counter_con+2)+"].name'>";
             document.getElementById(div_con).appendChild(newdiv);
             counter_con++;
         }
@@ -17,7 +17,7 @@ function addCategory(counter_type) {
         if (counter_team < 18) {
             var newdiv = document.createElement('div');
             newdiv.setAttribute('id', "T" + counter_team);
-            newdiv.innerHTML = "Category " + (counter_team + 3) + ":" + "<input type='text' maxlength='20' class='form-control' style='margin-bottom: 7px' name='teamSubCategories["+(counter_team+2)+"].name'>";
+            newdiv.innerHTML = "Category " + (counter_team + 3) + " <span style='color: darkgrey'>(1 - 20 length)</span>:" + "<input type='text' maxlength='20' class='form-control' style='margin-bottom: 7px' name='teamSubCategories["+(counter_team+2)+"].name'>";
             document.getElementById(div_team).appendChild(newdiv);
             counter_team++;
         }

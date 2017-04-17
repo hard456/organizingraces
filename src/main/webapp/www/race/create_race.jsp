@@ -13,10 +13,10 @@
             <div style="max-width: 800px; margin: 0 auto;">
 
                 <form:form name="createEventForm" action="${pageContext.request.contextPath}/create_event" method="POST">
-                    Race name:
+                    Race name<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                     <input type="text" maxlength="32" style="margin-bottom: 7px;" class="form-control"
                            placeholder="Race name" name="race.name">
-                    Size of team:
+                    Size of team<span style="color: red;">*</span>:
                     <select name="race.teamSize" class="form-control">
                         <option value="1">1</option>
                         <option selected value="2">2</option>
@@ -60,9 +60,9 @@
                             <label><input type="radio" name="conRadio" value="own">Create own categories</label>
                         </div>
                     </div>
-                    Category 1:
+                    Category  <span style='color: darkgrey'>(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" style="margin-bottom: 7px;" name="contestantSubCategories[0].name"/>
-                    Category 2:
+                    Category 2 <span style='color: darkgrey'>(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="contestantSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="con">
@@ -116,9 +116,9 @@
                         </div>
                     </div>
 
-                    Category 1:
+                    Category 1 <span style='color: darkgrey'>(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[0].name" style="margin-bottom: 7px;">
-                    Category 2:
+                    Category 2 <span style='color: darkgrey'>(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="team">

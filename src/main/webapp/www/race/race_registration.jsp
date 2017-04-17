@@ -16,6 +16,8 @@
         <div style="max-width: 800px; margin: 0 auto;">
             <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
 
+            <%-- ADMIN TEAM REGISTRATION --%>
+
             <div class="well well-lg" style="background: lightgoldenrodyellow">
                 <div style="text-align: center;">
                     <c:if test="${race.teamSize gt 1}">ADMIN TEAM REGISTRATION</c:if>
@@ -28,13 +30,14 @@
             <div class="row">
                 <c:if test="${race.teamSize gt 1}">
                     <div class="col-sm-6">
-                        Team name:<input class="form-control" name="teamName" maxlength="32"/>
+                        Team name <span style="color: darkgrey">(3 - 32 length)</span>:
+                        <input class="form-control" name="teamName" maxlength="32"/>
                     </div>
                 </c:if>
                 <c:if test="${not empty team_categories}">
                     <div class="col-sm-6">
-                        <c:if test="${race.teamSize gt 1}">Team category:</c:if>
-                        <c:if test="${race.teamSize eq 1}">Race category:</c:if>
+                        <c:if test="${race.teamSize gt 1}">Team category<span style="color: red;">*</span>:</c:if>
+                        <c:if test="${race.teamSize eq 1}">Race category<span style="color: red;">*</span>:</c:if>
                         <select class="form-control" name="teamCategory">
                             <c:forEach items="${team_categories}" var="c">
                                 <option value="${c.id}">${c.name}</option>
@@ -67,7 +70,7 @@
                     <br>
                     <div class="row">
                         <div class="col-sm-4">
-                            Firstname:
+                            Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" id="${i.index}firstname" name="" maxlength="32"/>
@@ -80,7 +83,7 @@
 
                         </div>
                         <div class="col-sm-4">
-                            Lastname:
+                            Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" type="text" id="${i.index}lastname" name=""
@@ -94,7 +97,7 @@
 
                         </div>
                         <div class="col-sm-4">
-                            Phone:
+                            Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" type="text" id="${i.index}phone" name="" maxlength="32">
@@ -109,7 +112,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-4">
-                            Email:
+                            Email <span style="color: darkgrey">(6 - 32 length)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" type="text" id="${i.index}email" name="" maxlength="32">
@@ -123,7 +126,7 @@
                         </div>
                         <c:if test="${not empty con_categories}">
                             <div class="col-sm-4">
-                                Contestant category:
+                                Contestant category<span style="color: red;">*</span>:
                                 <c:choose>
                                     <c:when test="${i.index gt race.teamSize-1}">
                                         <select class="form-control" id="${i.index}category" name="">
@@ -183,11 +186,8 @@
                 <div id="admin_team_result"></div>
                 <br><br><br><br>
 
+                <%-- ADMIN SOLO CONTESTANT REGISTRATION --%>
 
-                    <%----%>
-                    <%----%>
-                    <%----%>
-                    <%----%>
                 <c:if test="${race.teamSize gt 1}">
                     <div class="well well-lg" style="background: lightgoldenrodyellow">
                         <div style="text-align: center;">ADMIN SOLO REGISTRATION</div>
@@ -197,31 +197,35 @@
 
                         <div class="row">
                             <div class="col-sm-4">
-                                Firstname:<input class="form-control" name="contestant.firstname" id="firstname"
+                                Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                                <input class="form-control" name="contestant.firstname" id="firstname"
                                                  maxlength="32"/>
                             </div>
                             <div class="col-sm-4">
-                                Lastname:<input class="form-control"
+                                Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                                <input class="form-control"
                                                 type="text"
                                                 name="contestant.lastname" id="lastname" maxlength="32">
 
                             </div>
                             <div class="col-sm-4">
-                                Phone:<input class="form-control"
+                                Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
+                                <input class="form-control"
                                              type="text"
                                              name="contestant.phone" id="phone" maxlength="16">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
-                                Email:<input class="form-control"
+                                Email <span style="color: darkgrey">(6 - 32 length)</span>:
+                                <input class="form-control"
                                              type="text"
                                              name="contestant.email" id="email" maxlength="32">
 
                             </div>
                             <c:if test="${not empty con_categories}">
                                 <div class="col-sm-4">
-                                    Contestant category:
+                                    Contestant category<span style="color: red;">*</span>:
                                     <select class="form-control" name="category">
                                         <c:forEach items="${con_categories}" var="c">
                                             <option value="${c.id}">${c.name}</option>
@@ -253,10 +257,8 @@
                 </c:if>
                 </c:if>
 
-                    <%----%>
-                    <%----%>
-                    <%----%>
-                    <%----%>
+                <%-- USER SOLO REGISTRATION --%>
+
                 <c:choose>
                     <c:when test="${race.registration eq true || race_cooperator eq true || race.user.id eq user.id}">
                         <c:if test="${race.teamSize gt 1}">
@@ -267,7 +269,7 @@
                             <form:form name="addSoloContestant" action="${pageContext.request.contextPath}/race/${race.id}/addSoloContestant" method="POST">
 
                                 <c:if test="${not empty con_categories}">
-                                    Contestant category:
+                                    Contestant category<span style="color: red;">*</span>:
                                     <select class="form-control" name="category">
                                         <c:forEach items="${con_categories}" var="c">
                                             <option value="${c.id}">${c.name}</option>
@@ -296,10 +298,7 @@
                             <br><br><br><br>
                         </c:if>
 
-                        <%----%>
-                        <%----%>
-                        <%----%>
-                        <%----%>
+                        <%-- USER TEAM REGISTRATION --%>
 
                         <div class="well well-lg">
                             <div style="text-align: center;">
@@ -313,13 +312,14 @@
                             <div class="row">
                                 <c:if test="${race.teamSize gt 1}">
                                     <div class="col-sm-6">
-                                        Team name:<input class="form-control" name="teamName" maxlength="32"/>
+                                        Team name <span style="color: darkgrey">(3 - 32 length)</span>:
+                                        <input class="form-control" name="teamName" maxlength="32"/>
                                     </div>
                                 </c:if>
                                 <c:if test="${not empty team_categories}">
                                     <div class="col-sm-6">
-                                        <c:if test="${race.teamSize gt 1}">Team category:</c:if>
-                                        <c:if test="${race.teamSize eq 1}">Race category:</c:if>
+                                        <c:if test="${race.teamSize gt 1}">Team category:<span style="color: red;">*</span></c:if>
+                                        <c:if test="${race.teamSize eq 1}">Race category:<span style="color: red;">*</span></c:if>
                                         <select class="form-control" name="teamCategory">
                                             <c:forEach items="${team_categories}" var="c">
                                                 <option value="${c.id}">${c.name}</option>
@@ -338,7 +338,7 @@
                             <c:if test="${not empty con_categories}">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        Contestant category:
+                                        Contestant category<span style="color: red;">*</span>:
                                         <select class="form-control" name="conCategory">
                                             <c:forEach items="${con_categories}" var="c">
                                                 <option value="${c.id}">${c.name}</option>
@@ -364,24 +364,28 @@
                                     <br>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            Firstname:<input class="form-control"
+                                            Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                                            <input class="form-control"
                                                              name="contestants[${i.index}].firstname" maxlength="32"/>
                                         </div>
                                         <div class="col-sm-4">
-                                            Lastname:<input class="form-control"
+                                            Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                                            <input class="form-control"
                                                             type="text"
                                                             name="contestants[${i.index}].lastname" maxlength="32">
 
                                         </div>
                                         <div class="col-sm-4">
-                                            Phone:<input class="form-control"
+                                            Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
+                                            <input class="form-control"
                                                          type="text"
                                                          name="contestants[${i.index}].phone" maxlength="16">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            Email:<input class="form-control"
+                                            Email <span style="color: darkgrey">(6 - 32 length)</span>:
+                                            <input class="form-control"
                                                          type="text"
                                                          name="contestants[${i.index}].email" maxlength="32">
 
@@ -389,7 +393,7 @@
 
                                         <c:if test="${not empty con_categories}">
                                             <div class="col-sm-4">
-                                                Contestant category:
+                                                Contestant category<span style="color: red;">*</span>:
                                                 <select class="form-control" name="teammateCategory[${i.index}]">
                                                     <c:forEach items="${con_categories}" var="c">
                                                         <option value="${c.id}">${c.name}</option>

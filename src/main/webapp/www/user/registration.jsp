@@ -7,25 +7,25 @@
     <jsp:body>
         <div class="card-log" style="margin-top: 25px;">
             <form:form action="${pageContext.request.contextPath}/addUser" modelAttribute="userRegistrationForm" method="POST">
-                <div style="margin: 0 auto; max-width: 250px;">Username:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Username<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:</div>
                 <form:input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Username" maxlength="32" path="user.login"/>
-                <div style="margin: 0 auto; max-width: 250px;">Firstname:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:</div>
                 <form:input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Firstname" maxlength="32" path="user.firstname"/>
-                <div style="margin: 0 auto; max-width: 250px;">Surname:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Surname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:</div>
                 <form:input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Surname" maxlength="32" path="user.surname"/>
-                <div style="margin: 0 auto; max-width: 250px;">Phone:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:</div>
                 <form:input type="text" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Phone" maxlength="16" path="user.phone"/>
-                <div style="margin: 0 auto; max-width: 250px;">Email:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Email<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:</div>
                 <form:input type="email" style="margin: 0 auto 20px; max-width: 250px;" class="form-control"
                        placeholder="Email" maxlength="32" path="user.email"/>
-                <div style="margin: 0 auto; max-width: 250px;">Password:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Password<span style="color: red;">*</span> <span style="color: darkgrey">(8 - 256 length)</span>:</div>
                 <form:input type="password" style="margin: 0 auto 7px; max-width: 250px;" class="form-control"
                        placeholder="Password" maxlength="256" path="user.password"/>
-                <div style="margin: 0 auto; max-width: 250px;">Password again:</div>
+                <div style="margin: 0 auto; max-width: 250px;">Password again<span style="color: red;">*</span> <span style="color: darkgrey">(8 - 256 length)</span>:</div>
                 <form:input type="password" style="margin: 0 auto 20px; max-width: 250px;" class="form-control"
                        placeholder="Password again" path="passwordAgain"/>
                 <div style="text-align: center;">
