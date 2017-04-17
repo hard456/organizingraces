@@ -1,7 +1,5 @@
 package cz.zcu.fav.sportevents.model;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -16,33 +14,26 @@ public class Contestant implements Serializable{
     @Column(name = "id")
     private int id;
 
-    @NotNull
     @Column(name = "firstname", nullable = false, length = 32)
     private String firstname;
 
-    @NotNull
     @Column(name = "lastname", nullable = false, length = 32)
     private String lastname;
 
-    @Nullable
     @Column(name = "email", nullable = false, length = 32)
     private String email;
 
-    @Nullable
     @Column(name = "phone", nullable = true, length = 16)
     private String phone;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(name = "con_subcat_id")
     private ContestantSubcategory category;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -51,7 +42,6 @@ public class Contestant implements Serializable{
     @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean paid;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(name = "race_id")
     private Race race;

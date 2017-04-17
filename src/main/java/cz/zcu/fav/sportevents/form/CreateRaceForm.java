@@ -1,7 +1,6 @@
 package cz.zcu.fav.sportevents.form;
 
 
-import com.sun.istack.internal.Nullable;
 import cz.zcu.fav.sportevents.model.ContestantSubcategory;
 import cz.zcu.fav.sportevents.model.Race;
 import cz.zcu.fav.sportevents.model.TeamSubcategory;
@@ -30,11 +29,9 @@ public class CreateRaceForm {
     private Race race;
 
     @NumberFormat
-    @Nullable
     private Integer defTeamCategoryId;
 
     @NumberFormat
-    @Nullable
     private Integer defConCategoryId;
 
     public CreateRaceForm() {

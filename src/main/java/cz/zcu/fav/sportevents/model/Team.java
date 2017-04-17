@@ -1,6 +1,5 @@
 package cz.zcu.fav.sportevents.model;
 
-import com.sun.istack.internal.Nullable;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
@@ -34,7 +33,6 @@ public class Team implements Serializable{
     @Column(name = "deadline_time")
     private Integer deadlineTime;
 
-    @Nullable
     @ManyToOne
     @JoinColumn(name = "team_subcat_id")
     private TeamSubcategory category;

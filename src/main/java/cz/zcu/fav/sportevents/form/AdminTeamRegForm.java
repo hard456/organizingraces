@@ -1,6 +1,5 @@
 package cz.zcu.fav.sportevents.form;
 
-import com.sun.istack.internal.Nullable;
 import cz.zcu.fav.sportevents.model.Contestant;
 
 import javax.validation.Valid;
@@ -11,12 +10,10 @@ public class AdminTeamRegForm {
     @Valid
     private List<Contestant> contestants;
 
-    @Nullable
     private List<Integer> teammateCategory;
 
     private String teamName;
 
-    @Nullable
     private Integer teamCategory;
 
     public List<Contestant> getContestants() {
