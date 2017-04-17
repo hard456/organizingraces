@@ -1,7 +1,8 @@
 package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.comparator.FinalPointsCompare;
-import cz.zcu.fav.sportevents.container.ListIntegerStringCointaner;
+import cz.zcu.fav.sportevents.container.TeamIdListResultResponse;
+import cz.zcu.fav.sportevents.form.DateTimeCategoryIdForm;
 import cz.zcu.fav.sportevents.form.DatetimeTeamForm;
 import cz.zcu.fav.sportevents.model.*;
 import cz.zcu.fav.sportevents.service.*;
@@ -97,14 +98,13 @@ public class RaceResultController {
         int penalizationPoints = 0;
         Duration interval = null;
         try {
-            Date date = new Date();
+
             interval = new Duration(team.getStartTime().plusMinutes(team.getDeadlineTime()), team.getFinishTime());
-//            interval = new Period(         deadlineTime, finishTime, PeriodType.minutes());
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         if (interval != null) {
-//            final int minutes = interval.getMinutes();
             long minutes = interval.getStandardMinutes();
             final Duration standardMinutes = Duration.standardMinutes(interval.getStandardMinutes());
             final Duration secondsInterval = new Duration(interval).minus(standardMinutes);
@@ -136,21 +136,6 @@ public class RaceResultController {
                 teamSubcategories = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
                 model.addObject("team_categories", teamSubcategories);
             }
-
-//            Team yolo = teamService.getTeamById(153);
-            DateTimeFormatter sdf = DateTimeFormat.forPattern("yy-MM-dd HH:mm:ss");
-//            DateTime yoloDate = sdf.parseDateTime("2010-02-06 16:30:13");
-//            yolo.setFinishTime(yoloDate);
-//            yolo.setName("yolo");
-//            teamService.save(yolo);
-
-//            try {
-//                sdf.parseDateTime("yolo");
-//                System.out.println("OK");
-//            }
-//            catch (Exception e){
-//                System.out.println("FAIL");
-//            }
 
             List<Team> teams = teamService.getTeamsByRaceId(race_id);
             List<Contestant> contestants = contestantService.getContestantsByRaceId(race_id);
@@ -196,22 +181,142 @@ public class RaceResultController {
         return teams;
     }
 
-    //OK
-    @RequestMapping(value = "/race/{id}/results/setStartTimeNextTen", method = RequestMethod.POST)
-    public ModelAndView setStartTimeNextTen(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
-        return null;
+    @RequestMapping(value = "/race/{id}/results/setStartTimeToCategory", method = RequestMethod.POST, produces = "application/json")
+    public
+    @ResponseBody
+    TeamIdListResultResponse setStartTimeToCategory(@ModelAttribute DateTimeCategoryIdForm dateTimeCategoryIdForm,
+                                                    BindingResult bindingResult, @PathVariable("id") int race_id) {
+
+        TeamIdListResultResponse response = new TeamIdListResultResponse();
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTime newDate = null;
+
+        if(bindingResult.hasErrors()){
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+
+        if(dateTimeCategoryIdForm.getCategoryId() == null){
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+
+
+
+        List<Team> teams = teamService.getListByCategoryIdRaceId(race_id, dateTimeCategoryIdForm.getCategoryId());
+
+        if(teams.size() == 0){
+            response.setValidation("not_team");
+            return response;
+        }
+
+        if (dateTimeCategoryIdForm.getDatetime() == null || dateTimeCategoryIdForm.getDatetime().equals("")) {
+            response.setValidation("empty_datetime");
+            return response;
+        } else {
+
+            try {
+                newDate = format.parseDateTime(dateTimeCategoryIdForm.getDatetime());
+
+            } catch (Exception e) {
+                response.setValidation("wrong_format");
+                return response;
+            }
+
+                for (Team team : teams) {
+                        if (team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())) {
+                            response.setValidation("start_time_before");
+                            return response;
+                        }
+                }
+                for (Team team : teams) {
+                    team.setStartTime(newDate);
+                    response.addToList(team.getId());
+                    teamService.update(team);
+                }
+            }
+
+        response.setValidation("ok");
+        return response;
     }
 
-    //OK
-    @RequestMapping(value = "/race/{id}/results/setStartTimeAll", method = RequestMethod.POST)
-    public @ResponseBody ListIntegerStringCointaner setStartTimeAll(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
+    @RequestMapping(value = "/race/{id}/results/setStartTimeNextTen", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody
+    TeamIdListResultResponse setStartTimeNextTen(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+        TeamIdListResultResponse response = new TeamIdListResultResponse();
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+
+        List<Team> teams = teamService.getTeamsByRaceId(race_id);
+        List<Team> newTeamList = new ArrayList<>();
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        DateTime newDate = null;
+
+        if (dateTime == null || dateTime.equals("")) {
+            response.setValidation("empty_datetime");
+            return response;
+        } else {
+
+            try {
+                newDate = format.parseDateTime(dateTime);
+
+            } catch (Exception e) {
+                response.setValidation("wrong_format");
+                return response;
+            }
+            if (teams.size() == 0) {
+                response.setValidation("not_team");
+                return response;
+            }
+            else{
+                for (Team team : teams) {
+                    if(team.getStartTime() == null){
+                        if(newTeamList.size() == 10){
+                            break;
+                        }
+                        if (team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())) {
+                            response.setValidation("start_time_before");
+                            return response;
+                        }
+                        newTeamList.add(team);
+                    }
+                }
+                for (Team team : newTeamList) {
+                    team.setStartTime(newDate);
+                    response.addToList(team.getId());
+                    teamService.update(team);
+                }
+            }
+        }
+
+        response.setValidation("ok");
+        return response;
+    }
+
+
+    @RequestMapping(value = "/race/{id}/results/setStartTimeAll", method = RequestMethod.POST, produces = "application/json")
+    public
+    @ResponseBody
+    TeamIdListResultResponse setStartTimeAll(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
 
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();
-        ListIntegerStringCointaner response = new ListIntegerStringCointaner();
+        TeamIdListResultResponse response = new TeamIdListResultResponse();
 
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
-            response.setString("something_went_wrong");
+            response.setValidation("something_went_wrong");
             return response;
         }
 
@@ -219,45 +324,43 @@ public class RaceResultController {
         DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         DateTime newDate = null;
 
-        if(dateTime.equals("")){
-            for (Team team : teams){
-                if(team.getFinishTime() != null){
-                    response.setString("not_null_finishtime");
+        if (dateTime.equals("")) {
+            for (Team team : teams) {
+                if (team.getFinishTime() != null) {
+                    response.setValidation("not_null_finishtime");
                     return response;
                 }
             }
-        }
-        else{
+        } else {
 
             try {
                 newDate = format.parseDateTime(dateTime);
 
             } catch (Exception e) {
-                response.setString("wrong_format");
+                response.setValidation("wrong_format");
                 return response;
             }
 
-            for (Team team : teams){
-                if(team.getFinishTime() != null && !format.parseDateTime(dateTime).isBefore(team.getFinishTime())){
-                    response.setString("start_time_before");
+            for (Team team : teams) {
+                if (team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())) {
+                    response.setValidation("start_time_before");
                     return response;
                 }
             }
         }
 
         for (Team team : teams) {
-            if(newDate != null){
+            if (newDate != null) {
                 team.setStartTime(newDate);
-            }
-            else{
+            } else {
                 team.setStartTime(null);
             }
 
             response.addToList(team.getId());
-//            teamService.update(team);
+            teamService.update(team);
         }
 
-        response.setString("ok");
+        response.setValidation("ok");
         return response;
     }
 
@@ -266,7 +369,7 @@ public class RaceResultController {
     @ResponseBody
     String setStartTime(@ModelAttribute("datetimeTeamForm") DatetimeTeamForm datetimeTeamForm, BindingResult bindingResult, @PathVariable("id") int race_id) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "something_went_wrong";
         }
 
@@ -286,10 +389,9 @@ public class RaceResultController {
 
         DateTimeFormatter format = DateTimeFormat.forPattern("yy-MM-dd HH:mm:ss");
         if (datetimeTeamForm.getDateTime().equals("")) {
-            if(team.getFinishTime() == null){
+            if (team.getFinishTime() == null) {
                 team.setStartTime(null);
-            }
-            else{
+            } else {
                 return "cant_be_empty";
             }
         } else {
@@ -299,7 +401,7 @@ public class RaceResultController {
             } catch (Exception e) {
                 return "wrong_format";
             }
-            if(team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())){
+            if (team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())) {
                 return "start_time_before";
             }
         }
@@ -309,13 +411,14 @@ public class RaceResultController {
         return "ok";
     }
 
-    //OK
     @RequestMapping(value = "/race/{id}/results/finished", method = RequestMethod.POST, produces = "application/json")
-    public @ResponseBody List<String> teamFinished(@ModelAttribute("teamId") Integer teamId, BindingResult bindingResult, @PathVariable("id") int race_id) {
+    public
+    @ResponseBody
+    List<String> teamFinished(@ModelAttribute("teamId") Integer teamId, BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         List<String> response = new ArrayList<>();
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             response.add("something_went_wrong");
             return response;
         }
@@ -329,7 +432,7 @@ public class RaceResultController {
             return response;
         }
 
-        if(team.getStartTime() == null){
+        if (team.getStartTime() == null) {
             response.add("start_time_missing");
             return response;
         }
@@ -338,7 +441,7 @@ public class RaceResultController {
         DateTime dateTime = new DateTime();
         String responseDate = dateTime.toString(format);
 
-        if(!team.getStartTime().isBefore(dateTime)){
+        if (!team.getStartTime().isBefore(dateTime)) {
             response.add("start_time_before");
             return response;
         }
@@ -349,13 +452,15 @@ public class RaceResultController {
         response.add("ok");
         response.add(responseDate);
 
-       return response;
+        return response;
     }
 
     @RequestMapping(value = "/race/{id}/results/setFinishTime", method = RequestMethod.POST)
-    public @ResponseBody String setFinishTime(@ModelAttribute("datetimeTeamForm") DatetimeTeamForm datetimeTeamForm, BindingResult bindingResult, @PathVariable("id") int race_id) {
+    public
+    @ResponseBody
+    String setFinishTime(@ModelAttribute("datetimeTeamForm") DatetimeTeamForm datetimeTeamForm, BindingResult bindingResult, @PathVariable("id") int race_id) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "something_went_wrong";
         }
 
@@ -373,7 +478,7 @@ public class RaceResultController {
 
         Team team = teamService.getTeamById(datetimeTeamForm.getTeamId());
 
-        if(team.getStartTime() == null){
+        if (team.getStartTime() == null) {
             return "start_time_missing";
         }
 
@@ -384,7 +489,7 @@ public class RaceResultController {
             try {
                 newDate = format.parseDateTime(datetimeTeamForm.getDateTime());
 
-                if(!team.getStartTime().isBefore(newDate)){
+                if (!team.getStartTime().isBefore(newDate)) {
                     return "start_time_before";
                 }
 
@@ -400,19 +505,20 @@ public class RaceResultController {
     }
 
     @RequestMapping(value = "/race/{id}/results/setPoints", method = RequestMethod.POST)
-    public @ResponseBody String setPoints(@RequestBody List<String> numbers, @PathVariable("id") int race_id) {
+    public
+    @ResponseBody
+    String setPoints(@RequestBody List<String> numbers, @PathVariable("id") int race_id) {
         List<Integer> newNumbers = new ArrayList<>();
-        if(numbers.size() != 3){
+        if (numbers.size() != 3) {
             return "wrong_parameter_count";
         }
 
-        for (String string : numbers){
-                try {
-                    newNumbers.add(Integer.parseInt(string));
-                }
-                catch (NumberFormatException e){
-                    return "not_number";
-                }
+        for (String string : numbers) {
+            try {
+                newNumbers.add(Integer.parseInt(string));
+            } catch (NumberFormatException e) {
+                return "not_number";
+            }
 
         }
 
@@ -424,11 +530,11 @@ public class RaceResultController {
             return "something_went_wrong";
         }
 
-        if(team == null){
+        if (team == null) {
             return "team";
         }
 
-        if(newNumbers.get(1) < 0 || newNumbers.get(2) < 0){
+        if (newNumbers.get(1) < 0 || newNumbers.get(2) < 0) {
             return "negative_number";
         }
 
@@ -439,16 +545,100 @@ public class RaceResultController {
         return "ok";
     }
 
-    //TODO hodnoty
     @RequestMapping(value = "/race/{id}/results/setDeadlineToCategory", method = RequestMethod.POST)
-    public ModelAndView setDeadlineToCategory(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
-        return null;
+    public @ResponseBody TeamIdListResultResponse setDeadlineToCategory(@ModelAttribute DateTimeCategoryIdForm dateTimeCategoryIdForm,
+                                                                        BindingResult bindingResult, @PathVariable("id") int race_id) {
+
+        TeamIdListResultResponse response = new TeamIdListResultResponse();
+
+        if(bindingResult.hasErrors()){
+            response.setValidation("number_format");
+            return response;
+        }
+
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+        int minutes = 0;
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+        if(dateTimeCategoryIdForm.getDatetime() == null || dateTimeCategoryIdForm.getDatetime().equals("")){
+            response.setValidation("empty_time");
+            return response;
+        }
+
+        try {
+            minutes = Integer.parseInt(dateTimeCategoryIdForm.getDatetime());
+        }
+        catch (Exception e){
+            response.setValidation("number_format");
+            return response;
+        }
+
+        if(minutes < 0){
+            response.setValidation("negative_number");
+            return response;
+        }
+
+        List<Team> teams = teamService.getListByCategoryIdRaceId(race_id, dateTimeCategoryIdForm.getCategoryId());
+
+        if(teams.size() == 0){
+            response.setValidation("not_team");
+            return response;
+        }
+
+        for (Team team : teams) {
+            team.setDeadlineTime(minutes);
+            teamService.update(team);
+            response.addToList(team.getId());
+        }
+
+        response.setValidation("ok");
+        return response;
     }
 
-    //TODO hodnoty
     @RequestMapping(value = "/race/{id}/results/setDeadlineForAll", method = RequestMethod.POST)
-    public ModelAndView setDeadlineForAll(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
-        return null;
+    public @ResponseBody TeamIdListResultResponse setDeadlineForAll(@ModelAttribute("deadline") String deadline, @PathVariable("id") int race_id) {
+
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+        TeamIdListResultResponse response = new TeamIdListResultResponse();
+        int minutes = 0;
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            response.setValidation("something_went_wrong");
+            return response;
+        }
+        if(deadline == null || deadline.equals("")){
+            response.setValidation("empty_time");
+            return response;
+        }
+
+        try {
+            minutes = Integer.parseInt(deadline);
+        }
+        catch (Exception e){
+            response.setValidation("number_format");
+            return response;
+        }
+
+        if(minutes < 0){
+            response.setValidation("negative_number");
+            return response;
+        }
+
+        List<Team> teams = teamService.getTeamsByRaceId(race_id);
+
+        for (Team team : teams) {
+            team.setDeadlineTime(minutes);
+            teamService.update(team);
+            response.addToList(team.getId());
+        }
+
+        response.setValidation("ok");
+        return response;
     }
 
 }
