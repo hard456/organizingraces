@@ -13,7 +13,7 @@
 <%-- CURRENT TIME WITH PATTERN --%>
 <joda:format var="now_format" value="${now}" pattern="yyyy-MM-dd HH:mm:ss"/>
 
-<script src="/js/results_manage.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/results_manage.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -47,7 +47,7 @@
                     <div class="modal-body">
                         Would you like to set deadline time?
                         <c:if test="${not empty team_categories}">
-                            <select class="form-control" id="teamCategory" style="margin-top: 5px;">
+                            <select class="form-control" id="teamCategoryDeadlineTime" style="margin-top: 5px;">
                                 <c:forEach var="c" items="${team_categories}">
                                     <option value="${c.id}">${c.name}</option>
                                 </c:forEach>
@@ -55,9 +55,9 @@
                         </c:if>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-danger" value="FOR ALL" onclick="setDeadlineForAll(${race.id})">
+                        <input type="button" class="btn btn-danger" value="FOR ALL" onclick="setDeadlineForAll(${race.id})" data-dismiss="modal">
                         <c:if test="${not empty team_categories}">
-                            <input type="button" class="btn btn-danger" value="TO CATEGORY" onclick="setDeadlineToCategory(${race.id})">
+                            <input type="button" class="btn btn-danger" value="TO CATEGORY" onclick="setDeadlineToCategory(${race.id})" data-dismiss="modal">
                         </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
@@ -79,12 +79,22 @@
                     </div>
                     <div class="modal-body">
                         Would you like to set a time for?
+                        <c:if test="${not empty team_categories}">
+                            <select class="form-control" id="teamCategoryStartTime" style="margin-top: 5px;">
+                                <c:forEach var="c" items="${team_categories}">
+                                    <option value="${c.id}">${c.name}</option>
+                                </c:forEach>
+                            </select>
+                        </c:if>
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-danger" value="FOR ALL"
                                onclick="setStartTimeForAll(${race.id})" data-dismiss="modal">
                         <input type="button" class="btn btn-danger" value="Next 10"
                                onclick="setStartTimeNextTen(${race.id})" data-dismiss="modal">
+                        <c:if test="${not empty team_categories}">
+                            <input type="button" class="btn btn-danger" value="TO CATEGORY" onclick="setStartTimeToCategory(${race.id})" data-dismiss="modal">
+                        </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -174,7 +184,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="button" class="btn btn-primary" value="Save" id="setPointsButton" data-dismiss="modal">
+                    <input type="button" class="btn btn-primary" value="Save" id="setPointsButton">
                     <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                 </div>
             </div>
@@ -189,7 +199,7 @@
                     <div class="modal-body">
                         <div style="margin-bottom: 15px;">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete result</h4>
+                            <h4 class="modal-title">Result</h4>
                         </div>
                         <div id="resultDanger" style="margin-bottom: 10px;" class="alert alert-danger"></div>
                         <div style="text-align: right">
@@ -209,7 +219,7 @@
                     <div class="modal-body">
                         <div style="margin-bottom: 15px;">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Delete result</h4>
+                            <h4 class="modal-title">Result</h4>
                         </div>
                         <div id="resultSuccess" style="margin-bottom: 10px;" class="alert alert-success"></div>
                         <div style="text-align: right">
@@ -241,7 +251,7 @@
                         <hr>
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" placeholder="In minutes"/>
+                                <input type="text" id="deadLineTime"  class="form-control" placeholder="In minutes"/>
                             </div>
                             <div class="col-sm-2">
                                 <input type="button" value="Deadline time" class="btn btn-success" data-toggle="modal"
@@ -263,6 +273,7 @@
                         <table id="myTable" class="display" cellspacing="0" width="100%">
                             <thead>
                             <tr>
+                                <th>Position</th>
                                 <th>Team</th>
                                 <th>Category</th>
                                 <th>Points</th>
@@ -276,6 +287,7 @@
                             <tbody>
                             <c:forEach items="${teams}" var="team" varStatus="i">
                                 <tr style="text-align: center;">
+                                    <td>${i.index+1}</td>
                                     <td>${team.name}</td>
                                     <td>${team.category.name}</td>
                                     <td id="points${team.id}" onclick="setPointsToModal(${race.id},${team.id})"
@@ -294,7 +306,9 @@
                                         data-toggle="modal" data-target="#finishTimeModal">
                                         <joda:format value="${team.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                     </td>
-                                    <td>${team.deadlineTime}</td>
+                                    <td id="deadline${team.id}">
+                                    ${team.deadlineTime}
+                                    </td>
                                     <td style="width: auto;">
                                         <input type="button" value="Finish" class="btn btn-primary btn-sm"
                                                onclick="teamFinished(${race.id}, ${team.id})">
@@ -325,16 +339,15 @@
                             $(document).ready(function () {
                                 $('#myTable').DataTable(
                                         {
-                                            "pagingType": "first_last_numbers",
-                                            "sScrollX": "100%",
+                                            "bPaginate": false,
                                             dom: 'Bfrtip',
                                             columnDefs: [
-                                                {type: 'non-empty-string', targets: 4}, // define 'name' column as non-empty-string type
-                                                {type: 'non-empty-string', targets: 5}
+                                                {type: 'non-empty-string', targets: 5}, // define 'name' column as non-empty-string type
+                                                {type: 'non-empty-string', targets: 6}
                                             ],
                                             lengthMenu: [
-                                                [10, 25, 50, -1],
-                                                ['10 rows', '25 rows', '50 rows', 'Show all']
+                                                [-1],
+                                                ['Show all']
                                             ],
                                             buttons: [
                                                 'pageLength',

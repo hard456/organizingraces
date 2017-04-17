@@ -8,8 +8,8 @@
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-<script src="/js/race_cooperation.js" language="Javascript" type="text/javascript"></script>
-<script src="/js/race_settings.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/race_cooperation.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/race_settings.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -146,14 +146,14 @@
                                     <c:when test="${race.evaluation eq true}">
                                         <div>
                                             <input id="evaluation_b" type="button" class="btn btn-success"
-                                                   onclick="changeEvalution(${race.id});"
+                                                   onclick="changeEvaluation(${race.id});"
                                                    value="Evaluated" style="width: 100%">
                                         </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div>
                                             <input id="evaluation_b" type="button" class="btn btn-danger"
-                                                   onclick="changeEvalution(${race.id});"
+                                                   onclick="changeEvaluation(${race.id});"
                                                    value="Not evaluated" style="width: 100%">
                                         </div>
                                     </c:otherwise>

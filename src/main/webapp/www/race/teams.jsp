@@ -6,8 +6,8 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-<script src="/js/delete_team.js" language="Javascript" type="text/javascript"></script>
-<script src="/js/excel_team.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/delete_team.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/excel_team.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>

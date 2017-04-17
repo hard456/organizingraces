@@ -8,7 +8,7 @@
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 
-<script src="/js/contestant_list.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/contestant_list.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>

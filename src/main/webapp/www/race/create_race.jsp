@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<script src="/js/add_category_input.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/add_category_input.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
