@@ -1,11 +1,7 @@
 package cz.zcu.fav.sportevents.form;
 
-import com.sun.istack.internal.Nullable;
-
-
 public class SoloRegForm {
 
-    @Nullable
     private Integer category;
 
     public Integer getCategory() {

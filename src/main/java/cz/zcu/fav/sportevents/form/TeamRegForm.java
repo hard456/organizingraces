@@ -1,6 +1,5 @@
 package cz.zcu.fav.sportevents.form;
 
-import com.sun.istack.internal.Nullable;
 import cz.zcu.fav.sportevents.model.Contestant;
 
 import javax.validation.Valid;
@@ -14,16 +13,12 @@ public class TeamRegForm {
     private List<Contestant> contestants;
 
     @Size(min = 3, max = 32)
-    @Nullable
     private String teamName;
 
-    @Nullable
     private Integer teamCategory;
 
-    @Nullable
     private Integer conCategory;
 
-    @Nullable
     private List<Integer> teammateCategory;
 
     public TeamRegForm() {
