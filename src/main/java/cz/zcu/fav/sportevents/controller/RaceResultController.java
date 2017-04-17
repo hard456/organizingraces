@@ -293,6 +293,10 @@ public class RaceResultController {
                         newTeamList.add(team);
                     }
                 }
+                if(newTeamList.size() == 0){
+                    response.setValidation("not_team");
+                    return response;
+                }
                 for (Team team : newTeamList) {
                     team.setStartTime(newDate);
                     response.addToList(team.getId());
