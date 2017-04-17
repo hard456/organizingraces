@@ -212,7 +212,6 @@ public class RaceRegistrationController {
             }
         }
 
-
         if (race.getTeamCategory() != null) {
             if (!r.getParameterMap().containsKey("teamCategory")) {
                 model.addObject("invalid", true);
@@ -301,6 +300,11 @@ public class RaceRegistrationController {
                 if (team.getName().length() < 3 || team.getName().length() > 32) {
                     model.addObject("invalid", true);
                     model.addObject("result", "Something went wrong.");
+                    return model;
+                }
+                if(teamService.getByRaceIdTeamName(race_id,team.getName()) != null){
+                    model.addObject("invalid", true);
+                    model.addObject("result", "Team with this name already exists.");
                     return model;
                 }
             }
@@ -599,6 +603,9 @@ public class RaceRegistrationController {
                 team.setName(HtmlUtils.htmlEscape(adminTeamRegForm.getTeamName(), "UTF-8"));
                 if (team.getName().length() < 3 || team.getName().length() > 32) {
                     return "invalid";
+                }
+                if(teamService.getByRaceIdTeamName(race_id,team.getName()) != null){
+                    return "team_exists";
                 }
             }
         }

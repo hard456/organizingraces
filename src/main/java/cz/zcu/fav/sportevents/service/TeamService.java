@@ -44,4 +44,9 @@ public class TeamService {
         return teamDAO.getListByCategoryIdRaceId(raceId, categoryId);
     }
 
+    @Transactional
+    public Team getByRaceIdTeamName(int raceId, String teamName){
+        return teamDAO.getByRaceIdTeamName(raceId, teamName);
+    }
+
 }

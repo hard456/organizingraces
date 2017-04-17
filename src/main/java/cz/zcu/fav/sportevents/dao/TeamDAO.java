@@ -50,4 +50,13 @@ public class TeamDAO {
                 .add(Restrictions.eq("category.id",categoryId));
         return criteria.list();
     }
+
+    public Team getByRaceIdTeamName(int raceId, String teamName) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Team.class)
+                .add(Restrictions.eq("race.id",raceId))
+                .add(Restrictions.eq("name",teamName));
+        criteria.setMaxResults(1);
+        return (Team) criteria.uniqueResult();
+    }
 }
