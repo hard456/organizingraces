@@ -8,7 +8,6 @@ function tagDeleteButtons(raceId,team){
 }
 
 function deleteTeam(raceId, team, deleteContestans){
-
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -20,7 +19,7 @@ function deleteTeam(raceId, team, deleteContestans){
 
     $.ajax({
         type: "POST",
-        url: "/race/" + raceId + "/teams/deleteTeam",
+        url: BASE_URL+"/race/" + raceId + "/teams/deleteTeam",
         data: data,
         dataType: "html",
         success: function (response) {

@@ -1,10 +1,9 @@
 function addCooperator(race_id) {
-
     var form = $("#addCooperatorForm").serialize();
     var tmp;
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/addCooperator",
+        url: BASE_URL+"/race/" + race_id + "/addCooperator",
         data: form,
         dataType: "json",
         success: function (response) {
@@ -40,7 +39,6 @@ function addCooperator(race_id) {
 }
 
 function deleteCooperator(race_id, login) {
-
     //nutnost pro poslání CSRF
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -53,7 +51,7 @@ function deleteCooperator(race_id, login) {
 
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/deleteCooperator",
+        url: BASE_URL+"/race/" + race_id + "/deleteCooperator",
         data: form,
         dataType: "json",
         success: function (response) {

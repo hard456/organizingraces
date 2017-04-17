@@ -14,7 +14,7 @@ function changePaidValue(race_id,contestant){
 
         $.ajax({
             type: "POST",
-            url: "/race/" + race_id + "/contestants/changePaidValue",
+            url: BASE_URL+"/race/" + race_id + "/contestants/changePaidValue",
             data: data,
             dataType: "html",
             success: function (response) {
@@ -46,7 +46,7 @@ function updateContestant(race_id,contestant){
 
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/contestants/updateContestant",
+        url: BASE_URL+"/race/" + race_id + "/contestants/updateContestant",
         data: form,
         dataType: "json",
         success: function (response) {

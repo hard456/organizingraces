@@ -13,11 +13,12 @@ function removeFromTeamList(id){
 }
 
 function createTeamAjax(race_id){
+
     var form = $("#createTeamForm").serialize();
     var data;
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/createTeam",
+        url: BASE_URL+"/race/" + race_id + "/createTeam",
         data: form,
         dataType: "json",
         success: function (response) {
@@ -53,7 +54,7 @@ function deleteSoloContestant(id, race_id){
 
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/contestants/deleteSoloContestant",
+        url: BASE_URL+"/race/" + race_id + "/contestants/deleteSoloContestant",
         data: data,
         dataType: "html",
         success: function (response) {

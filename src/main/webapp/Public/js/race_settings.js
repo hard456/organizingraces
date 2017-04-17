@@ -1,5 +1,4 @@
 function changeRegistration(raceId) {
-
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -9,7 +8,7 @@ function changeRegistration(raceId) {
 
         $.ajax({
             type: "POST",
-            url: "/race/" + raceId + "/changeRegistration",
+            url: BASE_URL + "/race/" + raceId + "/changeRegistration",
             dataType: "html",
             success: function (response) {
                 if (response == 1) {
@@ -24,8 +23,7 @@ function changeRegistration(raceId) {
         });
 }
 
-function changeEvalution(raceId) {
-
+function changeEvaluation(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -35,7 +33,7 @@ function changeEvalution(raceId) {
 
         $.ajax({
             type: "POST",
-            url: "/race/" + raceId + "/changeEvaluation",
+            url: BASE_URL + "/race/" + raceId + "/changeEvaluation",
             dataType: "html",
             success: function (response) {
                 if (response == 1) {

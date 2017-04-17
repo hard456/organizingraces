@@ -4,7 +4,7 @@ function adminTeamRegistrationAjax(race_id) {
 
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/adminTeamRegistration",
+        url: BASE_URL+"/race/" + race_id + "/adminTeamRegistration",
         data: form,
         async: false,
         dataType: "html",
@@ -30,12 +30,11 @@ function adminTeamRegistrationAjax(race_id) {
 
 
 function adminSoloRegistration(race_id) {
-
     var form = $("#adminSoloContestantForm").serialize();
 
     $.ajax({
         type: "POST",
-        url: "/race/" + race_id + "/adminSoloRegistration",
+        url: BASE_URL+"/race/" + race_id + "/adminSoloRegistration",
         data: form,
         async: true,
         dataType: "html",

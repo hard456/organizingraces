@@ -29,7 +29,7 @@ function importTeams(raceId, size) {
 
             $.ajax({
                 type: "POST",
-                url: url,
+                url: BASE_URL+url,
                 data: formData,
                 contentType: false,
                 processData: false,
