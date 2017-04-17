@@ -12,10 +12,13 @@ function adminTeamRegistrationAjax(race_id) {
             if (data.localeCompare("ok") == 0) {
                 data = '<div class="alert alert-success">The team was registered.</div>'
             }
-            if (data.localeCompare("fail") == 0) {
+            else if (data.localeCompare("fail") == 0) {
                 data = '<div class="alert alert-danger">Something went wrong.</div>'
             }
-            if (data.localeCompare("invalid") == 0) {
+            else if (data.localeCompare("team_exists") == 0) {
+                data = '<div class="alert alert-danger">Team with this name already exists.</div>'
+            }
+            else if (data.localeCompare("invalid") == 0) {
                 data = '<div class="alert alert-danger">' +
                     'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)' +
                     'Team name (3 - 32 length)' +
@@ -42,10 +45,10 @@ function adminSoloRegistration(race_id) {
             if (data.localeCompare("ok") == 0) {
                 data = '<div class="alert alert-success">The user was registered.</div>'
             }
-            if (data.localeCompare("fail") == 0) {
+            else if (data.localeCompare("fail") == 0) {
                 data = '<div class="alert alert-danger">Something went wrong.</div>'
             }
-            if (data.localeCompare("invalid") == 0) {
+            else if (data.localeCompare("invalid") == 0) {
                 data = '<div class="alert alert-danger">' +
                     'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)' +
                     '</div>'

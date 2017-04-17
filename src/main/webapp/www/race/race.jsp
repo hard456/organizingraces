@@ -210,6 +210,9 @@
                     <form:form id="deleteCooperatorForm" method="POST">
                         <c:forEach items="${cooperators}" varStatus="i">
                             <div id="C${cooperators.get(i.index).user.id}">
+                                <c:if test="${not i.first}">
+                                    <hr>
+                                </c:if>
                                 <div class="row">
                                     <div class="col-sm-9" name="login" style="margin-top: 7px;">
                                             ${cooperators.get(i.index).user.login}
@@ -228,9 +231,6 @@
                                     </div>
 
                                 </div>
-                                <c:if test="${not i.last}">
-                                    <hr>
-                                </c:if>
                             </div>
                         </c:forEach>
                     </form:form>

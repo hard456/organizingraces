@@ -29,7 +29,7 @@ function addCooperator(race_id) {
                 tmp = '<div class="alert alert-danger">You can not add yourself.</div>'
             }
             if (response.validation.localeCompare("iscooperator") == 0) {
-                tmp = '<div class="alert alert-danger">Theuser is already cooperator.</div>'
+                tmp = '<div class="alert alert-danger">User is already cooperator.</div>'
             }
 
             $('#add_cooperator_result').html(tmp);

@@ -52,16 +52,16 @@ function setPoints(raceId, teamId) {
                     if (response.localeCompare("wrong_parameter_count") == 0) {
                         $("#resultDanger").html("Wrong number of Integer parameters");
                     }
-                    if (response.localeCompare("something_went_wrong") == 0) {
+                    else if (response.localeCompare("something_went_wrong") == 0) {
                         $("#resultDanger").html("Something went wrong");
                     }
-                    if (response.localeCompare("team") == 0) {
+                    else if (response.localeCompare("team") == 0) {
                         $("#resultDanger").html("Team is no exists");
                     }
-                    if (response.localeCompare("negative_number") == 0) {
+                    else if (response.localeCompare("negative_number") == 0) {
                         $("#resultDanger").html("Number can't be negative");
                     }
-                    if (response.localeCompare("not_number") == 0) {
+                    else if (response.localeCompare("not_number") == 0) {
                         $("#resultDanger").html("Number format expected");
                     }
                     $('#resultDangerModal').modal('show');
@@ -95,16 +95,16 @@ function setGlobalStartTime(raceId, teamId) {
                 if (response.localeCompare("wrong_format") == 0) {
                     $("#resultDanger").html("Wrong date format");
                 }
-                if (response.localeCompare("team") == 0) {
+                else if (response.localeCompare("team") == 0) {
                     $("#resultDanger").html("Team is not exists");
                 }
-                if (response.localeCompare("something_went_wrong") == 0) {
+                else if (response.localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
-                if (response.localeCompare("cant_be_empty") == 0) {
+                else if (response.localeCompare("cant_be_empty") == 0) {
                     $("#resultDanger").html("Start time can't be empty");
                 }
-                if (response.localeCompare("start_time_before") == 0) {
+                else if (response.localeCompare("start_time_before") == 0) {
                     $("#resultDanger").html("Start time is not before finish time");
                 }
                 $('#resultDangerModal').modal('show');
@@ -138,16 +138,16 @@ function setStartTime(raceId, teamId) {
                 if (response.localeCompare("wrong_format") == 0) {
                     $("#resultDanger").html("Wrong date format");
                 }
-                if (response.localeCompare("team") == 0) {
+                else if (response.localeCompare("team") == 0) {
                     $("#resultDanger").html("Team is not exists");
                 }
-                if (response.localeCompare("something_went_wrong") == 0) {
+                else if (response.localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
-                if (response.localeCompare("cant_be_empty") == 0) {
+                else if (response.localeCompare("cant_be_empty") == 0) {
                     $("#resultDanger").html("Start time can't be empty");
                 }
-                if (response.localeCompare("start_time_before") == 0) {
+                else if (response.localeCompare("start_time_before") == 0) {
                     $("#resultDanger").html("Start time is not before finish time");
                 }
                 $('#resultDangerModal').modal('show');
