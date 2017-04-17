@@ -42,4 +42,12 @@ public class TeamDAO {
     public void update(Team team) {
         sessionFactory.getCurrentSession().update(team);
     }
+
+    public List<Team> getListByCategoryIdRaceId(int raceId, int categoryId) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Team.class)
+                .add(Restrictions.eq("race.id",raceId))
+                .add(Restrictions.eq("category.id",categoryId));
+        return criteria.list();
+    }
 }

@@ -39,4 +39,9 @@ public class TeamService {
         teamDAO.update(team);
     }
 
+    @Transactional
+    public List<Team> getListByCategoryIdRaceId(int raceId, int categoryId){
+        return teamDAO.getListByCategoryIdRaceId(raceId, categoryId);
+    }
+
 }
