@@ -52,7 +52,7 @@
                                 <th>Final Points</th>
                                 <th>Start time</th>
                                 <th>Finish time</th>
-                                    <%--<th>Action</th>--%>
+                                <th>Result time</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -67,8 +67,7 @@
                                     <td>${team.finalPoints}</td>
                                     <td><joda:format value="${team.startTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                                     <td><joda:format value="${team.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                                        <%--<td style="width: auto;"><input type="button" value="Action"--%>
-                                        <%--class="btn btn-primary"></td>--%>
+                                    <td>${team.resultTime}</td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -109,7 +108,8 @@
                                                     ],
                                                     columnDefs: [
                                                         {type: 'non-empty-string', targets: 7},
-                                                        {type: 'non-empty-string', targets: 8}
+                                                        {type: 'non-empty-string', targets: 8},
+                                                        {orderable: false, targets: 9}
                                                     ],
                                                     buttons: [
                                                         'pageLength',
@@ -140,7 +140,8 @@
                                                     ],
                                                     columnDefs: [
                                                         {type: 'non-empty-string', targets: 7},
-                                                        {type: 'non-empty-string', targets: 8}
+                                                        {type: 'non-empty-string', targets: 8},
+                                                        {type: 'non-empty-string', targets: 9}
                                                     ],
                                                     buttons: [
                                                         'pageLength',

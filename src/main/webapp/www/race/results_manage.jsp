@@ -270,6 +270,19 @@
                         </div>
 
                         <hr>
+
+                        <div class="row" style="margin-bottom: 15px;">
+                            <div class="col-sm-3" style="float: right;">
+                                <input type="button" id="buttonFinished" value="Finished" class="form-control">
+                            </div>
+                            <div class="col-sm-3" style="float: right;">
+                                <input type="button" id="buttonNotFinished" value="Not finished" class="form-control">
+                            </div>
+                            <div class="col-sm-3" style="float: right;">
+                                <input type="button" id="buttonShowAll" value="All" class="form-control">
+                            </div>
+                        </div>
+
                         <table id="myTable" class="display" cellspacing="0" width="100%">
                             <thead>
                             <tr>
@@ -354,6 +367,18 @@
                                             ]
                                         }
                                 );
+                            });
+                            $("#buttonShowAll").click(function(e){
+                                var table = $('#myTable').DataTable();
+                                table.columns(6).search('').draw();
+                            });
+                            $("#buttonNotFinished").click(function(e){
+                                var table = $('#myTable').DataTable();
+                                table.columns(6).search( '^$', true, false ).draw();
+                            });
+                            $("#buttonFinished").click(function(e){
+                                var table = $('#myTable').DataTable();
+                                table.columns(6).search( '^(?!\s*$)', true, false).draw();
                             });
                         </script>
 

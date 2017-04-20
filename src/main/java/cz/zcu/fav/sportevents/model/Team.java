@@ -28,6 +28,9 @@ public class Team implements Serializable{
     private int penalization;
 
     @Transient
+    private String resultTime;
+
+    @Transient
     private int finalPoints;
 
     @Column(name = "deadline_time")
@@ -135,5 +138,13 @@ public class Team implements Serializable{
 
     public void setFinishTime(DateTime finishTime) {
         this.finishTime = finishTime;
+    }
+
+    public String getResultTime() {
+        return resultTime;
+    }
+
+    public void setResultTime(String resultTime) {
+        this.resultTime = resultTime;
     }
 }
