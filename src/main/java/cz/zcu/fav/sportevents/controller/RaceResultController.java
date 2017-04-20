@@ -130,7 +130,6 @@ public class RaceResultController {
             team = teams.get(i);
             if (team.getStartTime() != null && team.getFinishTime() != null) {
                 Period diff = new Period(team.getStartTime(), team.getFinishTime()).normalizedStandard();
-                System.out.println(diff);
                 team.setResultTime(periodFormat.print(diff));
             }
             teams.set(i, team);
