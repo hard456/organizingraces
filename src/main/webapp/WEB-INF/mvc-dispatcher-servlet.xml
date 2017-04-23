@@ -24,7 +24,7 @@
 
     </bean>
 
-    <security:http auto-config="true" use-expressions="true">
+    <security:http auto-config="true" use-expressions="true" authentication-manager-ref="authManager">
 
         <!-- DETECTION SESSION EXPIRED -->
         <security:session-management>
@@ -37,7 +37,7 @@
         <!-- Interceptor urls -->
         <security:intercept-url pattern="/favicon.ico" access="permitAll" />
         <security:intercept-url pattern="/" access="permitAll" />
-        <security:intercept-url pattern="/userpage" access="isAuthenticated()" />
+        <security:intercept-url pattern="/userpage"/>
         <security:intercept-url pattern="/logout" access="isAuthenticated()"/>
         <security:intercept-url pattern="/create_race" access="isAuthenticated()" />
         <security:intercept-url pattern="/my_races" access="isAuthenticated()"/>
@@ -51,10 +51,34 @@
         <security:intercept-url pattern="/teamRegistration" access="none" method="GET"/>
         <security:intercept-url pattern="/addUser" access="none" method="GET"/>
         <security:intercept-url pattern="/create_event" access="none" method="GET"/>
-        <security:intercept-url pattern="/race/{id}/addSoloContestant" access="none" method="GET"/>
-        <security:intercept-url pattern="/race/{id}/teamRegistration" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/registration" access="isAuthenticated()"/>
         <security:intercept-url pattern="/race/{id}/exportTeams" access="none" method="GET"/>
+
+        <security:intercept-url pattern="/race/{id}/addSoloContestant" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/teamRegistration" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/changeRegistration" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/changeEvaluation" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/deleteCooperator" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/addCooperator" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/adminTeamRegistration" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/adminSoloRegistration" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/createTeam" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/contestants/deleteSoloContestant" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/importOnePersonTeam" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/importTeams" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/contestants/changePaidValue" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/contestants/updateContestant" access="none" method="GET"/>
+
+        <security:intercept-url pattern="/race/{id}/results/setPoints" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setStartTime" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setStartTimeToCategory" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setStartTimeAll" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setStartTimeNextTen" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/finished" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setFinishTime" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setDeadlineToCategory" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/results/setDeadlineForAll" access="none" method="GET"/>
+
 
         <!-- LOGIN -->
         <security:form-login login-page="/login"
@@ -76,7 +100,7 @@
 
     </security:http>
 
-    <security:authentication-manager>
+    <security:authentication-manager id="authManager" alias="authenticationManager">
     <security:authentication-provider user-service-ref="loginService">
         <security:password-encoder ref="bcryptEncoder"/>
     </security:authentication-provider>
