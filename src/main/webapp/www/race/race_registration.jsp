@@ -5,7 +5,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <script src="${pageContext.request.contextPath}/js/add_contestant_inputs.js" language="Javascript" type="text/javascript"></script>
-<script src="${pageContext.request.contextPath}/js/admin_registration.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/race_registration.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -266,7 +266,7 @@
                                 <div style="text-align: center;">SOLO REGISTRATION</div>
                             </div>
 
-                            <form:form name="addSoloContestant" action="${pageContext.request.contextPath}/race/${race.id}/addSoloContestant" method="POST">
+                            <form:form id="soloContestantForm">
 
                                 <c:if test="${not empty con_categories}">
                                     Contestant category<span style="color: red;">*</span>:
@@ -286,14 +286,15 @@
 
                                 <div class="row">
                                     <div class="col-sm-12" style="text-align: right">
-                                        <button class="btn btn-primary" type="submit" name="submit"><span
-                                                style="color: white;">Solo registration</span></button>
+                                        <input class="btn btn-primary" type="button" onclick="soloRegistration(${race.id})" style="color: white;" value="Solo registration">
                                     </div>
                                 </div>
 
                                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
                             </form:form>
+
+                            <div id="solo_reg_result"></div>
 
                             <br><br><br><br>
                         </c:if>
@@ -307,7 +308,7 @@
                             </div>
                         </div>
 
-                        <form:form action="${pageContext.request.contextPath}/race/${race.id}/teamRegistration" method="POST">
+                        <form:form id="teamRegistrationForm">
 
                             <div class="row">
                                 <c:if test="${race.teamSize gt 1}">
@@ -384,7 +385,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">
-                                            Email <span style="color: darkgrey">(6 - 32 length)</span>:
+                                            Email<span style="color: darkgrey">(6 - 32 length)</span>:
                                             <input class="form-control"
                                                          type="text"
                                                          name="contestants[${i.index}].email" maxlength="32">
@@ -410,14 +411,16 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <div class="row">
                                 <div class="col-sm-12" style="text-align: right">
-                                    <button class="btn btn-primary" type="submit" name="submit"><span
-                                            style="color: white;">
-                                    <c:if test="${race.teamSize gt 1}">Team Registration</c:if>
-                                    <c:if test="${race.teamSize eq 1}">Registration</c:if>
-                                </span></button>
+                                    <c:if test="${race.teamSize gt 1}">
+                                        <input class="btn btn-primary" type="button" onclick="teamRegistration(${race.id})" style="color: white;" value="Team registration">
+                                    </c:if>
+                                    <c:if test="${race.teamSize eq 1}">
+                                        <input class="btn btn-primary" type="button" onclick="teamRegistration(${race.id})" style="color: white;" value="Registration">
+                                    </c:if>
                                 </div>
                             </div>
                         </form:form>
+                        <div id="team_reg_result" style="margin-bottom: 45px;"></div>
                     </c:when>
                     <c:otherwise>
                         <div class="alert alert-warning">Registration disabled</div>

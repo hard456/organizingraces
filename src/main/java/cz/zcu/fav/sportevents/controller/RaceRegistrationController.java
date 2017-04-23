@@ -83,46 +83,27 @@ public class RaceRegistrationController {
     }
 
     @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
-    public ModelAndView addSoloContestant(HttpServletRequest r, @Valid @ModelAttribute SoloRegForm soloRegForm,
+    public @ResponseBody String addSoloContestant(HttpServletRequest r, @Valid @ModelAttribute SoloRegForm soloRegForm,
                                           BindingResult bindingResult, @PathVariable("id") int race_id) {
 
-        ModelAndView model = new ModelAndView();
-        model.setViewName("race/race_reg_result");
 
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();
 
-        model.addObject("race", race);
-        model.addObject("user", user);
-
         if (bindingResult.hasErrors()) {
-            model.addObject("invalid", true);
-            model.addObject("result", "Something went wrong.");
-            return model;
+            return "something_went_wrong";
         }
 
-        if (user == null) {
-            model.addObject("error", "404");
-            model.setViewName("error/error_page");
-            return model;
-        }
-
-        if (race == null) {
-            model.addObject("error", "404");
-            model.setViewName("error/error_page");
-            return model;
+        if (user == null || race == null) {
+            return "something_went_wrong";
         }
 
         if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id,user.getId())) {
             if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
-                model.addObject("invalid", true);
-                model.addObject("result", "You can't register again to this race.");
-                return model;
+                return "registered_already";
             }
             if(!race.isRegistration()){
-                model.addObject("invalid", true);
-                model.addObject("result", "Registration disabled.");
-                return model;
+                return "registration_disabled";
             }
         }
 
@@ -134,15 +115,11 @@ public class RaceRegistrationController {
 
             if (subcategories != null) {
                 if (!r.getParameterMap().containsKey("category")) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "something_went_wrong";
                 }
                 conCategory = getConCategoryFromList(subcategories, soloRegForm.getCategory());
                 if (conCategory == null) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "something_went_wrong";
                 }
             }
         }
@@ -159,14 +136,11 @@ public class RaceRegistrationController {
         contestant.setTeam(null);
         contestantService.saveContestant(contestant);
 
-        model.addObject("invalid", false);
-        model.addObject("result", "Registration successfully completed.");
-        return model;
-
+        return "ok";
     }
 
     @RequestMapping(value = "/race/{id}/teamRegistration", method = RequestMethod.POST)
-    public ModelAndView teamRegistration(HttpServletRequest r, @ModelAttribute("teamRegForm") TeamRegForm teamRegForm,
+    public @ResponseBody String teamRegistration(HttpServletRequest r, @ModelAttribute("teamRegForm") TeamRegForm teamRegForm,
                                          BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         ModelAndView model = new ModelAndView();
@@ -179,68 +153,48 @@ public class RaceRegistrationController {
         model.addObject("user", user);
 
         if (bindingResult.hasErrors()) {
-            model.addObject("invalid", true);
-            model.addObject("result", "Something went wrong.");
-            return model;
+           return "something_went_wrong";
         }
 
         Contestant creator = new Contestant();
         Team team = new Team();
 
-        if (user == null) {
-            model.addObject("error", "404");
-            model.setViewName("error/error_page");
-            return model;
-        }
-
-        if (race == null) {
-            model.addObject("error", "404");
-            model.setViewName("error/error_page");
-            return model;
+        if (user == null || race == null) {
+            return "something_went_wrong";
         }
 
         if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
             if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
-                model.addObject("invalid", true);
-                model.addObject("result", "You can't register again to same race.");
-                return model;
+                return "registered_already";
             }
             if(!race.isRegistration()){
                 model.addObject("invalid", true);
                 model.addObject("result", "Registration disabled.");
-                return model;
+                return "registration_disabled";
             }
         }
 
         if (race.getTeamCategory() != null) {
             if (!r.getParameterMap().containsKey("teamCategory")) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+                return "something_went_wrong";
             }
             List<TeamSubcategory> teamSubList;
             teamSubList = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
             team.setCategory(getTeamCategoryFromList(teamSubList, teamRegForm.getTeamCategory()));
             if (team.getCategory() == null) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+                return "something_went_wrong";
             }
         }
 
         if (race.getContestantCategory() != null) {
             if (!r.getParameterMap().containsKey("conCategory")) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+                return "something_went_wrong";
             }
             List<ContestantSubcategory> conSubList;
             conSubList = contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId());
             creator.setCategory(getConCategoryFromList(conSubList, teamRegForm.getConCategory()));
             if (creator.getCategory() == null) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+                return "something_went_wrong";
             }
         }
 
@@ -257,55 +211,41 @@ public class RaceRegistrationController {
             List<Contestant> contestants;
 
             if (teamRegForm.getContestants().size() != (race.getTeamSize() - 1)) {
-                model.addObject("invalid", true);
-                model.addObject("result", "Something went wrong.");
-                return model;
+                return "something_went_wrong";
             }
 
             if (race.getContestantCategory() != null) {
                 if (!validConListParameters(r, race.getTeamSize() - 1, true)) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "something_went_wrong";
                 }
                 contestants = validContestantList(teamRegForm.getContestants());
                 if (contestants == null) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)");
-                    return model;
+                    return "values";
                 }
 
                 contestants = setCategoriesToConList(contestants, teamRegForm.getTeammateCategory(), race.getContestantCategory().getId());
                 if (contestants == null) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "something_went_wrong";
                 }
             } else {
                 if (!validConListParameters(r, race.getTeamSize() - 1, false)) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "something_went_wrong";
                 }
                 contestants = validContestantList(teamRegForm.getContestants());
                 if (contestants == null) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "values";
                 }
 
             }
             if (teamRegForm.getTeamName().length() != 0) {
                 team.setName(HtmlUtils.htmlEscape(teamRegForm.getTeamName(), "UTF-8"));
                 if (team.getName().length() < 3 || team.getName().length() > 32) {
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Something went wrong.");
-                    return model;
+                    return "wrong_team_name";
                 }
                 if(teamService.getByRaceIdTeamName(race_id,team.getName()) != null){
                     model.addObject("invalid", true);
                     model.addObject("result", "Team with this name already exists.");
-                    return model;
+                    return "team_exists";
                 }
             }
             teamService.save(team);
@@ -325,10 +265,7 @@ public class RaceRegistrationController {
             contestantService.saveContestant(creator);
         }
 
-        model.addObject("invalid", false);
-        model.addObject("result", "Registration completed successfully.");
-        return model;
-
+        return "ok";
     }
 
     private List<Contestant> validContestantList(List<Contestant> c) {
@@ -539,8 +476,6 @@ public class RaceRegistrationController {
     @ResponseBody
     String addTeamByAdmin(HttpServletRequest request, @ModelAttribute("adminTeamRegForm") AdminTeamRegForm adminTeamRegForm,
                           BindingResult bindingResult, @PathVariable("id") int race_id) {
-
-        System.out.println(request.getParameterMap());
 
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();

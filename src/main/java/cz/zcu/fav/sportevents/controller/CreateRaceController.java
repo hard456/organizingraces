@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
@@ -48,18 +49,14 @@ public class CreateRaceController {
     }
 
     @RequestMapping(value = "/create_event", method = RequestMethod.POST)
-    public ModelAndView createEvent(HttpServletRequest request, @Valid @ModelAttribute("createRaceForm") CreateRaceForm createRaceForm, BindingResult result) {
-        ModelAndView model = new ModelAndView();
+    public @ResponseBody String createEvent(HttpServletRequest request, @Valid @ModelAttribute("createRaceForm") CreateRaceForm createRaceForm, BindingResult result) {
         User user = userService.getLoginUser();
         if (user != null) {
-            model.setViewName("race/race_create_result");
             if (result.hasErrors()) {
-                model.addObject("invalid", true);
-                return model;
+                return "values";
             }
             if (!validCreateRaceParameters(request)) {
-                model.addObject("invalid", true);
-                return model;
+                return "values";
             }
             Race race = new Race();
             race.setName(HtmlUtils.htmlEscape(createRaceForm.getRace().getName(), "UTF-8"));
@@ -68,8 +65,7 @@ public class CreateRaceController {
             race.setRegistration(true);
 
             if (race.getName().length() > 32 || race.getName().length() < 3) {
-                model.addObject("invalid", true);
-                return model;
+                return "values";
             }
 
             if (!raceService.isExistRaceByName(race.getName())) {
@@ -77,14 +73,12 @@ public class CreateRaceController {
 
                     if (createRaceForm.getTeamRadio().equals("own")) {
                         if (escapeTeamSubCategories(createRaceForm.getTeamSubCategories()) == null) {
-                            model.addObject("invalid", true);
-                            return model;
+                            return "values";
                         }
                     }
                     if (createRaceForm.getConRadio().equals("own")) {
                         if (escapeConSubCategories(createRaceForm.getContestantSubCategories()) == null) {
-                            model.addObject("invalid", true);
-                            return model;
+                            return "values";
                         }
 
                     }
@@ -147,22 +141,18 @@ public class CreateRaceController {
                         race.setTeamCategory(teamCategory);
                         raceService.save(race);
                     }
-                    model.addObject("result", true);
-                    return model;
+                    return "ok";
 
                 } else {
-                    model.addObject("invalid", true);
-                    return model;
+                    return "values";
                 }
 
             } else {
-                model.addObject("result", false);
-                return model;
+                return "race_name_exists";
             }
 
         } else {
-            model.setViewName("login");
-            return model;
+            return "something_went_wrong";
         }
     }
 

@@ -32,15 +32,13 @@ public class UserRegistrationController {
     @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
     public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("userRegistrationForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
-        model.setViewName("user/reg_result");
+        model.setViewName("user/registration");
         if (bindingResult.hasErrors()) {
-            model.addObject("invalid", true);
-            model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
+            model.addObject("message", "Data are invalid:<br> Password (8 - 256 length)<br>Login (3-32 length)<br>Firstname (2 - 32 length)<br>Lastname (2 - 32 length)<br>email (6 - 32 length)");
             return model;
         }
         if (!validUserParameters(request)) {
-            model.addObject("invalid", true);
-            model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
+            model.addObject("message", "Data are invalid:<br> Password (8 - 256 length)<br>Login (3 - 32 length)<br>Firstname (2 - 32 length)<br>Lastname (2 - 32 length)<br>email (6 - 32 length)");
             return model;
         }
 
@@ -54,51 +52,45 @@ public class UserRegistrationController {
         user.setSurname(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getSurname(), "UTF-8"));
         String passwordAgain = HtmlUtils.htmlEscape(userRegistrationForm.getPasswordAgain(), "UTF-8");
 
-        if (!regParametersSize(user)) {
-            model.addObject("invalid", true);
-            model.addObject("message", "Data are invalid:<br> Password (8-256 length)<br>Login (3-32 length)<br>Firstname (2-32 length)<br>Lastname (2-32 length)<br>email (6-32 length)");
+        if (!validUserParametersSize(user)) {
+            model.addObject("message", "Data are invalid:<br> Password (8 - 256 length)<br>Login (3 - 32 length)<br>Firstname (2 - 32 length)<br>Lastname (2 - 32 length)<br>email (6 - 32 length)");
             return model;
         }
         if (userService.checkUserName(user)) {
-            model.addObject("invalid", true);
             model.addObject("message", "Name already used");
             return model;
         }
         if (!EmailValidator.getInstance().isValid(user.getEmail())) {
-            model.addObject("invalid", true);
             model.addObject("message", "Email is in invalid format");
             return model;
         }
         if (!user.getPhone().isEmpty()) {
             if (!user.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
-                model.addObject("invalid", true);
                 model.addObject("message", "Invalid phone format (only allowed):<br> +420123456789<br>+420 123 456 789<br>123 456 789<br>123456789");
                 return model;
             }
             if (userService.checkPhone(user)) {
-                model.addObject("invalid", true);
                 model.addObject("message", "User with phone number already exists");
                 return model;
             }
         }
         if (userService.checkEmail(user)) {
-            model.addObject("invalid", true);
             model.addObject("message", "Email already used");
             return model;
         }
         if (!user.getPassword().equals(passwordAgain)) {
-            model.addObject("invalid", true);
             model.addObject("message", "Passwords are not identical");
             return model;
         }
         userService.addUser(user);
-        model.addObject("invalid", false);
-        model.addObject("message", "You have successfully registered");
+
+        model.setViewName("user/login");
+        model.addObject("after_reg",true);
         return model;
 
     }
 
-    private boolean regParametersSize(User user) {
+    private boolean validUserParametersSize(User user) {
         if (user.getLogin().length() > 32 || user.getLogin().length() < 3) {
             return false;
         } else if (user.getEmail().length() > 32 || user.getEmail().length() < 6) {

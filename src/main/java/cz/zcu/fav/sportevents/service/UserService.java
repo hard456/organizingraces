@@ -24,7 +24,6 @@ public class UserService {
 
     @Transactional
     public boolean checkEmail(User user){
-        System.out.println("CHECKMAIL");
         if(userDAO.findByEmail(user.getEmail()) != null){
             return true;
         }

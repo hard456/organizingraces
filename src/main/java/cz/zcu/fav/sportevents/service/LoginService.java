@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service(value = "loginService")
+@Service
 public class LoginService implements UserDetailsService {
 
     @Autowired

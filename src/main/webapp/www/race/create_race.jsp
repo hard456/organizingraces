@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<script src="${pageContext.request.contextPath}/js/add_category_input.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/create_race.js" language="Javascript" type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -12,7 +12,7 @@
         <div class="card-log" style="margin-top: 25px;">
             <div style="max-width: 800px; margin: 0 auto;">
 
-                <form:form name="createEventForm" action="${pageContext.request.contextPath}/create_event" method="POST">
+                <form:form id="createEventForm">
                     Race name<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                     <input type="text" maxlength="32" style="margin-bottom: 7px;" class="form-control"
                            placeholder="Race name" name="race.name">
@@ -60,9 +60,9 @@
                             <label><input type="radio" name="conRadio" value="own">Create own categories</label>
                         </div>
                     </div>
-                    Category  <span style='color: darkgrey'>(1 - 20 length)</span>:
+                    Category 1:
                     <input type="text" maxlength="20" class="form-control" style="margin-bottom: 7px;" name="contestantSubCategories[0].name"/>
-                    Category 2 <span style='color: darkgrey'>(1 - 20 length)</span>:
+                    Category 2:
                     <input type="text" maxlength="20" class="form-control" name="contestantSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="con">
@@ -116,9 +116,9 @@
                         </div>
                     </div>
 
-                    Category 1 <span style='color: darkgrey'>(1 - 20 length)</span>:
+                    Category 1:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[0].name" style="margin-bottom: 7px;">
-                    Category 2 <span style='color: darkgrey'>(1 - 20 length)</span>:
+                    Category 2:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="team">
@@ -139,11 +139,11 @@
 
                     <br><br>
                     <div style="text-align: center;">
-                        <button class="btn btn-primary" type="submit" name="submit"><span
-                                style="color: white;">Create race</span></button>
+                        <input class="btn btn-primary" type="button" name="submit" onclick="createRace()" value="Create race" style="color: white;">
                     </div>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form:form>
+                <div id="create_race_result" style="margin: 10px 0 80px 0;"></div>
             </div>
         </div>
 
