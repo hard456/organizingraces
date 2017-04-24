@@ -48,7 +48,7 @@ public class UserRegistrationController {
         user.setFirstname(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getFirstname(), "UTF-8"));
         user.setLogin(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getLogin(), "UTF-8"));
         user.setPassword(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getPassword(), "UTF-8"));
-        user.setPhone(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getPhone(), "UTF-8"));
+        user.setPhone(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getPhone().replaceAll("\\s+",""), "UTF-8"));
         user.setSurname(HtmlUtils.htmlEscape(userRegistrationForm.getUser().getSurname(), "UTF-8"));
         String passwordAgain = HtmlUtils.htmlEscape(userRegistrationForm.getPasswordAgain(), "UTF-8");
 

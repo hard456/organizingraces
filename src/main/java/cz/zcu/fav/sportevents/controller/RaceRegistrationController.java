@@ -274,7 +274,7 @@ public class RaceRegistrationController {
             c.get(i).setFirstname(HtmlUtils.htmlEscape(c.get(i).getFirstname(), "UTF-8"));
             c.get(i).setLastname(HtmlUtils.htmlEscape(c.get(i).getLastname(), "UTF-8"));
             c.get(i).setEmail(HtmlUtils.htmlEscape(c.get(i).getEmail(), "UTF-8"));
-            c.get(i).setPhone(HtmlUtils.htmlEscape(c.get(i).getPhone(), "UTF-8"));
+            c.get(i).setPhone(HtmlUtils.htmlEscape(c.get(i).getPhone().replaceAll("\\s+",""), "UTF-8"));
 
             if (c.get(i).getEmail().length() > 0) {
                 if (!EmailValidator.getInstance().isValid(c.get(i).getEmail()) || c.get(i).getEmail().length() > 32 || c.get(i).getEmail().length() < 6) {
@@ -397,7 +397,7 @@ public class RaceRegistrationController {
         contestant.setFirstname(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getFirstname(), "UTF-8"));
         contestant.setLastname(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getLastname(), "UTF-8"));
         contestant.setEmail(HtmlUtils.htmlEscape(adminSoloRegForm.getContestant().getEmail(), "UTF-8"));
-        contestant.setPhone(adminSoloRegForm.getContestant().getPhone());
+        contestant.setPhone(adminSoloRegForm.getContestant().getPhone().replaceAll("\\s+",""));
         contestant.setRace(race);
         contestant.setUser(user);
 
