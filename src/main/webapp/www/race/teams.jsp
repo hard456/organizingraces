@@ -6,7 +6,7 @@
 <meta name="_csrf" content="${_csrf.token}"/>
 <meta name="_csrf_header" content="${_csrf.headerName}"/>
 
-<script src="${pageContext.request.contextPath}/js/delete_team.js" language="Javascript"
+<script src="${pageContext.request.contextPath}/js/teams.js" language="Javascript"
         type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/js/excel_team.js" language="Javascript" type="text/javascript"></script>
 
@@ -14,8 +14,6 @@
     <jsp:body>
 
         <t:race_menu/>
-
-        <%--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>--%>
 
         <%-- Import teams modal --%>
 
@@ -66,6 +64,24 @@
             </div>
         </div>
 
+        <!-- Save danger result -->
+        <div class="modal" id="updatetModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div style="margin-bottom: 15px;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete result</h4>
+                        </div>
+                        <div id="save_result" style="margin-bottom: 10px;"></div>
+                        <div style="text-align: right">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Close"
+                                   style="margin-bottom: 5px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Delete team modal -->
         <div class="modal" id="deleteTeamModal" role="dialog">
@@ -168,14 +184,14 @@
             <c:when test="${teams.size() > 0}">
                 <c:forEach items="${teams}" var="team">
                     <div class="well" id="T${team.id}">
-                        <c:if test="${race_cooperator eq true || race.user.id eq user.id || not empty race.teamCategory}">
+                        <c:if test="${race.teamSize gt 1 || race_cooperator eq true || race.user.id eq user.id || race.teamCategory ne null}">
                             <div class="row" style="margin-bottom: 20px;">
                                 <c:if test="${race.teamSize gt 1}">
                                     <c:choose>
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
-                                            <div class="col-sm-4" style="margin-bottom: 10px;">
+                                            <div class="col-sm-3" style="margin-bottom: 10px;">
                                                 Team name:
-                                                <input class="form-control" type="text" value="${team.name}" disabled>
+                                                <input class="form-control" type="text" value="${team.name}" id="teamName${team.id}">
                                             </div>
                                         </c:when>
                                         <c:otherwise>
@@ -190,10 +206,21 @@
                                 <c:if test="${race.teamCategory ne null}">
                                     <c:choose>
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
-                                            <div class="col-sm-4" style="margin-bottom: 10px;">
+                                            <div class="col-sm-3" style="margin-bottom: 10px;">
                                                 Team category:
-                                                <input class="form-control" type="text" value="${team.category.name}"
-                                                       disabled>
+                                                <select class="form-control" id="teamCategory${team.id}">
+                                                <c:forEach items="${team_categories}" var="category">
+                                                    <c:choose>
+                                                        <c:when test="${team.category.id eq category.id}">
+                                                            <option value="${category.id}" selected>${category.name}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${category.id}">${category.name}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+
+                                                </c:forEach>
+                                                </select>
                                             </div>
                                         </c:when>
                                         <c:otherwise>
@@ -207,27 +234,35 @@
 
                                 </c:if>
                                 <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                                    <div class="col-sm-4 hidden-xs"
+                                    <div class="col-sm-3 hidden-xs"
                                          style="text-align: right; margin-top: 20px; float: right;">
-                                        <input type="button" value="Delete" class="btn btn-danger"
+                                        <input type="button" value="Delete" style="width: 100%;" class="btn btn-danger"
                                                data-toggle="modal" data-target="#deleteTeamModal"
                                                onclick="tagDeleteButtons(${race.id}, ${team.id})">
                                     </div>
-                                    <div class="col-sm-4 visible-xs" style="text-align: right;">
+                                    <div class="col-sm-3 visible-xs">
                                         <input type="button" value="Delete" class="btn btn-danger"
                                                style="width: 100%"
                                                data-toggle="modal" data-target="#deleteTeamModal"
                                                onclick="tagDeleteButtons(${race.id}, ${team.id})">
                                     </div>
+                                    <c:if test="${race.teamSize > 1 || race.teamCategory ne null}">
+                                    <div class="col-sm-3 hidden-xs" style="text-align: right; margin-top: 20px; float: right;">
+                                        <input type="button" value="Save" style="width: 100%;" class="btn btn-success"
+                                               onclick="updateTeam(${race.id}, ${team.id})">
+                                    </div>
+                                    <div class="col-sm-3 visible-xs" style="margin-top: 5px;">
+                                        <input type="button" value="Save" class="btn btn-success"
+                                               style="width: 100%" onclick="updateTeam(${race.id}, ${team.id})">
+                                    </div>
+                                    </c:if>
                                 </c:if>
                             </div>
                         </c:if>
-                        <c:if test="${race.teamSize gt 1 || race.teamCategory ne null || race_cooperator eq true
-                        || race.user.id eq user.id}">
+                        <c:if test="${race.teamSize gt 1 || race.teamCategory ne null || race_cooperator eq true|| race.user.id eq user.id}">
                             <hr>
                         </c:if>
-                        <c:if test="${race.teamSize gt 1 || race_cooperator eq true
-                        || race.user.id eq user.id}">
+                        <c:if test="${race.teamSize gt 1 || race_cooperator eq true|| race.user.id eq user.id}">
                             <div class="row">
                                 <div class="col-sm-4">
                                     Members:
@@ -236,7 +271,7 @@
                         </c:if>
                         <c:forEach items="${contestants}" var="c">
                             <c:if test="${c.team.id eq team.id}">
-                                <div class="row" style="margin-bottom: 7px;">
+                                <div class="row" style="margin-bottom: 5px;">
                                     <c:choose>
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                             <div class="col-sm-3">
@@ -255,13 +290,17 @@
                                     </c:choose>
 
                                     <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
-                                        <div class="col-sm-3">
-                                            <input class="form-control" type="text" value="${c.email}" disabled>
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input class="form-control" type="text" value="${c.phone}"
-                                                   disabled>
-                                        </div>
+                                        <c:if test="${c.email ne null && c.email.length() > 0}">
+                                            <div class="col-sm-3">
+                                                <input class="form-control" type="text" value="${c.email}" disabled>
+                                            </div>
+                                        </c:if>
+                                        <c:if test="${c.phone ne null && c.phone.length() > 0}">
+                                            <div class="col-sm-3">
+                                                <input class="form-control" type="text" value="${c.phone}"
+                                                       disabled>
+                                            </div>
+                                        </c:if>
                                     </c:if>
                                     <c:if test="${race.contestantCategory ne null}">
                                         <c:choose>
@@ -288,9 +327,9 @@
                 </c:forEach>
             </c:when>
             <c:otherwise>
-                    <div class="alert alert-warning">
-                        List of teams / contestants is empty!
-                    </div>
+                <div class="alert alert-warning">
+                    List of teams / contestants is empty!
+                </div>
             </c:otherwise>
         </c:choose>
         </div>

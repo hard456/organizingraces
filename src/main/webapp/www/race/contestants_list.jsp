@@ -10,6 +10,24 @@
 
 <script src="${pageContext.request.contextPath}/js/contestant_list.js" language="Javascript" type="text/javascript"></script>
 
+<div class="modal" id="updatetModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div style="margin-bottom: 15px;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete result</h4>
+                </div>
+                <div id="save_result" style="margin-bottom: 10px;"></div>
+                <div style="text-align: right">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Close"
+                           style="margin-bottom: 5px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <t:template>
     <jsp:body>
 

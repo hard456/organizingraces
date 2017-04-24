@@ -38,8 +38,6 @@ function updateContestant(race_id,contestant){
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    //var form = {'contestan.firstname':'honziiik'};
-
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
@@ -51,13 +49,13 @@ function updateContestant(race_id,contestant){
         dataType: "json",
         success: function (response) {
             if (response == true) {
-                $("#S" + contestant).css("background-color", "#5cb85c");
+                    $("#save_result").html("<div class='alert alert-success'>Successfully saved.</div>");
             }
             else{
-                $("#S" + contestant).css("background-color", "#d9534f");
-                alert("Firstname (3 - 32 length\nLastname (3 - 32 length)\nEmail (6 - 32 length)\nPhone (+420123456789,789456123)");
+                $("#save_result").html("<div class='alert alert-danger'>Firstname (3 - 32 length<br>Lastname (3 - 32 length)<br>+" +
+                    "Email (6 - 32 length)<br>Phone (+420123456789,789456123)</div>");
             }
-
+            $('#updatetModal').modal('show');
         }
     });
 

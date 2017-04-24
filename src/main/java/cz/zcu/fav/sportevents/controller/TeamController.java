@@ -3,6 +3,7 @@ package cz.zcu.fav.sportevents.controller;
 import cz.zcu.fav.sportevents.container.ContestantImportExcel;
 import cz.zcu.fav.sportevents.container.TeamImportExcel;
 import cz.zcu.fav.sportevents.form.DeleteTeamForm;
+import cz.zcu.fav.sportevents.form.UpdateTeamForm;
 import cz.zcu.fav.sportevents.model.*;
 import cz.zcu.fav.sportevents.service.*;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -65,6 +66,9 @@ public class TeamController {
             User user = userService.getLoginUser();
             model.addObject("race", race);
             model.addObject("user", user);
+            if(race.getTeamCategory() != null){
+                model.addObject("team_categories", teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId()));
+            }
             model.setViewName("race/teams");
             model.addObject("teams", teamService.getTeamsByRaceId(race_id));
             model.addObject("contestants", contestantService.getContestantsByRaceId(race_id));
@@ -82,7 +86,7 @@ public class TeamController {
     @RequestMapping(value = "/race/{id}/teams/deleteTeam", method = RequestMethod.POST)
     public
     @ResponseBody
-    Integer createTeam(HttpServletRequest r, @ModelAttribute DeleteTeamForm deleteTeamForm,
+    Integer deleteTeam(HttpServletRequest r, @ModelAttribute DeleteTeamForm deleteTeamForm,
                        BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         User user = userService.getLoginUser();
@@ -984,6 +988,64 @@ public class TeamController {
             }
         }
         return true;
+    }
+
+    @RequestMapping(value = "/race/{id}/teams/updateTeam", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String updateTeam(HttpServletRequest r, @ModelAttribute UpdateTeamForm updateTeamForm,
+                       BindingResult bindingResult, @PathVariable("id") int race_id) {
+
+        User user = userService.getLoginUser();
+        Race race = raceService.getRaceById(race_id);
+        TeamSubcategory category = null;
+        if (bindingResult.hasErrors()) {
+            return "something_went_wrong";
+        }
+
+        Team team = teamService.getTeamById(updateTeamForm.getTeamId());
+
+        if (user == null || race == null) {
+            return "something_went_wrong";
+        }
+
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            return "something_went_wrong";
+        }
+
+        if (team.getRace().getId() != race.getId()) {
+            return "something_went_wrong";
+        }
+
+        if(updateTeamForm.getTeamName() != null && updateTeamForm.getTeamName().length() != 0){
+            updateTeamForm.setTeamName(HtmlUtils.htmlEscapeHex(updateTeamForm.getTeamName(),"UTF-8"));
+            if(!team.getName().equals(updateTeamForm.getTeamName())){
+                if(teamService.getByRaceIdTeamName(race_id,updateTeamForm.getTeamName()) != null){
+                    return "team_exists";
+                }
+            }
+            if(updateTeamForm.getTeamName().length() > 32 || updateTeamForm.getTeamName().length() < 3){
+                return "team_name";
+            }
+        }
+
+        if(race.getTeamCategory() != null){
+            if(updateTeamForm.getTeamCategory() != null){
+                category = teamSubcategoryService.getSubcategoryById(updateTeamForm.getTeamCategory());
+                if(category.getTeamCategory().getId() != race.getTeamCategory().getId()){
+                    return "something_went_wrong";
+                }
+            }
+            else{
+                return "something_went_wrong";
+            }
+        }
+
+        team.setName(updateTeamForm.getTeamName());
+        team.setCategory(category);
+        teamService.update(team);
+
+        return "ok";
     }
 
 }
