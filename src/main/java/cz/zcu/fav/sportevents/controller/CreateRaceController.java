@@ -141,7 +141,7 @@ public class CreateRaceController {
                         race.setTeamCategory(teamCategory);
                         raceService.save(race);
                     }
-                    return "ok";
+                    return Integer.toString(race.getId());
 
                 } else {
                     return "values";

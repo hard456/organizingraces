@@ -54,15 +54,14 @@ function createRace() {
         async: false,
         dataType: "html",
         success: function (data) {
-            if (data.localeCompare("ok") == 0) {
-                $('#createEventForm').get(0).reset();
-                data = '<div class="alert alert-success">The race was created.</div>'
+            if (!isNaN(data)) {
+                window.location.replace(BASE_URL+"/race/"+data);
             }
             else if (data.localeCompare("race_name_exists") == 0) {
                 data = '<div class="alert alert-danger">The race with this name already exists.</div>'
             }
             else if (data.localeCompare("values") == 0) {
-                data = '<div class="alert alert-danger">Data are invalid:<br>Team name (3 - 32 length)<br>If you use custom categories (1 - 20 length)</div>'
+                data = '<div class="alert alert-danger">Data are invalid:<br>Race name (3 - 32 length)<br>If you use custom categories (1 - 20 length)</div>'
             }
 
             $('#create_race_result').html(data);

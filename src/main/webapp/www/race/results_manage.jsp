@@ -13,7 +13,8 @@
 <%-- CURRENT TIME WITH PATTERN --%>
 <joda:format var="now_format" value="${now}" pattern="yyyy-MM-dd HH:mm:ss"/>
 
-<script src="${pageContext.request.contextPath}/js/results_manage.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/results_manage.js" language="Javascript"
+        type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -55,9 +56,11 @@
                         </c:if>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" class="btn btn-danger" value="FOR ALL" onclick="setDeadlineForAll(${race.id})" data-dismiss="modal">
+                        <input type="button" class="btn btn-danger" value="FOR ALL"
+                               onclick="setDeadlineForAll(${race.id})" data-dismiss="modal">
                         <c:if test="${not empty team_categories}">
-                            <input type="button" class="btn btn-danger" value="TO CATEGORY" onclick="setDeadlineToCategory(${race.id})" data-dismiss="modal">
+                            <input type="button" class="btn btn-danger" value="TO CATEGORY"
+                                   onclick="setDeadlineToCategory(${race.id})" data-dismiss="modal">
                         </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
@@ -93,7 +96,8 @@
                         <input type="button" class="btn btn-danger" value="Next 10"
                                onclick="setStartTimeNextTen(${race.id})" data-dismiss="modal">
                         <c:if test="${not empty team_categories}">
-                            <input type="button" class="btn btn-danger" value="TO CATEGORY" onclick="setStartTimeToCategory(${race.id})" data-dismiss="modal">
+                            <input type="button" class="btn btn-danger" value="TO CATEGORY"
+                                   onclick="setStartTimeToCategory(${race.id})" data-dismiss="modal">
                         </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
@@ -122,7 +126,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" id="setStartTimeButton" value="Set time" class="btn btn-success" data-dismiss="modal"/>
+                        <input type="button" id="setStartTimeButton" value="Set time" class="btn btn-success"
+                               data-dismiss="modal"/>
                         <input type="button" class="btn btn-danger" value="Set global time"
                                id="setGlobalStartTimeButton" data-dismiss="modal">
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
@@ -152,7 +157,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input type="button" value="Set" class="btn btn-success" id="finishTimeButton" data-dismiss="modal"/>
+                        <input type="button" value="Set" class="btn btn-success" id="finishTimeButton"
+                               data-dismiss="modal"/>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
                 </div>
@@ -162,34 +168,34 @@
         <%-- POINTS MODAL --%>
 
         <div class="modal" id="pointsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                   aria-hidden="true">
-        <div class="modal-dialog line_white" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div style="margin-bottom: 15px;">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Set points</h4>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12" style="margin-bottom: 10px;">
-                            Points:
-                            <input type="text" id="pointsModalInput" class="form-control"/>
-                        </div>
-                        <div class="col-sm-12" style="margin-bottom: 10px;">
-                            Bonus points:
-                            <input type="text" id="bonusModalInput" class="form-control"/>
+             aria-hidden="true">
+            <div class="modal-dialog line_white" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div style="margin-bottom: 15px;">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Set points</h4>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <input type="button" class="btn btn-primary" value="Save" id="setPointsButton">
-                    <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-12" style="margin-bottom: 10px;">
+                                Points:
+                                <input type="text" id="pointsModalInput" class="form-control"/>
+                            </div>
+                            <div class="col-sm-12" style="margin-bottom: 10px;">
+                                Bonus points:
+                                <input type="text" id="bonusModalInput" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-primary" value="Save" id="setPointsButton">
+                        <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <%-- RESULT DANGER MODAL --%>
 
@@ -251,7 +257,7 @@
                         <hr>
                         <div class="row" style="margin-bottom: 10px;">
                             <div class="col-sm-3">
-                                <input type="text" id="deadLineTime"  class="form-control" placeholder="In minutes"/>
+                                <input type="text" id="deadLineTime" class="form-control" placeholder="In minutes"/>
                             </div>
                             <div class="col-sm-2">
                                 <input type="button" value="Deadline time" class="btn btn-success" data-toggle="modal"
@@ -299,7 +305,7 @@
                             </thead>
                             <tbody>
                             <c:forEach items="${teams}" var="team" varStatus="i">
-                                <tr style="text-align: center;">
+                                <tr style="text-align: center;" id="TEAM${team.id}">
                                     <td>${i.index+1}</td>
                                     <td>${team.name}</td>
                                     <td>${team.category.name}</td>
@@ -320,7 +326,7 @@
                                         <joda:format value="${team.finishTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                     </td>
                                     <td id="deadline${team.id}">
-                                    ${team.deadlineTime}
+                                            ${team.deadlineTime}
                                     </td>
                                     <td style="width: auto;">
                                         <input type="button" value="Finish" class="btn btn-primary btn-sm"
@@ -332,6 +338,8 @@
                         </table>
 
                         <script>
+                            var rowIndex = 0;
+                            var columnIndex = 0;
                             jQuery.extend(jQuery.fn.dataTableExt.oSort, {
                                 "non-empty-string-asc": function (str1, str2) {
                                     if (str1 == "")
@@ -352,8 +360,9 @@
                             $(document).ready(function () {
                                 $('#myTable').DataTable(
                                         {
+                                            "pagingType": "first_last_numbers",
+                                            "sScrollX": "100%",
                                             "bPaginate": false,
-                                            dom: 'Bfrtip',
                                             columnDefs: [
                                                 {type: 'non-empty-string', targets: 5}, // define 'name' column as non-empty-string type
                                                 {type: 'non-empty-string', targets: 6}
@@ -368,17 +377,24 @@
                                         }
                                 );
                             });
-                            $("#buttonShowAll").click(function(e){
+                            $("#buttonShowAll").click(function (e) {
                                 var table = $('#myTable').DataTable();
                                 table.columns(6).search('').draw();
                             });
-                            $("#buttonNotFinished").click(function(e){
+                            $("#buttonNotFinished").click(function (e) {
                                 var table = $('#myTable').DataTable();
-                                table.columns(6).search( '^$', true, false ).draw();
+                                table.columns(6).search('^$', true, false).draw();
                             });
-                            $("#buttonFinished").click(function(e){
+                            $("#buttonFinished").click(function (e) {
                                 var table = $('#myTable').DataTable();
-                                table.columns(6).search( '^(?!\s*$)', true, false).draw();
+                                table.columns(6).search('^(?!\s*$)', true, false).draw();
+                            });
+
+                            $('#myTable tbody').on('click', 'td', function () {
+                                var table = $('#myTable').DataTable();
+                                if ( table.data().length != 0 ) {
+                                    rowIndex = table.cell(this).index().row;
+                                }
                             });
                         </script>
 

@@ -226,7 +226,7 @@ public class RaceResultController {
             }
 
             if (team.getName() != null) {
-                teamName +=  ")";
+                teamName += ")";
             }
 
             team.setName(teamName);
@@ -367,15 +367,13 @@ public class RaceResultController {
     @RequestMapping(value = "/race/{id}/results/setStartTimeAll", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
-    TeamIdListResultResponse setStartTimeAll(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
+    String setStartTimeAll(@ModelAttribute("dateTime") String dateTime, @PathVariable("id") int race_id) {
 
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();
-        TeamIdListResultResponse response = new TeamIdListResultResponse();
 
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
-            response.setValidation("something_went_wrong");
-            return response;
+            return "something_went_wrong";
         }
 
         List<Team> teams = teamService.getTeamsByRaceId(race_id);
@@ -385,8 +383,7 @@ public class RaceResultController {
         if (dateTime.equals("")) {
             for (Team team : teams) {
                 if (team.getFinishTime() != null) {
-                    response.setValidation("not_null_finishtime");
-                    return response;
+                    return "not_null_finishtime";
                 }
             }
         } else {
@@ -395,14 +392,12 @@ public class RaceResultController {
                 newDate = format.parseDateTime(dateTime);
 
             } catch (Exception e) {
-                response.setValidation("wrong_format");
-                return response;
+                return "wrong_format";
             }
 
             for (Team team : teams) {
                 if (team.getFinishTime() != null && !newDate.isBefore(team.getFinishTime())) {
-                    response.setValidation("start_time_before");
-                    return response;
+                    return "start_time_before";
                 }
             }
         }
@@ -413,13 +408,9 @@ public class RaceResultController {
             } else {
                 team.setStartTime(null);
             }
-
-            response.addToList(team.getId());
             teamService.update(team);
         }
-
-        response.setValidation("ok");
-        return response;
+        return "ok";
     }
 
     @RequestMapping(value = "/race/{id}/results/setStartTime", method = RequestMethod.POST)
@@ -661,32 +652,27 @@ public class RaceResultController {
     @RequestMapping(value = "/race/{id}/results/setDeadlineForAll", method = RequestMethod.POST)
     public
     @ResponseBody
-    TeamIdListResultResponse setDeadlineForAll(@ModelAttribute("deadline") String deadline, @PathVariable("id") int race_id) {
+    String setDeadlineForAll(@ModelAttribute("deadline") String deadline, @PathVariable("id") int race_id) {
 
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();
-        TeamIdListResultResponse response = new TeamIdListResultResponse();
         int minutes = 0;
 
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
-            response.setValidation("something_went_wrong");
-            return response;
+            return "something_went_wrong";
         }
         if (deadline == null || deadline.equals("")) {
-            response.setValidation("empty_time");
-            return response;
+            return "empty_time";
         }
 
         try {
             minutes = Integer.parseInt(deadline);
         } catch (Exception e) {
-            response.setValidation("number_format");
-            return response;
+            return "number_format";
         }
 
         if (minutes < 0) {
-            response.setValidation("negative_number");
-            return response;
+            return "negative_number";
         }
 
         List<Team> teams = teamService.getTeamsByRaceId(race_id);
@@ -694,11 +680,9 @@ public class RaceResultController {
         for (Team team : teams) {
             team.setDeadlineTime(minutes);
             teamService.update(team);
-            response.addToList(team.getId());
         }
 
-        response.setValidation("ok");
-        return response;
+        return "ok";
     }
 
 }

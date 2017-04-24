@@ -156,6 +156,10 @@ public class SoloContestantController {
 
         if(createTeamForm.getTeamName().length() != 0){
             createTeamForm.setTeamName(HtmlUtils.htmlEscape(createTeamForm.getTeamName(),"UTF-8"));
+            if(teamService.getByRaceIdTeamName(race_id,createTeamForm.getTeamName()) != null){
+                response.setValidation("Team with this name already exists");
+                return response;
+            }
             if(createTeamForm.getTeamName().length() > 32 || createTeamForm.getTeamName().length() < 3){
                 response.setValidation("Team name (3 - 32 length)");
                 return response;

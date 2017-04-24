@@ -27,13 +27,13 @@ function createTeamAjax(race_id){
                 $.each(response.contestantId, function(k, v) {
                     $('#C' + v).remove();
                 });
+                $('#createTeamForm').get(0).reset();
             }
             else{
                 data = '<div class="alert alert-danger">'+response.validation+'</div>';
             }
 
             $('#create_team_result').html(data);
-            $('#createTeamForm').get(0).reset();
 
         }
     });

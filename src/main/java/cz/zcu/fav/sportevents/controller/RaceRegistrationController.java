@@ -536,11 +536,11 @@ public class RaceRegistrationController {
             }
             if (adminTeamRegForm.getTeamName().length() != 0) {
                 team.setName(HtmlUtils.htmlEscape(adminTeamRegForm.getTeamName(), "UTF-8"));
-                if (team.getName().length() < 3 || team.getName().length() > 32) {
-                    return "invalid";
-                }
                 if(teamService.getByRaceIdTeamName(race_id,team.getName()) != null){
                     return "team_exists";
+                }
+                if (team.getName().length() < 3 || team.getName().length() > 32) {
+                    return "team_name";
                 }
             }
         }

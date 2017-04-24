@@ -45,8 +45,11 @@ function setPoints(raceId, teamId) {
             success: function (response) {
                 $('#pointsModal').modal('hide');
                 if (response.localeCompare("ok") == 0) {
-                    $('#points' + teamId).html(numbers[1]);
-                    $('#bonus' + teamId).html(numbers[2]);
+                    var table = $('#myTable').DataTable();
+                    table.cell({ row: rowIndex, column: 3}).data(numbers[1]);
+                    table.cell({ row: rowIndex, column: 4}).data(numbers[2]);
+                    //$('#points' + teamId).html(numbers[1]);
+                    //$('#bonus' + teamId).html(numbers[2]);
                 }
                 else {
                     if (response.localeCompare("wrong_parameter_count") == 0) {
@@ -89,7 +92,9 @@ function setGlobalStartTime(raceId, teamId) {
         dataType: "html",
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
-                $('#startTime' + teamId).html(data.dateTime);
+                var table = $('#myTable').DataTable();
+                table.cell({ row: rowIndex, column: 5}).data(data.dateTime);
+                //$('#startTime' + teamId).html(data.dateTime);
             }
             else {
                 if (response.localeCompare("wrong_format") == 0) {
@@ -132,7 +137,9 @@ function setStartTime(raceId, teamId) {
         dataType: "html",
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
-                $('#startTime' + teamId).html(data.dateTime);
+                var table = $('#myTable').DataTable();
+                table.cell({ row: rowIndex, column: 5}).data(data.dateTime);
+                //$('#startTime' + teamId).html(data.dateTime);
             }
             else {
                 if (response.localeCompare("wrong_format") == 0) {
@@ -174,8 +181,10 @@ function setStartTimeToCategory(raceId){
         dataType: "json",
         success: function (response) {
             if(response.validation.localeCompare("ok") == 0){
+                var table = $('#myTable').DataTable();
                 $.each(response.teamIdList, function(k, v) {
-                    $('#startTime' + v).html(data.datetime);
+                    var row = table.row('#TEAM'+v);
+                    table.cell({ row: row.index(), column: 5}).data(data.datetime);
                 });
             }
             else{
@@ -215,24 +224,28 @@ function setStartTimeForAll(raceId) {
         type: "POST",
         url: BASE_URL+"/race/" + raceId + "/results/setStartTimeAll",
         data: data,
-        dataType: "json",
+        dataType: "html",
         success: function (response) {
-           if(response.validation.localeCompare("ok") == 0){
-               $.each(response.teamIdList, function(k, v) {
-                   $('#startTime' + v).html(data.dateTime);
+           if(response.localeCompare("ok") == 0){
+               var table = $('#myTable').DataTable();
+               table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                   var row = this.data();
+                   row[5]=data.dateTime;
+                   this.data(row);
                });
            }
            else{
-               if (response.validation.localeCompare("something_went_wrong") == 0) {
+               $('#startTimeTeamsModal').modal('hide');
+               if (response.localeCompare("something_went_wrong") == 0) {
                    $("#resultDanger").html("Something went wrong");
                }
-               else if (response.validation.localeCompare("not_null_finishtime") == 0) {
+               else if (response.localeCompare("not_null_finishtime") == 0) {
                    $("#resultDanger").html("Can't set null where finish time is not null");
                }
-               else if (response.validation.localeCompare("wrong_format") == 0) {
+               else if (response.localeCompare("wrong_format") == 0) {
                    $("#resultDanger").html("Wrong datetime format");
                }
-               else if (response.validation.localeCompare("start_time_before") == 0) {
+               else if (response.localeCompare("start_time_before") == 0) {
                    $("#resultDanger").html("Start time is not before finish time somewhere");
                }
                $('#resultDangerModal').modal('show');
@@ -260,8 +273,10 @@ function setStartTimeNextTen(raceId) {
         dataType: "json",
         success: function (response) {
             if(response.validation.localeCompare("ok") == 0){
+                var table = $('#myTable').DataTable();
                 $.each(response.teamIdList, function(k, v) {
-                    $('#startTime' + v).html(data.dateTime);
+                    var row = table.row('#TEAM'+v);
+                    table.cell({ row: row.index(), column: 5}).data(data.dateTime);
                 });
             }
             else{
@@ -304,14 +319,16 @@ function teamFinished(raceId, teamId) {
         dataType: "json",
         success: function (response) {
             if (response[0].localeCompare("ok") == 0) {
-                $('#finishTime' + teamId).html(response[1]);
+                var table = $('#myTable').DataTable();
+                table.cell({ row: rowIndex, column: 6}).data(response[1]);
+                //$('#finishTime' + teamId).html(response[1]);
             }
             else {
                 if (response[0].localeCompare("start_time_missing") == 0) {
                     $("#resultDanger").html("Misssing start time");
                 }
                 else if (response[0].localeCompare("start_time_before") == 0) {
-                    $("#resultDanger").html("Start time is not before finish time somewhere");
+                    $("#resultDanger").html("Start must be before finish time");
                 }
                 else if (response[0].localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
@@ -341,7 +358,9 @@ function setFinishTime(raceId, teamId) {
         dataType: "html",
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
-                $('#finishTime' + teamId).html(data.dateTime);
+                var table = $('#myTable').DataTable();
+                table.cell({ row: rowIndex, column: 6}).data(data.dateTime);
+                //$('#finishTime' + teamId).html(data.dateTime);
             }
             else {
                 if (response.localeCompare("wrong_format") == 0) {
@@ -357,7 +376,7 @@ function setFinishTime(raceId, teamId) {
                     $("#resultDanger").html("Missing start time");
                 }
                 else if (response.localeCompare("start_time_before") == 0) {
-                    $("#resultDanger").html("Start time is not before finish time");
+                    $("#resultDanger").html("Start must be before finish time");
                 }
                 $('#resultDangerModal').modal('show');
             }
@@ -382,8 +401,10 @@ function setDeadlineToCategory(raceId) {
         dataType: "json",
         success: function (response) {
             if(response.validation.localeCompare("ok") == 0){
+                var table = $('#myTable').DataTable();
                 $.each(response.teamIdList, function(k, v) {
-                    $('#deadline' + v).html(data.datetime);
+                    var row = table.row('#TEAM'+v);
+                    table.cell({ row: row.index(), column: 7}).data(data.datetime);
                 });
             }
             else{
@@ -422,25 +443,27 @@ function setDeadlineForAll(raceId) {
         type: "POST",
         url: BASE_URL+"/race/" + raceId + "/results/setDeadlineForAll",
         data: data,
-        dataType: "json",
+        dataType: "html",
         success: function (response) {
-            console.log(response.validation);
-            if(response.validation.localeCompare("ok") == 0){
-                $.each(response.teamIdList, function(k, v) {
-                    $('#deadline' + v).html(data.deadline);
-                });
+            if(response.localeCompare("ok") == 0){
+                var table = $('#myTable').DataTable();
+                table.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    var row = this.data();
+                    row[7]=data.deadline;
+                    this.data(row);
+                })
             }
             else{
-                if (response.validation.localeCompare("something_went_wrong") == 0) {
+                if (response.localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
-                else if (response.validation.localeCompare("empty_time") == 0) {
+                else if (response.localeCompare("empty_time") == 0) {
                     $("#resultDanger").html("Empty time");
                 }
-                else if (response.validation.localeCompare("number_format") == 0) {
+                else if (response.localeCompare("number_format") == 0) {
                     $("#resultDanger").html("Not a number");
                 }
-                else if (response.validation.localeCompare("negative_number") == 0) {
+                else if (response.localeCompare("negative_number") == 0) {
                     $("#resultDanger").html("Not positive number");
                 }
                 $('#resultDangerModal').modal('show');

@@ -19,10 +19,12 @@ function adminTeamRegistrationAjax(race_id) {
             else if (data.localeCompare("team_exists") == 0) {
                 data = '<div class="alert alert-danger">Team with this name already exists.</div>'
             }
+            else if (data.localeCompare("team_name") == 0) {
+                data = '<div class="alert alert-danger">Team name (3 - 32 length).</div>'
+            }
             else if (data.localeCompare("invalid") == 0) {
                 data = '<div class="alert alert-danger">' +
-                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)' +
-                    'Team name (3 - 32 length)' +
+                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, +420123456789)' +
                     '</div>'
             }
 
@@ -51,7 +53,7 @@ function adminSoloRegistration(race_id) {
             }
             else if (data.localeCompare("invalid") == 0) {
                 data = '<div class="alert alert-danger">' +
-                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)' +
+                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, +420123456789)' +
                     '</div>'
             }
             $('#admin_solo_result').html(data);
@@ -121,7 +123,7 @@ function teamRegistration(race_id) {
             }
             else if (data.localeCompare("values") == 0) {
                 data = '<div class="alert alert-danger">' +
-                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, 123 456 789, +420123456789, +420 123 456 789)' +
+                    'Data are invalid:<br>Firstname (3 - 32 length)<br>Lastname (3 - 32 length)<br>Phone (123456789, +420123456789)' +
                     '<br>Email (6 - 32 length)'+
                     '</div>'
             }
