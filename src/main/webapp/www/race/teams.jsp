@@ -35,6 +35,9 @@
                             Import XLSX file
                         </label>
                         <span id="upload-file-info"></span>
+
+                        <div class="loader" id="loader" style="margin: 20px auto 20px auto; display: none"></div>
+
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-primary" value="Import"
@@ -197,7 +200,7 @@
                                         <c:otherwise>
                                             <div class="col-sm-6" style="margin-bottom: 10px;">
                                                 Team name:
-                                                <input class="form-control" type="text" value="${team.name}" disabled>
+                                                <input class="form-control" type="text" value="${team.name}">
                                             </div>
                                         </c:otherwise>
                                     </c:choose>
@@ -226,8 +229,7 @@
                                         <c:otherwise>
                                             <div class="col-sm-6" style="margin-bottom: 10px;">
                                                 Team category:
-                                                <input class="form-control" type="text" value="${team.category.name}"
-                                                       disabled>
+                                                <input class="form-control" type="text" value="${team.category.name}">
                                             </div>
                                         </c:otherwise>
                                     </c:choose>
@@ -276,15 +278,13 @@
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                             <div class="col-sm-3">
                                                 <input class="form-control" type="text"
-                                                       value="${c.firstname} ${c.lastname}"
-                                                       disabled>
+                                                       value="${c.firstname} ${c.lastname}">
                                             </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="col-sm-6">
                                                 <input class="form-control" type="text"
-                                                       value="${c.firstname} ${c.lastname}"
-                                                       disabled>
+                                                       value="${c.firstname} ${c.lastname}">
                                             </div>
                                         </c:otherwise>
                                     </c:choose>
@@ -292,13 +292,12 @@
                                     <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
                                         <c:if test="${c.email ne null && c.email.length() > 0}">
                                             <div class="col-sm-3">
-                                                <input class="form-control" type="text" value="${c.email}" disabled>
+                                                <input class="form-control" type="text" value="${c.email}">
                                             </div>
                                         </c:if>
                                         <c:if test="${c.phone ne null && c.phone.length() > 0}">
                                             <div class="col-sm-3">
-                                                <input class="form-control" type="text" value="${c.phone}"
-                                                       disabled>
+                                                <input class="form-control" type="text" value="${c.phone}">
                                             </div>
                                         </c:if>
                                     </c:if>
@@ -306,14 +305,12 @@
                                         <c:choose>
                                             <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
                                                 <div class="col-sm-3">
-                                                    <input class="form-control" type="text" value="${c.category.name}"
-                                                           disabled>
+                                                    <input class="form-control" type="text" value="${c.category.name}">
                                                 </div>
                                             </c:when>
                                             <c:otherwise>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" type="text" value="${c.category.name}"
-                                                           disabled>
+                                                    <input class="form-control" type="text" value="${c.category.name}">
                                                 </div>
                                             </c:otherwise>
                                         </c:choose>

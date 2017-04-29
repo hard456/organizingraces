@@ -6,46 +6,56 @@
 
         <!-- Carousel -->
 
-        <div id="carousel" style="width: auto; height: auto;">
-            <div style="width: 100%; height: auto; background-color: whitesmoke; padding: 0; margin: 0;">
-                <div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel"
-                     style="padding: 10px 0 10px 0">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
-                    </ol>
+        <%--<div id="carousel" style="width: auto; height: auto;">--%>
+            <%--<div style="width: 100%; height: auto; background-color: whitesmoke; padding: 0; margin: 0;">--%>
+                <%--<div id="myCarousel" class="carousel slide hidden-xs" data-ride="carousel"--%>
+                     <%--style="padding: 10px 0 10px 0">--%>
+                    <%--<!-- Indicators -->--%>
+                    <%--<ol class="carousel-indicators">--%>
+                        <%--<li data-target="#myCarousel" data-slide-to="0" class="active"></li>--%>
+                        <%--<li data-target="#myCarousel" data-slide-to="1"></li>--%>
+                        <%--<li data-target="#myCarousel" data-slide-to="2"></li>--%>
+                    <%--</ol>--%>
 
-                    <div class="carousel-inner" role="listbox" style="height: 500px;">
+                    <%--<div class="carousel-inner" role="listbox" style="height: 500px;">--%>
 
-                        <div class="item active"
-                             style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside">Create your orienteering race</span>
-                        </div>
+                        <%--<div class="item active"--%>
+                             <%--style="text-align: center; line-height: 500px; vertical-align: middle;">--%>
+                            <%--<img style="margin: 0 auto;" src="/images/3.png">--%>
+                            <%--<span class="carousel-inside">Create your orienteering race</span>--%>
+                        <%--</div>--%>
 
-                        <div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside" style="background: orange">Manage your orienteering race</span>
-                        </div>
+                        <%--<div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">--%>
+                            <%--<img style="margin: 0 auto;" src="/images/4.png">--%>
+                            <%--<span class="carousel-inside" style="background: orange">Manage your orienteering race</span>--%>
+                        <%--</div>--%>
 
-                        <div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">
-                            <span class="carousel-inside" style="background: #ff4ec9">Resolve your orienteering race</span>
-                        </div>
+                        <%--<div class="item" style="text-align: center; line-height: 500px; vertical-align: middle;">--%>
+                            <%--<img style="margin: 0 auto;" src="/images/1.JPG">--%>
+                            <%--<span class="carousel-inside" style="background: #ff4ec9">Resolve your orienteering race</span>--%>
+                        <%--</div>--%>
 
-                    </div>
+                    <%--</div>--%>
 
-                    <!-- Left and right controls -->
-                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
-            </div>
-        </div>
+                    <%--<!-- Left and right controls -->--%>
+                    <%--<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">--%>
+                        <%--<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>--%>
+                        <%--<span class="sr-only">Previous</span>--%>
+                    <%--</a>--%>
+                    <%--<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">--%>
+                        <%--<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>--%>
+                        <%--<span class="sr-only">Next</span>--%>
+                    <%--</a>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+
+            <img class="background_image" src="/images/background_home.png">
+
+
+
+
+
         <div class="container-fluid" style="background-color: #D8DBE8;">
             <div class="container" style="margin: 30px auto 0 auto; max-width: 1000px;">
 

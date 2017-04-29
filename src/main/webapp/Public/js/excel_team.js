@@ -25,6 +25,7 @@ function importTeams(raceId, size) {
             $('#importTeams').modal('hide');
         }
         else {
+            $('#loader').css("display", "block");
             formData.append('file', $('input[type=file]')[0].files[0]);
 
             $.ajax({
@@ -34,7 +35,6 @@ function importTeams(raceId, size) {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);
                     if (response.localeCompare("ok") == 0) {
                         data = '<div class="alert alert-success">Excel file successfully imported. REFRESH PAGE!</div>';
                     }
@@ -43,8 +43,10 @@ function importTeams(raceId, size) {
                     }
                     $('#importResult').html(data);
                     $('#importTeams').modal('hide');
+                    $('#loader').css("display", "none");
                 }
             });
+
         }
     }
 }

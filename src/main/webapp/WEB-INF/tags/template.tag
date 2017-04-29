@@ -3,6 +3,9 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<!DOCTYPE html>
+
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -30,9 +33,10 @@
 <div id="header">
     <div style="max-width: 100%; height: auto; background-color: #336666">
         <div style="margin: 0 auto; padding: 14px; max-width: 1000px; height: auto;">
-            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"
-                  style="font-size:2em; color: white;"></span>
-            <a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">Orienteering Races</span></a>
+            <%--<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"--%>
+                  <%--style="font-size:2em; color: white;"></span>--%>
+            <%--<a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">Orienteering Races</span></a>--%>
+                <img style="width: 228px; height: 84px;" src="/images/logo.png">
             <br>
             <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>

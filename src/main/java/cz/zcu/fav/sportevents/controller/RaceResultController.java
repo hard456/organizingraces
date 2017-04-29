@@ -75,6 +75,12 @@ public class RaceResultController {
 
             model.addObject("teams", teamLinkedList);
 
+            if(race.getTeamCategory() != null){
+                List<TeamSubcategory> categories;
+                categories = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
+                model.addObject("team_categories", categories);
+            }
+
             if (user != null) {
                 if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
                     model.addObject("race_cooperator", true);
@@ -90,7 +96,7 @@ public class RaceResultController {
         for (Team team : teamLinkedList) {
             if (team.getStartTime() != null && team.getFinishTime() != null) {
                 int penalization = 0;
-                if (team.getDeadlineTime() != null) {
+                if (team.getDeadlineTime() != null && team.getDeadlineTime() != 0) {
                     penalization = getPenalizationPoints(team);
                     team.setPenalization(penalization);
                 }
@@ -581,10 +587,6 @@ public class RaceResultController {
 
         if (team == null) {
             return "team";
-        }
-
-        if (newNumbers.get(1) < 0 || newNumbers.get(2) < 0) {
-            return "negative_number";
         }
 
         team.setPoints(newNumbers.get(1));

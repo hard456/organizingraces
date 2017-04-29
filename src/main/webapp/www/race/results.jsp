@@ -39,6 +39,20 @@
                                 </div>
                             </div>
                         </c:if>
+                        <c:if test="${race.teamCategory ne null}">
+                            <hr>
+                            <div class="row">
+                                    <div class="col-sm-2 col-md-offset-4" style="margin-top: 7px;">Select by category:</div>
+                                    <div class="col-sm-3">
+                                        <select id="categorySelect" class="form-control">
+                                            <option value="None"></option>
+                                            <c:forEach items="${team_categories}" var="c">
+                                                <option value="${c.name}">${c.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                            </div>
+                        </c:if>
                         <br><br>
                         <table id="myTable" class="display" cellspacing="0" width="100%">
                             <thead>
@@ -91,6 +105,16 @@
                                     return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
                                 }
                             });
+                            $('#categorySelect').on('change', function () {
+                                if (this.value.localeCompare("None") == 0) {
+                                    var table = $('#myTable').DataTable();
+                                    table.columns(2).search('').draw();
+                                }
+                                else {
+                                    var table = $('#myTable').DataTable();
+                                    table.columns(2).search(this.value, true, false).draw();
+                                }
+                            });
                         </script>
 
                         <c:choose>
@@ -103,8 +127,8 @@
                                                     "sScrollX": "100%",
                                                     dom: 'Bfrtip',
                                                     lengthMenu: [
-                                                        [10, 25, 50, -1],
-                                                        ['10 rows', '25 rows', '50 rows', 'Show all']
+                                                        [50, 100, -1],
+                                                        ['50 rows', '100 rows', 'Show all']
                                                     ],
                                                     columnDefs: [
                                                         {type: 'non-empty-string', targets: 7},
@@ -117,7 +141,7 @@
                                                         {
                                                             extend: 'csvHtml5',
                                                             charset: 'UTF-16LE',
-                                                            fieldSeparator: '\t',
+                                                            fieldSeparator: ';',
                                                             bom: true
                                                         }
                                                     ]
@@ -135,8 +159,8 @@
                                                     "sScrollX": "100%",
                                                     dom: 'Bfrtip',
                                                     lengthMenu: [
-                                                        [10, 25, 50, -1],
-                                                        ['10 rows', '25 rows', '50 rows', 'Show all']
+                                                        [50, 100, -1],
+                                                        ['50 rows', '100 rows', 'Show all']
                                                     ],
                                                     columnDefs: [
                                                         {type: 'non-empty-string', targets: 7},

@@ -58,17 +58,24 @@ function updateTeam(raceId, teamId) {
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
                 $("#save_result").html("<div class='alert alert-success'>Successfully saved.</div>");
+                $('#updatetModal').modal('show');
+                setTimeout(function () {
+                    $('#updatetModal').modal('hide');
+                }, 200);
             }
-            if (response.localeCompare("team_exists") == 0) {
-                $("#save_result").html("<div class='alert alert-danger'>Team with this name already exists.</div>");
+            else {
+                if (response.localeCompare("team_exists") == 0) {
+                    $("#save_result").html("<div class='alert alert-danger'>Team with this name already exists.</div>");
+                }
+                else if (response.localeCompare("something_went_wrong") == 0) {
+                    $("#save_result").html("<div class='alert alert-danger'>Something went wrong.</div>");
+                }
+                else if (response.localeCompare("team_name") == 0) {
+                    $("#save_result").html("<div class='alert alert-danger'>Team name (3 - 32 length).</div>");
+                }
+                $('#updatetModal').modal('show');
             }
-            else if (response.localeCompare("something_went_wrong") == 0) {
-                $("#save_result").html("<div class='alert alert-danger'>Something went wrong.</div>");
-            }
-            else if (response.localeCompare("team_name") == 0) {
-                $("#save_result").html("<div class='alert alert-danger'>Team name (3 - 32 length).</div>");
-            }
-            $('#updatetModal').modal('show');
+
 
         }
     });

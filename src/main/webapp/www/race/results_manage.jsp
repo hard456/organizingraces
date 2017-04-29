@@ -54,13 +54,16 @@
                                 </c:forEach>
                             </select>
                         </c:if>
+
+                        <div class="loader" id="loaderDeadline" style="margin: 20px auto 20px auto; display: none"></div>
+
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-danger" value="FOR ALL"
-                               onclick="setDeadlineForAll(${race.id})" data-dismiss="modal">
+                               onclick="setDeadlineForAll(${race.id})">
                         <c:if test="${not empty team_categories}">
                             <input type="button" class="btn btn-danger" value="TO CATEGORY"
-                                   onclick="setDeadlineToCategory(${race.id})" data-dismiss="modal">
+                                   onclick="setDeadlineToCategory(${race.id})">
                         </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
@@ -89,15 +92,18 @@
                                 </c:forEach>
                             </select>
                         </c:if>
+
+                        <div class="loader" id="loaderStartTime" style="margin: 20px auto 20px auto; display: none"></div>
+
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-danger" value="FOR ALL"
-                               onclick="setStartTimeForAll(${race.id})" data-dismiss="modal">
+                               onclick="setStartTimeForAll(${race.id})">
                         <input type="button" class="btn btn-danger" value="Next 10"
-                               onclick="setStartTimeNextTen(${race.id})" data-dismiss="modal">
+                               onclick="setStartTimeNextTen(${race.id})">
                         <c:if test="${not empty team_categories}">
                             <input type="button" class="btn btn-danger" value="TO CATEGORY"
-                                   onclick="setStartTimeToCategory(${race.id})" data-dismiss="modal">
+                                   onclick="setStartTimeToCategory(${race.id})">
                         </c:if>
                         <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
                     </div>
@@ -255,37 +261,45 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row" style="margin-bottom: 10px;">
-                            <div class="col-sm-3">
-                                <input type="text" id="deadLineTime" class="form-control" placeholder="In minutes"/>
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="button" value="Deadline time" class="btn btn-success" data-toggle="modal"
-                                       data-target="#deadlineTimeModal"/>
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-sm-3">
                                 <input type="text" id="startGlobalTime" class="form-control" value="${now_format}"
                                        placeholder="${now_format}"/>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <input type="button" value="Set start time" class="btn btn-success" data-toggle="modal"
-                                       data-target="#startTimeTeamsModal"/>
+                                       data-target="#startTimeTeamsModal" style="width: 100%;"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" id="deadLineTime" class="form-control" placeholder="In minutes"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="button" value="Deadline time" class="btn btn-success" data-toggle="modal"
+                                       data-target="#deadlineTimeModal" style="width: 100%;"/>
                             </div>
                         </div>
 
                         <hr>
 
-                        <div class="row" style="margin-bottom: 15px;">
-                            <div class="col-sm-3" style="float: right;">
-                                <input type="button" id="buttonFinished" value="Finished" class="form-control">
+                        <div class="row" style="margin-bottom: 15px; text-align: right;">
+                            <c:if test="${race.teamCategory ne null}">
+                                <div class="col-sm-3">
+                                    <select id="categorySelect" class="form-control" style="width: 100%">
+                                        <option value="None"></option>
+                                        <c:forEach items="${team_categories}" var="c">
+                                            <option value="${c.name}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </c:if>
+                            <div class="col-sm-3">
+                                <input type="button" id="buttonShowAll" value="All" class="form-control" style="width: 100%">
                             </div>
-                            <div class="col-sm-3" style="float: right;">
-                                <input type="button" id="buttonNotFinished" value="Not finished" class="form-control">
+                            <div class="col-sm-3">
+                                <input type="button" id="buttonNotFinished" value="Not finished" class="form-control" style="width: 100%">
                             </div>
-                            <div class="col-sm-3" style="float: right;">
-                                <input type="button" id="buttonShowAll" value="All" class="form-control">
+                            <div class="col-sm-3">
+                                <input type="button" id="buttonFinished" value="Finished" class="form-control" style="width: 100%">
                             </div>
                         </div>
 
@@ -394,6 +408,16 @@
                                 var table = $('#myTable').DataTable();
                                 if ( table.data().length != 0 ) {
                                     rowIndex = table.cell(this).index().row;
+                                }
+                            });
+                            $('#categorySelect').on('change', function () {
+                                if (this.value.localeCompare("None") == 0) {
+                                    var table = $('#myTable').DataTable();
+                                    table.columns(2).search('').draw();
+                                }
+                                else {
+                                    var table = $('#myTable').DataTable();
+                                    table.columns(2).search(this.value, true, false).draw();
                                 }
                             });
                         </script>

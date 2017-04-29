@@ -111,7 +111,7 @@ public class ContestantController {
     @RequestMapping(value = "/race/{id}/contestants/updateContestant", method = RequestMethod.POST)
     public
     @ResponseBody
-    boolean updateContestant(HttpServletRequest r, @ModelAttribute UpdateContestantForm updateContestantForm,
+    String updateContestant(HttpServletRequest r, @ModelAttribute UpdateContestantForm updateContestantForm,
                          BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         User user = userService.getLoginUser();
@@ -119,32 +119,32 @@ public class ContestantController {
 
 
         if (bindingResult.hasErrors()) {
-            return false;
+            return "something_went_wrong";
         }
 
         if (user == null || race == null) {
-            return false;
+            return "something_went_wrong";
         }
 
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
-            return false;
+            return "something_went_wrong";
         }
 
         if(race.getContestantCategory() != null){
             if(!validUpdateContestantParameters(r, true)){
-                return false;
+                return "something_went_wrong";
             }
         }
         else{
             if(!validUpdateContestantParameters(r, false)){
-                return false;
+                return "something_went_wrong";
             }
         }
 
         Contestant contestant = contestantService.getContestantById(updateContestantForm.getConId());
 
         if(contestant == null || contestant.getRace().getId() != race.getId()){
-            return false;
+            return "something_went_wrong";
         }
 
         Contestant newContestant = new Contestant();
@@ -159,19 +159,24 @@ public class ContestantController {
         newContestant.setPaid(contestant.isPaid());
 
         if(!validContestantData(newContestant)){
-            return false;
+            return "data";
+        }
+        if(!newContestant.getPhone().isEmpty()){
+            if (!newContestant.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
+                return "phone";
+            }
         }
 
         if(race.getContestantCategory() != null){
             ContestantSubcategory category = contestantSubcategoryService.getSubCategoryById(updateContestantForm.getConCategory());
             if(category == null || (category.getContestantCategory().getId() != race.getContestantCategory().getId())){
-                return false;
+                return "something_went_wrong";
             }
             newContestant.setCategory(category);
         }
 
         contestantService.saveContestant(newContestant);
-        return true;
+        return "ok";
     }
 
     private boolean validContestantData(Contestant contestant) {
@@ -189,12 +194,6 @@ public class ContestantController {
                 return false;
             }
         }
-        if(!contestant.getPhone().isEmpty()){
-            if (!contestant.getPhone().matches("^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$")) {
-                return false;
-            }
-        }
-
         return true;
     }
 

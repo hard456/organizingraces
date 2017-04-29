@@ -523,7 +523,7 @@ public class TeamController {
                 } else if (i == 3) {
                     if (cell != null) {
                         String phoneRegEx = "^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$";
-                        tmp = cell.getStringCellValue();
+                        tmp = cell.getStringCellValue().replaceAll("\\s+","");
                         if (!tmp.matches(phoneRegEx)) {
                             return "wrong phone format [ROW:" + (row.getRowNum()+1) + "]";
                         } else {
@@ -766,7 +766,7 @@ public class TeamController {
                         }
                     } else if ((i - 2) % 6 == 4) {
                         if (cell != null && cell.getStringCellValue().length() != 0) {
-                            contestant.setPhone(cell.getStringCellValue());
+                            contestant.setPhone(cell.getStringCellValue().replaceAll("\\s+",""));
                         } else {
                             contestant.setPhone("");
                         }
