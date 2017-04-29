@@ -50,7 +50,7 @@
             <%--</div>--%>
         <%--</div>--%>
 
-            <img class="background_image" src="/images/background_home.png">
+        <img class="background_image hidden-xs" src="/images/background_home.png">
 
 
 
