@@ -26,7 +26,7 @@
                     Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
                     <form:input type="text" style="margin-botoom: 7px; max-width: 100%;" class="form-control"
                                 placeholder="Phone" maxlength="16" path="user.phone"/>
-                    Email<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                    Email<span style="color: red;">*</span> <span style="color: darkgrey">(6 - 32 length)</span>:
                     <form:input type="email" style="margin-botoom: 7px; max-width: 100%;" class="form-control"
                                 placeholder="Email" maxlength="32" path="user.email"/>
                     Password<span style="color: red;">*</span> <span style="color: darkgrey">(8 - 256 length)</span>:

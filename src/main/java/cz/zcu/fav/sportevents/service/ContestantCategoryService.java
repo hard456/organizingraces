@@ -20,7 +20,7 @@ public class ContestantCategoryService {
     }
 
     @Transactional
-    public boolean exist(int id){
+    public boolean exists(int id){
         if(contestantCategoryDAO.getCategoryById(id) != null){
             return true;
         }

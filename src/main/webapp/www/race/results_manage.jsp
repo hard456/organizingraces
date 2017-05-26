@@ -306,7 +306,7 @@
                         <table id="myTable" class="display" cellspacing="0" width="100%">
                             <thead>
                             <tr>
-                                <th>Position</th>
+                                <th>Id</th>
                                 <th>Team</th>
                                 <th>Category</th>
                                 <th>Points</th>
@@ -320,7 +320,7 @@
                             <tbody>
                             <c:forEach items="${teams}" var="team" varStatus="i">
                                 <tr style="text-align: center;" id="TEAM${team.id}">
-                                    <td>${i.index+1}</td>
+                                    <td>${team.id}</td>
                                     <td>${team.name}</td>
                                     <td>${team.category.name}</td>
                                     <td id="points${team.id}" onclick="setPointsToModal(${race.id},${team.id})"
@@ -420,6 +420,9 @@
                                     table.columns(2).search(this.value, true, false).draw();
                                 }
                             });
+                            setInterval( function () {
+                                reloadTable(${race.id});
+                            }, 5000 );
                         </script>
 
                     </c:when>

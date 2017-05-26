@@ -32,7 +32,7 @@ public class TeamSubcategoryService {
     }
 
     @Transactional
-    public TeamSubcategory getSubcategoryByName(String teamCategory, int raceTeamCategory) {
-        return teamSubcategoryDAO.getSubcategoryByName(teamCategory,raceTeamCategory);
+    public TeamSubcategory getSubcategoryByNameByCategoryId(String teamCategory, int raceTeamCategory) {
+        return teamSubcategoryDAO.getSubcategoryByNameByCategoryId(teamCategory,raceTeamCategory);
     }
 }

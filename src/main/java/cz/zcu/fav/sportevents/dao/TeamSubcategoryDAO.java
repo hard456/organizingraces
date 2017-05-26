@@ -34,7 +34,7 @@ public class TeamSubcategoryDAO {
         return (TeamSubcategory) criteria.uniqueResult();
     }
 
-    public TeamSubcategory getSubcategoryByName(String teamCategory, int raceTeamCategory) {
+    public TeamSubcategory getSubcategoryByNameByCategoryId(String teamCategory, int raceTeamCategory) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(TeamSubcategory.class)
                 .add(Restrictions.eq("name", teamCategory))

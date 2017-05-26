@@ -75,7 +75,7 @@ public class RaceResultController {
 
             model.addObject("teams", teamLinkedList);
 
-            if(race.getTeamCategory() != null){
+            if (race.getTeamCategory() != null) {
                 List<TeamSubcategory> categories;
                 categories = teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId());
                 model.addObject("team_categories", categories);
@@ -97,7 +97,7 @@ public class RaceResultController {
             if (team.getStartTime() != null && team.getFinishTime() != null) {
                 int penalization = 0;
                 if (team.getDeadlineTime() != null && team.getDeadlineTime() != 0) {
-                    penalization = getPenalizationPoints(team);
+                    penalization = countPenalizationPoints(team);
                     team.setPenalization(penalization);
                 }
                 int finalPoints = team.getPoints() + team.getBonus() - penalization;
@@ -143,7 +143,7 @@ public class RaceResultController {
         return teams;
     }
 
-    private int getPenalizationPoints(Team team) {
+    private int countPenalizationPoints(Team team) {
         int penalizationPoints = 0;
         Duration interval = null;
         try {
@@ -220,7 +220,7 @@ public class RaceResultController {
             }
 
             for (Contestant c : contestants) {
-                if (c.getTeam() != null && c.getTeam().getId() == team.getId()) {
+                if ((c.getTeam() != null) && (c.getTeam().getId() == team.getId())) {
 
                     if (counter > 0) {
                         teamName += ", ";
@@ -442,7 +442,7 @@ public class RaceResultController {
 
         Team team = teamService.getTeamById(datetimeTeamForm.getTeamId());
 
-        DateTimeFormatter format = DateTimeFormat.forPattern("yy-MM-dd HH:mm:ss");
+        DateTimeFormatter format = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         if (datetimeTeamForm.getDateTime().equals("")) {
             if (team.getFinishTime() == null) {
                 team.setStartTime(null);
@@ -685,6 +685,26 @@ public class RaceResultController {
         }
 
         return "ok";
+    }
+
+    @RequestMapping(value = "/race/{id}/results/refreshTable", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    List<Team> refreshTable(@PathVariable("id") int race_id) {
+        Race race = raceService.getRaceById(race_id);
+        User user = userService.getLoginUser();
+
+        if (race == null || user == null) {
+            return new ArrayList<>();
+        }
+        if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+            return new ArrayList<>();
+        }
+
+        List<Team> teams = teamService.getTeamsByRaceId(race_id);
+        List<Contestant> contestants = contestantService.getContestantsByRaceId(race_id);
+        teams = editTeamName(teams, contestants);
+        return teams;
     }
 
 }

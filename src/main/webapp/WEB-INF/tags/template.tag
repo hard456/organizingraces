@@ -36,7 +36,7 @@
             <%--<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"--%>
                   <%--style="font-size:2em; color: white;"></span>--%>
             <%--<a href="${pageContext.request.contextPath}/" style="text-decoration: none;"><span style="color: white; font-size: 35px">Orienteering Races</span></a>--%>
-                <img style="width: 228px; height: 84px;" src="/images/logo.png">
+                <img style="width: 228px; height: 84px;" src="${pageContext.request.contextPath}/images/logo.png">
             <br>
             <span style="color: cadetblue; font-size: 18px;">SUPPORT FOR YOUR ORIENTEERING RACES</span>
         </div>

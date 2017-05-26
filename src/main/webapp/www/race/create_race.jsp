@@ -60,9 +60,9 @@
                             <label><input type="radio" name="conRadio" value="own">Create own categories</label>
                         </div>
                     </div>
-                    Category 1:
+                    Category 1 <span style="color: darkgrey">(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" style="margin-bottom: 7px;" name="contestantSubCategories[0].name"/>
-                    Category 2:
+                    Category 2 <span style="color: darkgrey">(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="contestantSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="con">
@@ -116,9 +116,9 @@
                         </div>
                     </div>
 
-                    Category 1:
+                    Category 1 <span style="color: darkgrey">(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[0].name" style="margin-bottom: 7px;">
-                    Category 2:
+                    Category 2 <span style="color: darkgrey">(1 - 20 length)</span>:
                     <input type="text" maxlength="20" class="form-control" name="teamSubCategories[1].name" style="margin-bottom: 7px;">
 
                     <div id="team">

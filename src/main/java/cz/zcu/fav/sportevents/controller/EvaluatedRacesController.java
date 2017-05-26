@@ -20,7 +20,7 @@ public class EvaluatedRacesController {
     public ModelAndView evaluatedRaces() {
         ModelAndView model = new ModelAndView();
         List<Race> list;
-        list = raceService.getEvalutedRaces();
+        list = raceService.getEvaluatedRaces();
         model.setViewName("others/evaluated_races");
         model.addObject("races", list);
         return model;

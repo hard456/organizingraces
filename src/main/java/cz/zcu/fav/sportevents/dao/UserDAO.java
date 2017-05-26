@@ -14,14 +14,13 @@ public class UserDAO{
     @Autowired
     SessionFactory sessionFactory;
 
-    public User get(String login) {
+    public User getUserByLogin(String login) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(User.class)
                 .add(Restrictions.eq("login",login));
 
         criteria.setMaxResults(1);
-        User user = (User)criteria.uniqueResult();
-        return user;
+        return (User)criteria.uniqueResult();
     }
 
     public void save(final User object) {

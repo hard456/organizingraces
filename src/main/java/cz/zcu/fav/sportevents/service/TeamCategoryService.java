@@ -26,7 +26,7 @@ public class TeamCategoryService {
     }
 
     @Transactional
-    public boolean exist(int id){
+    public boolean exists(int id){
         if(teamCategoryDAO.getCategoryById(id) != null){
             return true;
         }

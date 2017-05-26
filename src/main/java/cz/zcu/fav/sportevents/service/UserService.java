@@ -32,7 +32,7 @@ public class UserService {
 
     @Transactional
     public boolean checkUserName(User user){
-        if(userDAO.get(user.getLogin()) != null){
+        if(userDAO.getUserByLogin(user.getLogin()) != null){
             return true;
         }
         return false;
@@ -40,7 +40,7 @@ public class UserService {
 
     @Transactional
     public User getUser(String login){
-        return userDAO.get(login);
+        return userDAO.getUserByLogin(login);
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class UserService {
         } else {
             userName = principal.toString();
         }
-        return userDAO.get(userName);
+        return userDAO.getUserByLogin(userName);
     }
 
 }

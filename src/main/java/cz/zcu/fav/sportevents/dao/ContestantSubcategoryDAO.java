@@ -33,7 +33,7 @@ public class ContestantSubcategoryDAO {
         return (ContestantSubcategory) criteria.uniqueResult();
     }
 
-    public ContestantSubcategory getByIdAndRaceId(int id, int race_category){
+    public ContestantSubcategory getSubcategoryByRaceIdByCategoryId(int id, int race_category){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(ContestantSubcategory.class)
                 .add(Restrictions.eq("id", id))
@@ -42,7 +42,7 @@ public class ContestantSubcategoryDAO {
         return (ContestantSubcategory) criteria.uniqueResult();
     }
 
-    public ContestantSubcategory getSubcategoryByName(String contestantCategory, int raceConCategory) {
+    public ContestantSubcategory getCategoryByNameByCategoryId(String contestantCategory, int raceConCategory) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(ContestantSubcategory.class)
                 .add(Restrictions.eq("name", contestantCategory))

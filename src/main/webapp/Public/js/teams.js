@@ -27,6 +27,9 @@ function deleteTeam(raceId, team, deleteContestans) {
                 $('#T' + response).remove();
                 document.getElementById("delete_result").innerHTML = "<div class='alert alert-success'>Action sucessfully compeleted.<div/>";
                 $('#deleteResultModal').modal('show');
+                setTimeout(function () {
+                    $('#deleteResultModal').modal('hide');
+                }, 200);
             }
             else {
                 document.getElementById("delete_result").innerHTML = "<div class='alert alert-danger'>Something went wrong.<div/>";

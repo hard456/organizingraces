@@ -161,7 +161,7 @@ public class CreateRaceController {
             if (createRaceForm.getDefTeamCategoryId() == null) {
                 return false;
             }
-            if (!teamCategoryService.exist(createRaceForm.getDefTeamCategoryId())) {
+            if (!teamCategoryService.exists(createRaceForm.getDefTeamCategoryId())) {
                 return false;
             }
         }
@@ -169,7 +169,7 @@ public class CreateRaceController {
             if (createRaceForm.getDefConCategoryId() == null) {
                 return false;
             }
-            if (!contestantCategoryService.exist(createRaceForm.getDefConCategoryId())) {
+            if (!contestantCategoryService.exists(createRaceForm.getDefConCategoryId())) {
                 return false;
             }
         }

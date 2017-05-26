@@ -600,7 +600,7 @@ public class TeamController {
             Contestant contestant = new Contestant();
             team.setRace(race);
             if(race.getTeamCategory() != null){
-                team.setCategory(teamSubcategoryService.getSubcategoryByName(c.getTeamCategory(),race.getTeamCategory().getId()));
+                team.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(c.getTeamCategory(),race.getTeamCategory().getId()));
             }
             teamService.save(team);
             contestant.setFirstname(c.getFirstname());
@@ -610,7 +610,7 @@ public class TeamController {
             contestant.setRace(race);
             contestant.setUser(user);
             if(race.getContestantCategory() != null){
-                contestant.setCategory(contestantSubcategoryService.getSubcategoryByName(c.getContestantCategory(),race.getContestantCategory().getId()));
+                contestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(c.getContestantCategory(),race.getContestantCategory().getId()));
             }
             if(c.getPaid().equals("YES")){
                 contestant.setPaid(true);
@@ -802,7 +802,7 @@ public class TeamController {
                 }
                 if(race.getTeamCategory() != null){
                     String teamCategory = team.getCategory();
-                    newTeam.setCategory(teamSubcategoryService.getSubcategoryByName(teamCategory,race.getTeamCategory().getId()));
+                    newTeam.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(teamCategory,race.getTeamCategory().getId()));
                 }
                 newTeam.setRace(race);
                 teamService.save(newTeam);
@@ -820,7 +820,7 @@ public class TeamController {
                     }
                     if(race.getContestantCategory() != null){
                         String category = contestant.getContestantCategory();
-                        newContestant.setCategory(contestantSubcategoryService.getSubcategoryByName(category,race.getContestantCategory().getId()));
+                        newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category,race.getContestantCategory().getId()));
                     }
                     if(contestant.getPaid().equals("YES")){
                         newContestant.setPaid(true);
@@ -842,7 +842,7 @@ public class TeamController {
 
                 if(race.getContestantCategory() != null){
                     String category = team.getContestants().get(0).getContestantCategory();
-                    newContestant.setCategory(contestantSubcategoryService.getSubcategoryByName(category,race.getContestantCategory().getId()));
+                    newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category,race.getContestantCategory().getId()));
                 }
                 if(team.getContestants().get(0).getPaid().equals("YES")){
                     newContestant.setPaid(true);

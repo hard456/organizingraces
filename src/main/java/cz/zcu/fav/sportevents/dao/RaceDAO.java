@@ -29,7 +29,7 @@ public class RaceDAO {
         return criteria.list();
     }
 
-    public Race getRaceByUserId(String name){
+    public Race getRaceByName(String name){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
                 .add(Restrictions.eq("name",name));
@@ -53,7 +53,7 @@ public class RaceDAO {
         return criteria.list();
     }
 
-    public List<Race> getEvalutedRaces(){
+    public List<Race> getEvaluatedRaces(){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Race.class)
                 .add(Restrictions.eq("evaluation",true))

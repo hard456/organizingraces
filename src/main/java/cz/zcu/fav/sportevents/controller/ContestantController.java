@@ -175,7 +175,7 @@ public class ContestantController {
             newContestant.setCategory(category);
         }
 
-        contestantService.saveContestant(newContestant);
+        contestantService.update(newContestant);
         return "ok";
     }
 

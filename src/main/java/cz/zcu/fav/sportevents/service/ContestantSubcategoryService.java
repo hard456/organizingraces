@@ -32,12 +32,12 @@ public class ContestantSubcategoryService {
     }
 
     @Transactional
-    public ContestantSubcategory getCategoryWithRaceId(int category, int race_category){
-        return contestantSubcategoryDAO.getByIdAndRaceId(category,race_category);
+    public ContestantSubcategory getSubcategoryByRaceIdByCategoryId(int category, int race_category){
+        return contestantSubcategoryDAO.getSubcategoryByRaceIdByCategoryId(category,race_category);
     }
 
     @Transactional
-    public ContestantSubcategory getSubcategoryByName(String contestantCategory, int raceConCategory) {
-        return contestantSubcategoryDAO.getSubcategoryByName(contestantCategory,raceConCategory);
+    public ContestantSubcategory getCategoryByNameByCategoryId(String contestantCategory, int raceConCategory) {
+        return contestantSubcategoryDAO.getCategoryByNameByCategoryId(contestantCategory,raceConCategory);
     }
 }

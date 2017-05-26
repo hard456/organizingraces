@@ -27,7 +27,7 @@ public class RaceService {
 
     @Transactional
     public boolean isExistRaceByName(String name){
-        if(raceDAO.getRaceByUserId(name) == null){
+        if(raceDAO.getRaceByName(name) == null){
             return false;
         }
         return true;
@@ -44,8 +44,8 @@ public class RaceService {
     }
 
     @Transactional
-    public List<Race> getEvalutedRaces(){
-        return raceDAO.getEvalutedRaces();
+    public List<Race> getEvaluatedRaces(){
+        return raceDAO.getEvaluatedRaces();
     }
 
     @Transactional

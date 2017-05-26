@@ -22,7 +22,7 @@ public class LoginService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String username){
-        User user = userDAO.get(username);
+        User user = userDAO.getUserByLogin(username);
         if (user == null) {
             throw new UsernameNotFoundException("Not Found");
         }

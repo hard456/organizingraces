@@ -1,5 +1,6 @@
 package cz.zcu.fav.sportevents.controller;
 
+import cz.zcu.fav.sportevents.comparator.SupportedRacesCompare;
 import cz.zcu.fav.sportevents.model.Race;
 import cz.zcu.fav.sportevents.model.RaceCooperation;
 import cz.zcu.fav.sportevents.model.User;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -32,6 +34,7 @@ public class MyRacesController {
         ModelAndView model = new ModelAndView();
         List<Race> myRaces = raceService.listByUserId(user.getId());
         List<RaceCooperation> supportedRaces = raceCooperationService.getCooperationsByUserId(user.getId());
+        Collections.sort(supportedRaces, new SupportedRacesCompare());
         model.setViewName("user/my_races");
         model.addObject("myRaces", myRaces);
         model.addObject("supportedRaces", supportedRaces);

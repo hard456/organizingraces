@@ -410,7 +410,7 @@ public class RaceRegistrationController {
                 return "fail";
             }
             ContestantSubcategory category;
-            category = contestantSubcategoryService.getCategoryWithRaceId(adminSoloRegForm.getCategory(), race.getContestantCategory().getId());
+            category = contestantSubcategoryService.getSubcategoryByRaceIdByCategoryId(adminSoloRegForm.getCategory(), race.getContestantCategory().getId());
             if (category == null) {
                 return "fail";
             }
