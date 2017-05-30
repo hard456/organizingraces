@@ -130,6 +130,7 @@
                                        placeholder="${now_format}"/>
                             </div>
                         </div>
+                        <input type="hidden" id="startTimeModalHidden">
                     </div>
                     <div class="modal-footer">
                         <input type="button" id="setStartTimeButton" value="Set time" class="btn btn-success"
@@ -161,6 +162,7 @@
                                        placeholder="${now_format}"/>
                             </div>
                         </div>
+                        <input type="hidden" id="finishTimeModalHidden">
                     </div>
                     <div class="modal-footer">
                         <input type="button" value="Set" class="btn btn-success" id="finishTimeButton"
@@ -194,6 +196,8 @@
                                 <input type="text" id="bonusModalInput" class="form-control"/>
                             </div>
                         </div>
+                        <input type="hidden" id="pointsModalHidden">
+                        <input type="hidden" id="bonusModalHidden">
                     </div>
                     <div class="modal-footer">
                         <input type="button" class="btn btn-primary" value="Save" id="setPointsButton">
@@ -244,7 +248,7 @@
         </div>
 
         <div class="card-log" style="margin-top: 25px;">
-            <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="max-width: 1200px; margin: 0 auto;">
                 <c:choose>
                     <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
 
@@ -303,7 +307,7 @@
                             </div>
                         </div>
 
-                        <table id="myTable" class="display" cellspacing="0" width="100%">
+                        <table id="myTable" class="display" cellspacing="0" width="100%" style="font-size: 12px;">
                             <thead>
                             <tr>
                                 <th>Id</th>

@@ -1,5 +1,6 @@
 function setModalForFinishTime(raceId, teamId) {
     $('#finishTimeModalInput').val($.trim($('#finishTime' + teamId).text()));
+    $('#finishTimeModalHidden').val($.trim($('#finishTime' + teamId).text()));
     $("#finishTimeButton").attr('onclick', ' setFinishTime(' + raceId + ', ' + teamId + ');');
 
     setTimeout(function () {
@@ -10,6 +11,8 @@ function setModalForFinishTime(raceId, teamId) {
 function setPointsToModal(raceId, teamId) {
     $('#pointsModalInput').val($.trim($('#points' + teamId).text()));
     $('#bonusModalInput').val($.trim($('#bonus' + teamId).text()));
+    $('#pointsModalHidden').val($.trim($('#points' + teamId).text()));
+    $('#bonusModalHidden').val($.trim($('#bonus' + teamId).text()));
     $("#setPointsButton").attr('onclick', 'setPoints(' + raceId + ', ' + teamId + ');');
 
     setTimeout(function () {
@@ -19,6 +22,7 @@ function setPointsToModal(raceId, teamId) {
 
 function setStartTimeToModal(raceId, teamId) {
     $('#startTimeModalInput').val($.trim($('#startTime' + teamId).text()));
+    $('#startTimeModalHidden').val($.trim($('#startTime' + teamId).text()));
     $("#setStartTimeButton").attr('onclick', 'setStartTime(' + raceId + ', ' + teamId + ');');
     $("#setGlobalStartTimeButton").attr('onclick', 'setGlobalStartTime(' + raceId + ', ' + teamId + ');');
 
@@ -32,55 +36,52 @@ function setPoints(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
+    var data = {
+        teamId: teamId, newPoints: $("#pointsModalInput").val(),
+        newBonus: $("#bonusModalInput").val(), points: $("#pointsModalHidden").val(),
+        bonus: $("#bonusModalHidden").val()
+    };
 
-    if (!$.isNumeric($("#pointsModalInput").val()) || !$.isNumeric($("#bonusModalInput").val()) || !$.isNumeric(teamId)) {
-        $('#pointsModal').modal('hide');
-        $("#resultDanger").html("Number format expected");
-        $('#resultDangerModal').modal('show');
-    }
-    else {
-        var numbers = new Array();
-        numbers.push(teamId);
-        numbers.push(parseInt($("#pointsModalInput").val()));
-        numbers.push(parseInt($("#bonusModalInput").val()));
+    $(document).ajaxSend(function (e, xhr, options) {
+        xhr.setRequestHeader(header, token);
+    });
 
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
-
-        $.ajax({
-            type: "POST",
-            url: BASE_URL + "/race/" + raceId + "/results/setPoints",
-            contentType: 'application/json',
-            data: JSON.stringify(numbers),
-            dataType: "html",
-            success: function (response) {
-                $('#pointsModal').modal('hide');
-                if (response.localeCompare("ok") == 0) {
-                    var table = $('#myTable').DataTable();
-                    table.cell({row: rowIndex, column: 3}).data(numbers[1]);
-                    table.cell({row: rowIndex, column: 4}).data(numbers[2]);
-                    //$('#points' + teamId).html(numbers[1]);
-                    //$('#bonus' + teamId).html(numbers[2]);
-                }
-                else {
-                    if (response.localeCompare("wrong_parameter_count") == 0) {
-                        $("#resultDanger").html("Wrong number of Integer parameters");
-                    }
-                    else if (response.localeCompare("something_went_wrong") == 0) {
-                        $("#resultDanger").html("Something went wrong");
-                    }
-                    else if (response.localeCompare("team") == 0) {
-                        $("#resultDanger").html("Team is no exists");
-                    }
-                    else if (response.localeCompare("not_number") == 0) {
-                        $("#resultDanger").html("Number format expected");
-                    }
-                    $('#resultDangerModal').modal('show');
-                }
+    $.ajax({
+        type: "POST",
+        url: BASE_URL + "/race/" + raceId + "/results/setPoints",
+        data: data,
+        dataType: "html",
+        success: function (response) {
+            console.log("now");
+            $('#pointsModal').modal('hide');
+            if (response.localeCompare("ok") == 0) {
+                var table = $('#myTable').DataTable();
+                table.cell({row: rowIndex, column: 3}).data(data.newPoints);
+                table.cell({row: rowIndex, column: 4}).data(data.newBonus);
+                //$('#points' + teamId).html(numbers[1]);
+                //$('#bonus' + teamId).html(numbers[2]);
             }
-        });
-    }
+            else {
+                if (response.localeCompare("wrong_parameter_count") == 0) {
+                    $("#resultDanger").html("Wrong number of Integer parameters");
+                }
+                else if (response.localeCompare("something_went_wrong") == 0) {
+                    $("#resultDanger").html("Something went wrong");
+                }
+                else if (response.localeCompare("team") == 0) {
+                    $("#resultDanger").html("Team does not exist");
+                }
+                else if (response.localeCompare("not_number") == 0) {
+                    $("#resultDanger").html("Number format expected");
+                }
+                else if (response.localeCompare("collision") == 0) {
+                    $("#resultDanger").html("Data collision detected");
+                }
+                $('#resultDangerModal').modal('show');
+            }
+        }
+    });
+
 }
 
 function setGlobalStartTime(raceId, teamId) {
@@ -88,7 +89,8 @@ function setGlobalStartTime(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {dateTime: $("#startGlobalTime").val(), teamId: teamId};
+    var data = {dateTime: $("#startTimeModalHidden").val(), teamId: teamId,
+                newDateTime: $("#startGlobalTime").val()};
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -102,7 +104,7 @@ function setGlobalStartTime(raceId, teamId) {
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
                 var table = $('#myTable').DataTable();
-                table.cell({row: rowIndex, column: 5}).data(data.dateTime);
+                table.cell({row: rowIndex, column: 5}).data(data.newDateTime);
                 //$('#startTime' + teamId).html(data.dateTime);
             }
             else {
@@ -110,13 +112,16 @@ function setGlobalStartTime(raceId, teamId) {
                     $("#resultDanger").html("Wrong date format");
                 }
                 else if (response.localeCompare("team") == 0) {
-                    $("#resultDanger").html("Team is not exists");
+                    $("#resultDanger").html("Team does not exist");
                 }
                 else if (response.localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
                 else if (response.localeCompare("cant_be_empty") == 0) {
                     $("#resultDanger").html("Start time can't be empty");
+                }
+                else if (response.localeCompare("collision") == 0) {
+                    $("#resultDanger").html("Data collision detected");
                 }
                 else if (response.localeCompare("start_time_before") == 0) {
                     $("#resultDanger").html("Start time is not before finish time");
@@ -133,7 +138,8 @@ function setStartTime(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {dateTime: $("#startTimeModalInput").val(), teamId: teamId};
+    var data = {newDateTime: $("#startTimeModalInput").val(), teamId: teamId,
+                dateTime: $("#startTimeModalHidden").val()};
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -147,7 +153,7 @@ function setStartTime(raceId, teamId) {
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
                 var table = $('#myTable').DataTable();
-                table.cell({row: rowIndex, column: 5}).data(data.dateTime);
+                table.cell({row: rowIndex, column: 5}).data(data.newDateTime);
                 //$('#startTime' + teamId).html(data.dateTime);
             }
             else {
@@ -155,13 +161,16 @@ function setStartTime(raceId, teamId) {
                     $("#resultDanger").html("Wrong date format");
                 }
                 else if (response.localeCompare("team") == 0) {
-                    $("#resultDanger").html("Team is not exists");
+                    $("#resultDanger").html("Team does not exist");
                 }
                 else if (response.localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
                 else if (response.localeCompare("cant_be_empty") == 0) {
                     $("#resultDanger").html("Start time can't be empty");
+                }
+                else if (response.localeCompare("collision") == 0) {
+                    $("#resultDanger").html("Data collision detected");
                 }
                 else if (response.localeCompare("start_time_before") == 0) {
                     $("#resultDanger").html("Start time is not before finish time");
@@ -321,7 +330,7 @@ function teamFinished(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {teamId: teamId};
+    var data = {teamId: teamId, dateTime: $.trim($('#finishTime' + teamId).text())};
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -348,6 +357,12 @@ function teamFinished(raceId, teamId) {
                 else if (response[0].localeCompare("something_went_wrong") == 0) {
                     $("#resultDanger").html("Something went wrong");
                 }
+                else if (response[0].localeCompare("collision") == 0) {
+                    $("#resultDanger").html("Data collision detected");
+                }
+                else if (response[0].localeCompare("team") == 0) {
+                    $("#resultDanger").html("Team does not exist");
+                }
                 $('#resultDangerModal').modal('show');
             }
         }
@@ -360,7 +375,9 @@ function setFinishTime(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {dateTime: $("#finishTimeModalInput").val(), teamId: teamId};
+    var data = {newDateTime: $("#finishTimeModalInput").val(), teamId: teamId,
+                dateTime:$("#finishTimeModalHidden").val()
+                };
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -374,7 +391,7 @@ function setFinishTime(raceId, teamId) {
         success: function (response) {
             if (response.localeCompare("ok") == 0) {
                 var table = $('#myTable').DataTable();
-                table.cell({row: rowIndex, column: 6}).data(data.dateTime);
+                table.cell({row: rowIndex, column: 6}).data(data.newDateTime);
                 //$('#finishTime' + teamId).html(data.dateTime);
             }
             else {
@@ -389,6 +406,9 @@ function setFinishTime(raceId, teamId) {
                 }
                 else if (response.localeCompare("start_time_missing") == 0) {
                     $("#resultDanger").html("Missing start time");
+                }
+                else if (response.localeCompare("collision") == 0) {
+                    $("#resultDanger").html("Data collision detected");
                 }
                 else if (response.localeCompare("start_time_before") == 0) {
                     $("#resultDanger").html("Start must be before finish time");
@@ -524,7 +544,7 @@ function reloadTable(raceId) {
                     }
                 }
             }
-            else{
+            else {
                 table.clear().draw();
             }
         }

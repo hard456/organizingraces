@@ -22,7 +22,7 @@
 
 
         <div class="card-log" style="margin-top: 25px;">
-            <div style="max-width: 1000px; margin: 0 auto;">
+            <div style="max-width: 1200px; margin: 0 auto;">
                 <c:choose>
                     <c:when test="${race.evaluation eq true || race_cooperator eq true || race.user.id eq user.id}">
                         <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
@@ -54,7 +54,7 @@
                             </div>
                         </c:if>
                         <br><br>
-                        <table id="myTable" class="display" cellspacing="0" width="100%">
+                        <table id="myTable" class="display" cellspacing="0" width="100%" style="font-size: 12px;">
                             <thead>
                             <tr>
                                 <th>Rank</th>

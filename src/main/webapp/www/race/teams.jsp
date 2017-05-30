@@ -192,13 +192,13 @@
                                 <c:if test="${race.teamSize gt 1}">
                                     <c:choose>
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
-                                            <div class="col-sm-3" style="margin-bottom: 10px;">
+                                            <div class="col-sm-3">
                                                 Team name:
                                                 <input class="form-control" type="text" value="${team.name}" id="teamName${team.id}">
                                             </div>
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="col-sm-6" style="margin-bottom: 10px;">
+                                            <div class="col-sm-6">
                                                 Team name:
                                                 <input class="form-control" type="text" value="${team.name}">
                                             </div>
@@ -209,7 +209,7 @@
                                 <c:if test="${race.teamCategory ne null}">
                                     <c:choose>
                                         <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
-                                            <div class="col-sm-3" style="margin-bottom: 10px;">
+                                            <div class="col-sm-3">
                                                 Team category:
                                                 <select class="form-control" id="teamCategory${team.id}">
                                                 <c:forEach items="${team_categories}" var="category">
@@ -227,7 +227,7 @@
                                             </div>
                                         </c:when>
                                         <c:otherwise>
-                                            <div class="col-sm-6" style="margin-bottom: 10px;">
+                                            <div class="col-sm-6">
                                                 Team category:
                                                 <input class="form-control" type="text" value="${team.category.name}">
                                             </div>

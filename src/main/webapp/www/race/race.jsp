@@ -61,14 +61,12 @@
                                     <c:when test="${race.registration eq true}">
                                         <div>
                                             <input type="button" class="btn btn-success"
-                                                   onclick="changeRegistration(${race.id});"
                                                    value="Enabled" style="width: 100%">
                                         </div>
                                     </c:when>
                                     <c:otherwise>
                                         <div style="text-align: right;">
                                             <input type="button" class="btn btn-danger"
-                                                   onclick="changeRegistration(${race.id});"
                                                    value="Disabled" style="width: 100%">
                                         </div>
                                     </c:otherwise>
