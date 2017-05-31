@@ -46,14 +46,14 @@
                                             <div class="row">
                                                 <div class="col-sm-5">
                                                     <div class="visible-xs">Team name:</div>
-                                                    <input class="form-control" style="margin-bottom: 5px;" name="teamName"
+                                                    <input class="form-control" style="margin-bottom: 5px;" id="teamName"
                                                            placeholder="Team name" maxlength="32"/>
                                                 </div>
                                                 <c:if test="${race.teamCategory ne null}">
                                                 <div class="col-sm-5">
                                                     <div class="visible-xs">Category:</div>
                                                     <select class="form-control" style="margin-bottom: 5px;"
-                                                            name="teamCategory">
+                                                            id="teamCategory">
                                                         <c:forEach items="${team_categories}" var="c">
                                                             <option selected value="${c.id}">${c.name}</option>
                                                         </c:forEach>
@@ -114,8 +114,6 @@
                                                                    value="Delete"
                                                                    style="margin-bottom: 5px;" onclick="deleteSoloContestant(${c.id},${race.id});">
                                                         </div>
-
-                                                        <input type="text" hidden="true" id="ID${c.id}" name="contestants[${i.index}]">
                                                     </div>
                                                     <c:if test="${not i.last}">
                                                         <hr>

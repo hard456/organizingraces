@@ -7,9 +7,9 @@ public class CreateTeamForm {
 
     String teamName;
 
-    List<Integer> contestants;
+    List<String> contestants;
 
-    Integer teamCategory;
+    String teamCategory;
 
     public String getTeamName() {
         return teamName;
@@ -19,19 +19,19 @@ public class CreateTeamForm {
         this.teamName = teamName;
     }
 
-    public List<Integer> getContestants() {
+    public List<String> getContestants() {
         return contestants;
     }
 
-    public void setContestants(List<Integer> contestants) {
+    public void setContestants(List<String> contestants) {
         this.contestants = contestants;
     }
 
-    public Integer getTeamCategory() {
+    public String getTeamCategory() {
         return teamCategory;
     }
 
-    public void setTeamCategory(Integer teamCategory) {
+    public void setTeamCategory(String teamCategory) {
         this.teamCategory = teamCategory;
     }
 }

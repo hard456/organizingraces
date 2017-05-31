@@ -4,8 +4,10 @@
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<script src="${pageContext.request.contextPath}/js/add_contestant_inputs.js" language="Javascript" type="text/javascript"></script>
-<script src="${pageContext.request.contextPath}/js/race_registration.js" language="Javascript" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/add_contestant_inputs.js" language="Javascript"
+        type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/race_registration.js" language="Javascript"
+        type="text/javascript"></script>
 
 <t:template>
     <jsp:body>
@@ -16,7 +18,7 @@
         <div style="max-width: 800px; margin: 0 auto;">
             <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
 
-            <%-- ADMIN TEAM REGISTRATION --%>
+                <%-- ADMIN TEAM REGISTRATION --%>
 
             <div class="well well-lg" style="background: lightgoldenrodyellow">
                 <div style="text-align: center;">
@@ -70,7 +72,8 @@
                     <br>
                     <div class="row">
                         <div class="col-sm-4">
-                            Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                            Firstname<span style="color: red;">*</span> <span
+                                style="color: darkgrey">(3 - 32 length)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" id="${i.index}firstname" name="" maxlength="32"/>
@@ -83,7 +86,8 @@
 
                         </div>
                         <div class="col-sm-4">
-                            Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                            Lastname<span style="color: red;">*</span> <span
+                                style="color: darkgrey">(3 - 32 length)</span>:
                             <c:choose>
                                 <c:when test="${i.index gt race.teamSize-1}">
                                     <input class="form-control" type="text" id="${i.index}lastname" name=""
@@ -186,7 +190,7 @@
                 <div id="admin_team_result"></div>
                 <br><br><br><br>
 
-                <%-- ADMIN SOLO CONTESTANT REGISTRATION --%>
+                    <%-- ADMIN SOLO CONTESTANT REGISTRATION --%>
 
                 <c:if test="${race.teamSize gt 1}">
                     <div class="well well-lg" style="background: lightgoldenrodyellow">
@@ -199,28 +203,29 @@
                             <div class="col-sm-4">
                                 Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                                 <input class="form-control" name="contestant.firstname" id="firstname"
-                                                 maxlength="32"/>
+                                       maxlength="32"/>
                             </div>
                             <div class="col-sm-4">
-                                Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
+                                Lastname<span style="color: red;">*</span> <span
+                                    style="color: darkgrey">(3 - 32 length)</span>:
                                 <input class="form-control"
-                                                type="text"
-                                                name="contestant.lastname" id="lastname" maxlength="32">
+                                       type="text"
+                                       name="contestant.lastname" id="lastname" maxlength="32">
 
                             </div>
                             <div class="col-sm-4">
                                 Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
                                 <input class="form-control"
-                                             type="text"
-                                             name="contestant.phone" id="phone" maxlength="16">
+                                       type="text"
+                                       name="contestant.phone" id="phone" maxlength="16">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 Email <span style="color: darkgrey">(6 - 32 length)</span>:
                                 <input class="form-control"
-                                             type="text"
-                                             name="contestant.email" id="email" maxlength="32">
+                                       type="text"
+                                       name="contestant.email" id="email" maxlength="32">
 
                             </div>
                             <c:if test="${not empty con_categories}">
@@ -257,7 +262,7 @@
                 </c:if>
                 </c:if>
 
-                <%-- USER SOLO REGISTRATION --%>
+                    <%-- USER SOLO REGISTRATION --%>
 
                 <c:choose>
                     <c:when test="${race.registration eq true || race_cooperator eq true || race.user.id eq user.id}">
@@ -286,7 +291,9 @@
 
                                 <div class="row">
                                     <div class="col-sm-12" style="text-align: right">
-                                        <input class="btn btn-primary" type="button" onclick="soloRegistration(${race.id})" style="color: white;" value="Solo registration">
+                                        <input class="btn btn-primary" type="button"
+                                               onclick="soloRegistration(${race.id})" style="color: white;"
+                                               value="Solo registration">
                                     </div>
                                 </div>
 
@@ -367,28 +374,28 @@
                                         <div class="col-sm-4">
                                             Firstname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                                             <input class="form-control"
-                                                             name="contestants[${i.index}].firstname" maxlength="32"/>
+                                                   name="contestants[${i.index}].firstname" maxlength="32"/>
                                         </div>
                                         <div class="col-sm-4">
                                             Lastname<span style="color: red;">*</span> <span style="color: darkgrey">(3 - 32 length)</span>:
                                             <input class="form-control"
-                                                            type="text"
-                                                            name="contestants[${i.index}].lastname" maxlength="32">
+                                                   type="text"
+                                                   name="contestants[${i.index}].lastname" maxlength="32">
 
                                         </div>
                                         <div class="col-sm-4">
                                             Phone <span style="color: darkgrey">(123456789, +420123456789)</span>:
                                             <input class="form-control"
-                                                         type="text"
-                                                         name="contestants[${i.index}].phone" maxlength="16">
+                                                   type="text"
+                                                   name="contestants[${i.index}].phone" maxlength="16">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">
                                             Email<span style="color: darkgrey">(6 - 32 length)</span>:
                                             <input class="form-control"
-                                                         type="text"
-                                                         name="contestants[${i.index}].email" maxlength="32">
+                                                   type="text"
+                                                   name="contestants[${i.index}].email" maxlength="32">
 
                                         </div>
 
@@ -412,10 +419,14 @@
                             <div class="row">
                                 <div class="col-sm-12" style="text-align: right">
                                     <c:if test="${race.teamSize gt 1}">
-                                        <input class="btn btn-primary" type="button" onclick="teamRegistration(${race.id})" style="color: white;" value="Team registration">
+                                        <input class="btn btn-primary" type="button"
+                                               onclick="teamRegistration(${race.id})" style="color: white;"
+                                               value="Team registration">
                                     </c:if>
                                     <c:if test="${race.teamSize eq 1}">
-                                        <input class="btn btn-primary" type="button" onclick="teamRegistration(${race.id})" style="color: white;" value="Registration">
+                                        <input class="btn btn-primary" type="button"
+                                               onclick="teamRegistration(${race.id})" style="color: white;"
+                                               value="Registration">
                                     </c:if>
                                 </div>
                             </div>
