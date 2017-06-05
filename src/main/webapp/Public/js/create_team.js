@@ -47,11 +47,11 @@ function createTeamAjax(race_id){
         success: function (response) {
             if(response.validation.localeCompare("ok") == 0){
                 list = [];
-                data = '<div class="alert alert-success">The team was successfully created.</div>';
                 $.each(response.contestantId, function(k, v) {
                     $('#C' + v).remove();
                 });
                 $('#createTeamForm').get(0).reset();
+                data = '<div class="alert alert-success">The team was successfully created.</div>';
             }
             else{
                 data = '<div class="alert alert-danger">'+response.validation+'</div>';

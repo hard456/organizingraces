@@ -7,7 +7,7 @@
         <div class="card-log" style="margin: 30px auto;">
             <c:choose>
                 <c:when test="${empty races}">
-                    <div style="max-width: 850px; margin: 0 auto;">
+                    <div style="width: 850px; margin: 0 auto;">
                         <div class="alert alert-warning">
                             No races available.
                         </div>
@@ -15,7 +15,6 @@
                 </c:when>
                 <c:otherwise>
                     <div style="margin: 0 auto; max-width: 700px;">
-
                         <div class="row hidden-xs"
                              style="background: #8AD38A; color: white; padding: 5px 0 5px 0; margin-bottom: 10px;">
                             <div class="col-sm-8">
