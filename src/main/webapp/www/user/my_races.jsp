@@ -4,16 +4,18 @@
 
 <t:template>
     <jsp:body>
-        <div style="margin: 0 auto; max-width: 500px;">
+        <div style="margin: 0 auto; max-width: 600px;">
             <div class="card-log" style="margin: 30px auto;">
                 <div class="row">
-                    <div class="col-sm-6"><a data-toggle="tab" href="#my_races"><input type="button" style="width: 100%"
-                                                                                       class="btn btn-default"
-                                                                                       value="My races"></a></div>
-                    <div class="col-sm-6"><a data-toggle="tab" href="#supported_races"><input type="button"
-                                                                                              style="width: 100%"
-                                                                                              class="btn btn-default"
-                                                                                              value="Supported races"></a>
+                    <div class="col-sm-6" style="margin-top: 5px;"><a data-toggle="tab" href="#my_races"><input
+                            type="button" style="width: 100%"
+                            class="btn btn-default"
+                            value="My races"></a></div>
+                    <div class="col-sm-6" style="margin-top: 5px;"><a data-toggle="tab" href="#supported_races"><input
+                            type="button"
+                            style="width: 100%"
+                            class="btn btn-default"
+                            value="Supported races"></a>
                     </div>
                 </div>
 
@@ -32,9 +34,16 @@
 
                                         <div class="row">
                                             <div class="col-sm-8" style="margin-top: 6px;">
-                                                <a href="${pageContext.request.contextPath}/race/${m.id}"
-                                                   style="text-decoration: none; color: grey;"
-                                                   class="link_hover"> ${m.name}</a>
+                                                <div class="hidden-xs">
+                                                    <a href="${pageContext.request.contextPath}/race/${m.id}"
+                                                       style="text-decoration: none; color: grey;"
+                                                       class="link_hover"> ${m.name}</a>
+                                                </div>
+                                                <div class="visible-xs form-control" style="overflow: hidden;">
+                                                    <a href="${pageContext.request.contextPath}/race/${m.id}"
+                                                       style="text-decoration: none; color: grey;"
+                                                       class="link_hover"> ${m.name}</a>
+                                                </div>
                                             </div>
                                             <div class="col-sm-4" style="text-align: right">
                                                 <div class="hidden-xs">
@@ -75,9 +84,16 @@
 
                                         <div class="row">
                                             <div class="col-sm-8" style="margin-top: 6px;">
-                                                <a href="${pageContext.request.contextPath}/race/${s.race.id}"
-                                                   style="text-decoration: none; color: grey;"
-                                                   class="link_hover"> ${s.race.name}</a>
+                                                <div class="hidden-xs">
+                                                    <a href="${pageContext.request.contextPath}/race/${s.race.id}"
+                                                       style="text-decoration: none; color: grey;"
+                                                       class="link_hover"> ${s.race.name}</a>
+                                                </div>
+                                                <div class="visible-xs form-control" style="overflow: hidden;">
+                                                    <a href="${pageContext.request.contextPath}/race/${s.race.id}"
+                                                       style="text-decoration: none; color: grey;"
+                                                       class="link_hover"> ${s.race.name}</a>
+                                                </div>
                                             </div>
                                             <div class="col-sm-4" style="text-align: right">
                                                 <div class="hidden-xs">

@@ -1,10 +1,7 @@
 package cz.zcu.fav.sportevents.controller;
 
 import cz.zcu.fav.sportevents.form.UpdateContestantForm;
-import cz.zcu.fav.sportevents.model.Contestant;
-import cz.zcu.fav.sportevents.model.ContestantSubcategory;
-import cz.zcu.fav.sportevents.model.Race;
-import cz.zcu.fav.sportevents.model.User;
+import cz.zcu.fav.sportevents.model.*;
 import cz.zcu.fav.sportevents.service.*;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ContestantController {
@@ -33,6 +31,12 @@ public class ContestantController {
 
     @Autowired
     ContestantSubcategoryService contestantSubcategoryService;
+
+    @Autowired
+    TeamSubcategoryService teamSubcategoryService;
+
+    @Autowired
+    TeamService teamService;
 
     @RequestMapping(value = "/race/{id}/contestants/full_list", method = RequestMethod.GET)
     public ModelAndView contestants_list(@PathVariable("id") int race_id) {
@@ -61,11 +65,43 @@ public class ContestantController {
                 model.addObject("categories", contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId()));
             }
 
-            model.setViewName("race/contestants_list");
+            model.setViewName("race/manage_contestants");
             return model;
         }
     }
 
+
+    @RequestMapping(value = "/race/{id}/contestants", method = RequestMethod.GET)
+    public ModelAndView showOnePersonTeam(@PathVariable("id") int race_id) {
+        ModelAndView model = new ModelAndView();
+        Race race = raceService.getRaceById(race_id);
+        if (race == null) {
+            model.addObject("error", "404");
+            model.setViewName("error/error_page");
+            return model;
+        } else {
+            User user = userService.getLoginUser();
+            model.addObject("race", race);
+            model.addObject("user", user);
+            if(race.getTeamCategory() != null){
+                model.addObject("team_categories", teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId()));
+            }
+            if(race.getContestantCategory() != null){
+                model.addObject("con_categories", contestantSubcategoryService.getListByCategoryId(race.getContestantCategory().getId()));
+            }
+            List<Contestant> contestants = contestantService.getContestantsByRaceId(race_id);
+            model.addObject("contestants", contestants);
+            if (user != null) {
+                if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
+                    model.addObject("race_cooperator", true);
+                } else {
+                    model.addObject("race_cooperator", false);
+                }
+            }
+            model.setViewName("race/contestants");
+            return model;
+        }
+    }
 
     @RequestMapping(value = "/race/{id}/contestants/changePaidValue", method = RequestMethod.POST)
     public
@@ -174,7 +210,24 @@ public class ContestantController {
             }
             newContestant.setCategory(category);
         }
-
+        if(race.getTeamCategory() != null && race.getTeamSize() == 1){
+            if(updateContestantForm.getTeamCategory() == null){
+                return "something_went_wrong";
+            }
+            TeamSubcategory teamSubcategory;
+            teamSubcategory = teamSubcategoryService.getSubcategoryById(updateContestantForm.getTeamCategory());
+            if(teamSubcategory == null){
+                return "something_went_wrong";
+            }
+            TeamSubcategory teamSubcategory2;
+            teamSubcategory2 = teamSubcategoryService.getSubcategoryByNameByCategoryId(teamSubcategory.getName(),race.getTeamCategory().getId());
+            if(teamSubcategory2 == null || teamSubcategory.getId() != teamSubcategory2.getId()){
+                return "something_went_wrong";
+            }
+            Team team = contestant.getTeam();
+            team.setCategory(teamSubcategory);
+            teamService.update(team);
+        }
         contestantService.update(newContestant);
         return "ok";
     }

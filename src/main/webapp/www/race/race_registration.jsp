@@ -55,6 +55,7 @@
 
             <c:forEach varStatus="i" begin="0" end="${race.teamSize+1}">
 
+            <c:if test="${(race.teamSize eq 1 && i.index eq 0) || race.teamSize gt 1}">
             <c:choose>
             <c:when test="${i.index gt race.teamSize-1}">
             <div id="T${i.index}" style="display: none;">
@@ -63,13 +64,14 @@
                 <div id="T${i.index}">
                     </c:otherwise>
                     </c:choose>
-
-                    <div class="row">
-                        <div class="col-sm-4">
-                            Teammate ${i.index+1}:
+                    <c:if test="${race.teamSize gt 1}">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                Teammate ${i.index+1}:
+                            </div>
                         </div>
-                    </div>
-                    <br>
+                        <br>
+                    </c:if>
                     <div class="row">
                         <div class="col-sm-4">
                             Firstname<span style="color: red;">*</span> <span
@@ -169,11 +171,12 @@
                     </div>
                     <hr>
                 </div>
-
+                </c:if>
                 </c:forEach>
 
                 <div class="row">
                     <div class="col-sm-12" style="text-align: right">
+                        <c:if test="${race.teamSize gt 1}">
                         <input type="button" class="btn btn-danger" value="-"
                                onClick="removeContestant(${race.teamSize});"
                                id="removeContestantButton">
@@ -181,6 +184,7 @@
                         <input type="button" class="btn btn-success" value="+"
                                onClick="addContestant(${race.teamSize});"
                                id="addContestantButton">
+                        </c:if>
                         <input type="button" class="btn btn-primary" onclick="adminTeamRegistrationAjax(${race.id});"
                                value="Registration">
                     </div>

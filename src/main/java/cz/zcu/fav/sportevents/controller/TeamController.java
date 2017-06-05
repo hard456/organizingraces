@@ -25,10 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class TeamController {
@@ -54,7 +51,7 @@ public class TeamController {
     @Autowired
     ContestantSubcategoryService contestantSubcategoryService;
 
-    @RequestMapping(value = "/race/{id}/contestants/teams", method = RequestMethod.GET)
+    @RequestMapping(value = "/race/{id}/teams", method = RequestMethod.GET)
     public ModelAndView teams(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
         Race race = raceService.getRaceById(race_id);
@@ -66,12 +63,16 @@ public class TeamController {
             User user = userService.getLoginUser();
             model.addObject("race", race);
             model.addObject("user", user);
-            if(race.getTeamCategory() != null){
+            if (race.getTeamCategory() != null) {
                 model.addObject("team_categories", teamSubcategoryService.getListByCategoryId(race.getTeamCategory().getId()));
             }
-            model.setViewName("race/teams");
-            model.addObject("teams", teamService.getTeamsByRaceId(race_id));
-            model.addObject("contestants", contestantService.getContestantsByRaceId(race_id));
+            List<Team> teams = teamService.getTeamsByRaceId(race_id);
+            List<String> contestants = null;
+            if(teams.size() > 0){
+                contestants = createListOfTeamMembers(teams);
+            }
+            model.addObject("teams", teams);
+            model.addObject("contestants", contestants);
             if (user != null) {
                 if (raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
                     model.addObject("race_cooperator", true);
@@ -79,8 +80,33 @@ public class TeamController {
                     model.addObject("race_cooperator", false);
                 }
             }
+            model.setViewName("race/teams");
             return model;
         }
+    }
+
+    private List<String> createListOfTeamMembers(List<Team> teams) {
+        List<Contestant> contestants = contestantService.getContestantsByRaceId(teams.get(0).getRace().getId());
+        List<String> listOfMembers = new ArrayList<>();
+        String members;
+        int counter;
+        for (Team team : teams) {
+            members = "";
+            counter = 0;
+
+            for (Contestant c : contestants) {
+                if ((c.getTeam() != null) && (c.getTeam().getId() == team.getId())) {
+                    if (counter > 0) {
+                        members += ", ";
+                    }
+                    members += c.getFirstname() + " " + c.getLastname();
+                    counter++;
+                }
+            }
+
+            listOfMembers.add(members);
+        }
+        return listOfMembers;
     }
 
     @RequestMapping(value = "/race/{id}/teams/deleteTeam", method = RequestMethod.POST)
@@ -311,7 +337,7 @@ public class TeamController {
         int rowIndex = 0;
         int cellIndex = 0;
         XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet teamSheet = wb.createSheet("Teams");
+        XSSFSheet teamSheet = wb.createSheet("Contestants");
 
         List<Team> teams = teamService.getTeamsByRaceId(race_id);
         List<Contestant> contestants = contestantService.getContestantsByRaceId(race_id);
@@ -405,7 +431,7 @@ public class TeamController {
             response.setHeader("Pragma", "public");
             response.setHeader("Cache-Control", "must-revalidate, post-check=0, pre-check=0");
             response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Teams-" + dateFormat.format(new Date()) + ".xlsx");
+            response.setHeader("Content-Disposition", "attachment; filename=\"Contestants-" + dateFormat.format(new Date()) + ".xlsx");
             wb.write(response.getOutputStream());
         } catch (FileNotFoundException e) {
             return "error/wrong";
@@ -425,7 +451,7 @@ public class TeamController {
         XSSFWorkbook wb;
         XSSFRow row;
         XSSFCell cell;
-        if(race.getTeamSize() > 1){
+        if (race.getTeamSize() > 1) {
             return "something went wrong";
         }
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
@@ -442,9 +468,9 @@ public class TeamController {
         } catch (IOException e) {
             return "something went wrong";
         }
-        XSSFSheet sheet = wb.getSheet("Teams");
+        XSSFSheet sheet = wb.getSheet("Contestants");
         if (sheet == null) {
-            return "Teams sheet is not exists";
+            return "Contestants sheet is not exists";
         }
 
         Iterator rows = sheet.rowIterator();
@@ -480,7 +506,7 @@ public class TeamController {
                 if (cell != null) {
                     cell.setCellType(Cell.CELL_TYPE_STRING);
                 }
-                if(isRowEmpty(row,captions.size())){
+                if (isRowEmpty(row, captions.size())) {
                     rowEnd = true;
                     break;
                 }
@@ -488,80 +514,74 @@ public class TeamController {
                     if (cell != null) {
                         tmp = HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8");
                         if (tmp.length() > 32 || tmp.length() < 3) {
-                            return "wrong firstname (3 - 32 length) [ROW:" + (row.getRowNum()+1) + "]";
+                            return "wrong firstname (3 - 32 length) [ROW:" + (row.getRowNum() + 1) + "]";
                         } else {
                             contestant.setFirstname(tmp);
                         }
-                    }
-                    else{
-                        return "empty firstname [ROW:" + (row.getRowNum()+1) + "]";
+                    } else {
+                        return "empty firstname [ROW:" + (row.getRowNum() + 1) + "]";
                     }
                 } else if (i == 1) {
                     if (cell != null) {
                         tmp = HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8");
                         if (tmp.length() > 32 || tmp.length() < 3) {
-                            return "wrong lastname (3 - 32 length) [ROW:" + (row.getRowNum()+1) + "]";
+                            return "wrong lastname (3 - 32 length) [ROW:" + (row.getRowNum() + 1) + "]";
                         } else {
                             contestant.setLastname(tmp);
                         }
-                    }
-                    else{
-                        return "empty lastname [ROW:" + (row.getRowNum()+1) + "]";
+                    } else {
+                        return "empty lastname [ROW:" + (row.getRowNum() + 1) + "]";
                     }
                 } else if (i == 2) {
-                    if (cell != null) {
+                    if (cell != null && cell.getStringCellValue().length() > 0) {
                         tmp = HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8");
                         if (tmp.length() > 32 || tmp.length() < 6) {
-                            return "wrong email (6 - 32 length) [ROW:" + (row.getRowNum()+1) + "]";
+                            return "wrong email (6 - 32 length) [ROW:" + (row.getRowNum() + 1) + "]";
                         } else {
                             contestant.setEmail(tmp);
                         }
-                    }
-                    else{
+                    } else {
                         contestant.setEmail("");
                     }
                 } else if (i == 3) {
-                    if (cell != null) {
+                    if (cell != null && cell.getStringCellValue().length() > 0) {
                         String phoneRegEx = "^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$";
-                        tmp = cell.getStringCellValue().replaceAll("\\s+","");
+                        tmp = cell.getStringCellValue().replaceAll("\\s+", "");
                         if (!tmp.matches(phoneRegEx)) {
-                            return "wrong phone format [ROW:" + (row.getRowNum()+1) + "]";
+                            return "wrong phone format [ROW:" + (row.getRowNum() + 1) + "]";
                         } else {
                             contestant.setPhone(tmp);
                         }
-                    }
-                    else{
+                    } else {
                         contestant.setPhone("");
                     }
                 } else if (i == 4) {
                     if (cell != null) {
                         tmp = cell.getStringCellValue();
                         if (!tmp.equals("YES") && !tmp.equals("NO")) {
-                            return "wrong paid format [ROW:" + (row.getRowNum()+1) + "]";
+                            return "wrong paid format [ROW:" + (row.getRowNum() + 1) + "]";
                         } else {
                             contestant.setPaid(tmp);
                         }
-                    }
-                    else{
-                        return "empty paid [ROW:" + (row.getRowNum()+1) + "]";
+                    } else {
+                        return "empty paid [ROW:" + (row.getRowNum() + 1) + "]";
                     }
                 } else if (i == 5) {
                     if (race.getContestantCategory() != null) {
 
-                        if(cell != null && cell.getStringCellValue().length() > 0){
+                        if (cell != null && cell.getStringCellValue().length() > 0) {
                             contestant.setContestantCategory(cell.getStringCellValue());
-                        }
-                        else{
-                            return "empty contestant category [ROW:" + (row.getRowNum()+1) + "]";
+                        } else {
+                            return "empty contestant category [ROW:" + (row.getRowNum() + 1) + "]";
                         }
 
-                        if(!validConCategory(conCategories,cell.getStringCellValue())){
-                            return "wrong contestant category [ROW:" + (row.getRowNum()+1) + "]";
+                        if (!validConCategory(conCategories, cell.getStringCellValue())) {
+                            return "wrong contestant category [ROW:" + (row.getRowNum() + 1) + "]";
                         }
 
                     } else {
-                        if(cell != null && cell.getStringCellValue().length() > 0){
-                            return "contestant category should be empty [ROW:" + (row.getRowNum()+1) + "]";
+                        if (cell != null && cell.getStringCellValue().length() > 0) {
+                            return "contestant category should be empty [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                         contestant.setContestantCategory("");
                     }
@@ -569,22 +589,21 @@ public class TeamController {
                     if (race.getTeamCategory() != null) {
                         if (cell != null && cell.getStringCellValue().length() > 0) {
                             contestant.setTeamCategory(cell.getStringCellValue());
+                        } else {
+                            return "empty team category [ROW:" + (row.getRowNum() + 1) + "]";
                         }
-                        else{
-                            return "empty team category [ROW:" + (row.getRowNum()+1) + "]";
-                        }
-                        if(!validTeamCategory(teamCategories,cell.getStringCellValue())){
-                            return "wrong team category [ROW:" + (row.getRowNum()+1) + "]";
+                        if (!validTeamCategory(teamCategories, cell.getStringCellValue())) {
+                            return "wrong team category [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                     } else {
-                        if(cell != null && cell.getStringCellValue().length() > 0){
-                            return "team category should be empty [ROW:" + (row.getRowNum()+1) + "]";
+                        if (cell != null && cell.getStringCellValue().length() > 0) {
+                            return "team category should be empty [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                         contestant.setTeamCategory("");
                     }
                 }
             }
-            if(!rowEnd){
+            if (!rowEnd) {
                 contestants.add(contestant);
             }
         }
@@ -599,8 +618,8 @@ public class TeamController {
             Team team = new Team();
             Contestant contestant = new Contestant();
             team.setRace(race);
-            if(race.getTeamCategory() != null){
-                team.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(c.getTeamCategory(),race.getTeamCategory().getId()));
+            if (race.getTeamCategory() != null) {
+                team.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(c.getTeamCategory(), race.getTeamCategory().getId()));
             }
             teamService.save(team);
             contestant.setFirstname(c.getFirstname());
@@ -609,19 +628,18 @@ public class TeamController {
 
             contestant.setRace(race);
             contestant.setUser(user);
-            if(race.getContestantCategory() != null){
-                contestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(c.getContestantCategory(),race.getContestantCategory().getId()));
+            if (race.getContestantCategory() != null) {
+                contestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(c.getContestantCategory(), race.getContestantCategory().getId()));
             }
-            if(c.getPaid().equals("YES")){
+            if (c.getPaid().equals("YES")) {
                 contestant.setPaid(true);
-            }
-            else{
+            } else {
                 contestant.setPaid(false);
             }
-            if(c.getPhone().length() > 0){
+            if (c.getPhone().length() > 0) {
                 contestant.setPhone(c.getPhone());
             }
-            if(c.getEmail().length() > 0){
+            if (c.getEmail().length() > 0) {
                 contestant.setEmail(c.getEmail());
             }
             contestant.setTeam(team);
@@ -643,7 +661,7 @@ public class TeamController {
         XSSFRow row;
         XSSFCell cell;
         boolean rowEnd = false;
-        if(race.getTeamSize() == 1){
+        if (race.getTeamSize() == 1) {
             return "something went wrong";
         }
         if (race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id, user.getId())) {
@@ -686,7 +704,7 @@ public class TeamController {
             TeamImportExcel team = new TeamImportExcel();
             ContestantImportExcel contestant = new ContestantImportExcel();
             for (int i = 0; i < captions.size(); i++) {
-                if(isRowEmpty(row,captions.size())){
+                if (isRowEmpty(row, captions.size())) {
                     rowEnd = true;
                     break;
                 }
@@ -702,7 +720,7 @@ public class TeamController {
                         if (cell.getStringCellValue().equals("YES") || cell.getStringCellValue().equals("NO")) {
                             team.setSolo(cell.getStringCellValue());
                         } else {
-                            return "solo wrong value [ROW:" + (row.getRowNum()+1) + "]";
+                            return "solo wrong value [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                     } else {
                         //BREAK FILE READING
@@ -717,7 +735,7 @@ public class TeamController {
                 } else if (i == 2) {
                     if (race.getTeamCategory() == null) {
                         if (cell != null && cell.getStringCellValue().length() > 0) {
-                            return "team category should be empty [ROW:" + (row.getRowNum()+1) + "]";
+                            return "team category should be empty [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                         team.setCategory("");
                     } else {
@@ -726,21 +744,21 @@ public class TeamController {
                         } else if (cell != null && cell.getStringCellValue().length() > 0) {
                             team.setCategory(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                         } else {
-                            return "empty team category [ROW:" + (row.getRowNum()+1) + "]";
+                            return "empty team category [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                     }
                 } else if (i > 2) {
                     if ((i - 2) % 6 == 0) {
                         if (race.getContestantCategory() == null) {
                             if (cell != null && cell.getStringCellValue().length() > 0) {
-                                return "contestant category should be empty [ROW:" + (row.getRowNum()+1) + "]";
+                                return "contestant category should be empty [ROW:" + (row.getRowNum() + 1) + "]";
                             }
                             contestant.setContestantCategory("");
                         } else {
                             if (cell != null && cell.getStringCellValue().length() > 0) {
                                 contestant.setContestantCategory(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                             } else {
-                                return "empty contestant category [ROW:" + (row.getRowNum()+1) + "]";
+                                return "empty contestant category [ROW:" + (row.getRowNum() + 1) + "]";
                             }
                         }
                         team.addContestant(contestant);
@@ -749,24 +767,24 @@ public class TeamController {
                         if (cell != null && cell.getStringCellValue().length() > 0) {
                             contestant.setFirstname(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                         } else {
-                            return "empty firstname [ROW:" + (row.getRowNum()+1) + "]";
+                            return "empty firstname [ROW:" + (row.getRowNum() + 1) + "]";
                         }
 
                     } else if ((i - 2) % 6 == 2) {
                         if (cell != null && cell.getStringCellValue().length() > 0) {
                             contestant.setLastname(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                         } else {
-                            return "empty lastname [ROW:" + (row.getRowNum()+1) + "]";
+                            return "empty lastname [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                     } else if ((i - 2) % 6 == 3) {
-                        if (cell != null) {
+                        if (cell != null && cell.getStringCellValue().length() > 0) {
                             contestant.setEmail(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                         } else {
                             contestant.setEmail("");
                         }
                     } else if ((i - 2) % 6 == 4) {
                         if (cell != null && cell.getStringCellValue().length() != 0) {
-                            contestant.setPhone(cell.getStringCellValue().replaceAll("\\s+",""));
+                            contestant.setPhone(cell.getStringCellValue().replaceAll("\\s+", ""));
                         } else {
                             contestant.setPhone("");
                         }
@@ -774,7 +792,7 @@ public class TeamController {
                         if (cell != null) {
                             contestant.setPaid(HtmlUtils.htmlEscape(cell.getStringCellValue(), "UTF-8"));
                         } else {
-                            return "empty paid [ROW:" + (row.getRowNum()+1) + "]";
+                            return "empty paid [ROW:" + (row.getRowNum() + 1) + "]";
                         }
                     }
                 }
@@ -795,14 +813,14 @@ public class TeamController {
         }
 
         for (TeamImportExcel team : teamImport) {
-            if(team.getSolo().equals("NO")){
+            if (team.getSolo().equals("NO")) {
                 Team newTeam = new Team();
-                if(team.getTeamName().length() > 0){
+                if (team.getTeamName().length() > 0) {
                     newTeam.setName(team.getTeamName());
                 }
-                if(race.getTeamCategory() != null){
+                if (race.getTeamCategory() != null) {
                     String teamCategory = team.getCategory();
-                    newTeam.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(teamCategory,race.getTeamCategory().getId()));
+                    newTeam.setCategory(teamSubcategoryService.getSubcategoryByNameByCategoryId(teamCategory, race.getTeamCategory().getId()));
                 }
                 newTeam.setRace(race);
                 teamService.save(newTeam);
@@ -812,20 +830,19 @@ public class TeamController {
                     newContestant.setFirstname(contestant.getFirstname());
                     newContestant.setLastname(contestant.getLastname());
                     newContestant.setFirstname(contestant.getFirstname());
-                    if(contestant.getEmail().length() > 0){
+                    if (contestant.getEmail().length() > 0) {
                         newContestant.setEmail(contestant.getEmail());
                     }
-                    if(contestant.getPhone().length() > 0){
+                    if (contestant.getPhone().length() > 0) {
                         newContestant.setPhone(contestant.getPhone());
                     }
-                    if(race.getContestantCategory() != null){
+                    if (race.getContestantCategory() != null) {
                         String category = contestant.getContestantCategory();
-                        newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category,race.getContestantCategory().getId()));
+                        newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category, race.getContestantCategory().getId()));
                     }
-                    if(contestant.getPaid().equals("YES")){
+                    if (contestant.getPaid().equals("YES")) {
                         newContestant.setPaid(true);
-                    }
-                    else{
+                    } else {
                         newContestant.setPaid(false);
                     }
                     newContestant.setRace(race);
@@ -834,26 +851,24 @@ public class TeamController {
                     contestantService.saveContestant(newContestant);
                 }
 
-            }
-            else{
+            } else {
                 Contestant newContestant = new Contestant();
                 newContestant.setFirstname(team.getContestants().get(0).getFirstname());
                 newContestant.setLastname(team.getContestants().get(0).getLastname());
 
-                if(race.getContestantCategory() != null){
+                if (race.getContestantCategory() != null) {
                     String category = team.getContestants().get(0).getContestantCategory();
-                    newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category,race.getContestantCategory().getId()));
+                    newContestant.setCategory(contestantSubcategoryService.getCategoryByNameByCategoryId(category, race.getContestantCategory().getId()));
                 }
-                if(team.getContestants().get(0).getPaid().equals("YES")){
+                if (team.getContestants().get(0).getPaid().equals("YES")) {
                     newContestant.setPaid(true);
-                }
-                else{
+                } else {
                     newContestant.setPaid(false);
                 }
-                if(team.getContestants().get(0).getEmail().length() > 0){
+                if (team.getContestants().get(0).getEmail().length() > 0) {
                     newContestant.setEmail(team.getContestants().get(0).getEmail());
                 }
-                if(team.getContestants().get(0).getPhone().length() > 0){
+                if (team.getContestants().get(0).getPhone().length() > 0) {
                     newContestant.setPhone(team.getContestants().get(0).getPhone());
                 }
                 newContestant.setUser(user);
@@ -895,7 +910,7 @@ public class TeamController {
                 if (!contestant.getPaid().equals("YES") && !contestant.getPaid().equals("NO")) {
                     return "wrong paid value [ROW:" + (i + 2) + "]";
                 }
-                if (contestant.getEmail().length() != 0) {
+                if(contestant.getEmail().length() > 0){
                     if (!EmailValidator.getInstance().isValid(contestant.getEmail())) {
                         return "wrong email format [ROW:" + (i + 2) + "]";
                     }
@@ -967,7 +982,7 @@ public class TeamController {
             if (cells.hasNext()) {
                 cell = (XSSFCell) cells.next();
                 if (!caption.equals(cell.getStringCellValue())) {
-                    return "captions [cell:" + (cell.getColumnIndex()+1) + "]";
+                    return "captions [cell:" + (cell.getColumnIndex() + 1) + "]";
                 }
             } else {
                 return "captions";
@@ -976,13 +991,13 @@ public class TeamController {
         return "";
     }
 
-    private boolean isRowEmpty(XSSFRow row, int rowSize){
+    private boolean isRowEmpty(XSSFRow row, int rowSize) {
         Iterator<Cell> cells = row.cellIterator();
         XSSFCell cell;
-        for (int i = 0; i<rowSize; i++){
+        for (int i = 0; i < rowSize; i++) {
             if (cells.hasNext()) {
                 cell = (XSSFCell) cells.next();
-                if(cell != null && cell.getStringCellValue().length() > 0){
+                if (cell != null && cell.getStringCellValue().length() > 0) {
                     return false;
                 }
             }
@@ -994,7 +1009,7 @@ public class TeamController {
     public
     @ResponseBody
     String updateTeam(HttpServletRequest r, @ModelAttribute UpdateTeamForm updateTeamForm,
-                       BindingResult bindingResult, @PathVariable("id") int race_id) {
+                      BindingResult bindingResult, @PathVariable("id") int race_id) {
 
         User user = userService.getLoginUser();
         Race race = raceService.getRaceById(race_id);
@@ -1005,7 +1020,7 @@ public class TeamController {
 
         Team team = teamService.getTeamById(updateTeamForm.getTeamId());
 
-        if (user == null || race == null) {
+        if (user == null || race == null || team == null) {
             return "something_went_wrong";
         }
 
@@ -1017,26 +1032,25 @@ public class TeamController {
             return "something_went_wrong";
         }
 
-        if(updateTeamForm.getTeamName() != null && updateTeamForm.getTeamName().length() != 0){
-            updateTeamForm.setTeamName(HtmlUtils.htmlEscapeHex(updateTeamForm.getTeamName(),"UTF-8"));
-            if(!team.getName().equals(updateTeamForm.getTeamName())){
-                if(teamService.getByRaceIdTeamName(race_id,updateTeamForm.getTeamName()) != null){
+        if (updateTeamForm.getTeamName() != null && updateTeamForm.getTeamName().length() != 0) {
+            updateTeamForm.setTeamName(HtmlUtils.htmlEscape(updateTeamForm.getTeamName(), "UTF-8"));
+            if (!Objects.equals(team.getName(), updateTeamForm.getTeamName())) {
+                if (teamService.getByRaceIdTeamName(race_id, updateTeamForm.getTeamName()) != null) {
                     return "team_exists";
                 }
             }
-            if(updateTeamForm.getTeamName().length() > 32 || updateTeamForm.getTeamName().length() < 3){
+            if (updateTeamForm.getTeamName().length() > 32 || updateTeamForm.getTeamName().length() < 3) {
                 return "team_name";
             }
         }
 
-        if(race.getTeamCategory() != null){
-            if(updateTeamForm.getTeamCategory() != null){
+        if (race.getTeamCategory() != null) {
+            if (updateTeamForm.getTeamCategory() != null) {
                 category = teamSubcategoryService.getSubcategoryById(updateTeamForm.getTeamCategory());
-                if(category.getTeamCategory().getId() != race.getTeamCategory().getId()){
+                if (category.getTeamCategory().getId() != race.getTeamCategory().getId()) {
                     return "something_went_wrong";
                 }
-            }
-            else{
+            } else {
                 return "something_went_wrong";
             }
         }

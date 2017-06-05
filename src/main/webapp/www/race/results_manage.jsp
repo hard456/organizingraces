@@ -248,7 +248,7 @@
         </div>
 
         <div class="card-log" style="margin-top: 25px;">
-            <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="max-width: 1300px; margin: 0 auto;">
                 <c:choose>
                     <c:when test="${race_cooperator eq true || race.user.id eq user.id}">
 
@@ -311,8 +311,22 @@
                             <thead>
                             <tr>
                                 <th>Id</th>
-                                <th>Team</th>
-                                <th>Category</th>
+                                <c:choose>
+                                    <c:when test="${race.teamSize eq 1}">
+                                        <th>Contestant</th>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <th>Team</th>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${race.teamSize eq 1}">
+                                        <th>Race category</th>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <th>Team category</th>
+                                    </c:otherwise>
+                                </c:choose>
                                 <th>Points</th>
                                 <th>Bonus</th>
                                 <th>Start time</th>

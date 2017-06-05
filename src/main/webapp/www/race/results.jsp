@@ -22,7 +22,7 @@
 
 
         <div class="card-log" style="margin-top: 25px;">
-            <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="max-width: 1300px; margin: 0 auto;">
                 <c:choose>
                     <c:when test="${race.evaluation eq true || race_cooperator eq true || race.user.id eq user.id}">
                         <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
@@ -38,19 +38,19 @@
                                             class="btn btn-default" value="Set results"></a>
                                 </div>
                             </div>
+                            <hr>
                         </c:if>
                         <c:if test="${race.teamCategory ne null}">
-                            <hr>
                             <div class="row">
-                                    <div class="col-sm-2 col-md-offset-4" style="margin-top: 7px;">Select by category:</div>
-                                    <div class="col-sm-3">
-                                        <select id="categorySelect" class="form-control">
-                                            <option value="None"></option>
-                                            <c:forEach items="${team_categories}" var="c">
-                                                <option value="${c.name}">${c.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                                <div class="col-sm-2 col-md-offset-4" style="margin-top: 7px;">Select by category:</div>
+                                <div class="col-sm-3">
+                                    <select id="categorySelect" class="form-control">
+                                        <option value="None"></option>
+                                        <c:forEach items="${team_categories}" var="c">
+                                            <option value="${c.name}">${c.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
                             </div>
                         </c:if>
                         <br><br>
@@ -58,8 +58,25 @@
                             <thead>
                             <tr>
                                 <th>Rank</th>
-                                <th>Team</th>
-                                <th>Category</th>
+                                <c:choose>
+                                    <c:when test="${race.teamSize eq 1}">
+                                        <th>Contestant</th>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <th>Team</th>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+                                    <th>Id</th>
+                                </c:if>
+                                <c:choose>
+                                    <c:when test="${race.teamSize eq 1}">
+                                        <th>Race category</th>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <th>Team category</th>
+                                    </c:otherwise>
+                                </c:choose>
                                 <th>Points</th>
                                 <th>Bonus</th>
                                 <th>Penalization</th>
@@ -74,6 +91,9 @@
                                 <tr style="text-align: center;">
                                     <td>${i.index+1}</td>
                                     <td>${team.name}</td>
+                                    <c:if test="${race_cooperator eq true || race.user.id eq user.id}">
+                                        <td>${team.id}</td>
+                                    </c:if>
                                     <td>${team.category.name}</td>
                                     <td>${team.points}</td>
                                     <td>${team.bonus}</td>
@@ -105,16 +125,6 @@
                                     return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
                                 }
                             });
-                            $('#categorySelect').on('change', function () {
-                                if (this.value.localeCompare("None") == 0) {
-                                    var table = $('#myTable').DataTable();
-                                    table.columns(2).search('').draw();
-                                }
-                                else {
-                                    var table = $('#myTable').DataTable();
-                                    table.columns(2).search(this.value, true, false).draw();
-                                }
-                            });
                         </script>
 
                         <c:choose>
@@ -131,9 +141,9 @@
                                                         ['50 rows', '100 rows', 'Show all']
                                                     ],
                                                     columnDefs: [
-                                                        {type: 'non-empty-string', targets: 7},
                                                         {type: 'non-empty-string', targets: 8},
-                                                        {orderable: false, targets: 9}
+                                                        {type: 'non-empty-string', targets: 9},
+                                                        {orderable: false, targets: 10}
                                                     ],
                                                     buttons: [
                                                         'pageLength',
@@ -147,6 +157,16 @@
                                                     ]
                                                 }
                                         );
+                                    });
+                                    $('#categorySelect').on('change', function () {
+                                        if (this.value.localeCompare("None") == 0) {
+                                            var table = $('#myTable').DataTable();
+                                            table.columns(3).search('').draw();
+                                        }
+                                        else {
+                                            var table = $('#myTable').DataTable();
+                                            table.columns(3).search(this.value, true, false).draw();
+                                        }
                                     });
                                 </script>
                             </c:when>
@@ -165,13 +185,23 @@
                                                     columnDefs: [
                                                         {type: 'non-empty-string', targets: 7},
                                                         {type: 'non-empty-string', targets: 8},
-                                                        {type: 'non-empty-string', targets: 9}
+                                                        {orderable: false, targets: 9}
                                                     ],
                                                     buttons: [
                                                         'pageLength',
                                                     ]
                                                 }
                                         );
+                                    });
+                                    $('#categorySelect').on('change', function () {
+                                        if (this.value.localeCompare("None") == 0) {
+                                            var table = $('#myTable').DataTable();
+                                            table.columns(2).search('').draw();
+                                        }
+                                        else {
+                                            var table = $('#myTable').DataTable();
+                                            table.columns(2).search(this.value, true, false).draw();
+                                        }
                                     });
                                 </script>
                             </c:otherwise>

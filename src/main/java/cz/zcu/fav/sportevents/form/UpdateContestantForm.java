@@ -11,6 +11,8 @@ public class UpdateContestantForm {
 
     Integer conId;
 
+    Integer teamCategory;
+
     public Contestant getContestant() {
         return contestant;
     }
@@ -35,4 +37,11 @@ public class UpdateContestantForm {
         this.conId = conId;
     }
 
+    public Integer getTeamCategory() {
+        return teamCategory;
+    }
+
+    public void setTeamCategory(Integer teamCategory) {
+        this.teamCategory = teamCategory;
+    }
 }

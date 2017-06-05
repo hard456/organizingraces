@@ -45,8 +45,8 @@ function createTeamAjax(race_id){
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (response) {
-            list = [];
             if(response.validation.localeCompare("ok") == 0){
+                list = [];
                 data = '<div class="alert alert-success">The team was successfully created.</div>';
                 $.each(response.contestantId, function(k, v) {
                     $('#C' + v).remove();
