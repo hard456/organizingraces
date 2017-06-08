@@ -1,8 +1,10 @@
 package cz.zcu.fav.sportevents.form;
 
-public class DatetimeTeamForm {
+public class DateTimeTeamForm {
 
     String dateTime;
+
+    String newDateTime;
 
     Integer teamId;
 
@@ -14,11 +16,19 @@ public class DatetimeTeamForm {
         this.dateTime = dateTime;
     }
 
+    public String getNewDateTime() {
+        return newDateTime;
+    }
+
+    public void setNewDateTime(String newDateTime) {
+        this.newDateTime = newDateTime;
+    }
+
     public Integer getTeamId() {
         return teamId;
     }
 
-    public void setTeamId(Integer team) {
-        this.teamId = team;
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
     }
 }
