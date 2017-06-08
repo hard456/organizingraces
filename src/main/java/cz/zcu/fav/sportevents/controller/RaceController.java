@@ -28,6 +28,11 @@ public class RaceController {
     @Autowired
     private RaceCooperationService raceCooperationService;
 
+    /**
+     * Zobrazí šablonu pro smazání závodu.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/delete", method = RequestMethod.GET)
     public ModelAndView deleteRaceView(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -44,6 +49,12 @@ public class RaceController {
         }
     }
 
+    /**
+     * Zobrazí základní stránku závodu s názvem závodu a definovanou velikostí.
+     * Pro vlastníka závodu je součastí této šablony navíc administrace správců a nastavení závodu.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}", method = RequestMethod.GET)
     public ModelAndView race(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -69,6 +80,13 @@ public class RaceController {
         }
     }
 
+    /**
+     * Metoda pro smazání závodu.
+     * @param request
+     * @param password heslo vlastníka závodu
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/deleteRace", method = RequestMethod.POST)
     public ModelAndView deleteRace(HttpServletRequest request, @ModelAttribute(value = "password") String password, @PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -113,6 +131,13 @@ public class RaceController {
 
     }
 
+    /**
+     * Metoda pro přidání správce závodu.
+     * @param request
+     * @param login uživatelské jméno správce
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/addCooperator", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
@@ -166,6 +191,13 @@ public class RaceController {
 
     }
 
+    /**
+     * Smazání správce závodu.
+     * @param request
+     * @param login uživatelské jméno správce
+     * @param race_id
+     * @return -1 - obecná chyba, ID závodníka - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/deleteCooperator", method = RequestMethod.POST, produces = "application/json")
     public @ResponseBody int deleteCooperator(HttpServletRequest request, @ModelAttribute("login") String login, @PathVariable("id") int race_id){
         User user = userService.getLoginUser();
@@ -204,6 +236,11 @@ public class RaceController {
         return cooperator.getId();
     }
 
+    /**
+     * Pro zablokování a odblokování registrace do závodu.
+     * @param race_id
+     * @return 1 - registrace povolena, 0 - registrace zakázána, -1 - obecná chyba
+     */
     @RequestMapping(value = "/race/{id}/changeRegistration", method = RequestMethod.POST)
     public @ResponseBody int changeRegistration(@PathVariable("id") int race_id){
         User user = userService.getLoginUser();
@@ -229,6 +266,11 @@ public class RaceController {
         }
     }
 
+    /**
+     * Označit závod za vyhodnocený
+     * @param race_id
+     * @return -1 - obecná chyba, 0 - závod změněn na nevyhodnocený, 1 - závod vyhodnocený
+     */
     @RequestMapping(value = "/race/{id}/changeEvaluation", method = RequestMethod.POST)
     public @ResponseBody int changeEvaluation(@PathVariable("id") int race_id){
         User user = userService.getLoginUser();

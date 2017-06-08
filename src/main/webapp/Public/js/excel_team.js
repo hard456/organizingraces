@@ -1,3 +1,8 @@
+/**
+ * Ajax pro odeslání XLSX souboru pro importování závodníků/týmů.
+ * @param raceId ID závodu
+ * @param size definována velikost týmu u závodu
+ */
 function importTeams(raceId, size) {
     if (document.getElementById("my-file-selector").files.length == 0) {
         console.log("no files selected");

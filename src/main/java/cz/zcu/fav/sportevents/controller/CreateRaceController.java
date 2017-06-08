@@ -39,6 +39,10 @@ public class CreateRaceController {
     @Autowired
     UserService userService;
 
+    /**
+     * Zobrazení šablony pro vytvoření závodu.
+     * @return
+     */
     @RequestMapping(value = "/create_race", method = RequestMethod.GET)
     public ModelAndView createRace() {
         ModelAndView model = new ModelAndView();
@@ -48,6 +52,14 @@ public class CreateRaceController {
         return model;
     }
 
+    /**
+     * Metoda pro zpracování dat pro vytvoření závodu.
+     * @param request
+     * @param createRaceForm kontejner s daty z formuláře
+     * @param result
+     * @return "values" - špatně hodnoty, "something_went_wrong" - obecná chyba,
+     * "race_name_exists" - závod s tímto názvem existuje, ID závodu - proběhlo v pořádku
+     */
     @RequestMapping(value = "/create_event", method = RequestMethod.POST)
     public @ResponseBody String createEvent(HttpServletRequest request, @Valid @ModelAttribute("createRaceForm") CreateRaceForm createRaceForm, BindingResult result) {
         User user = userService.getLoginUser();
@@ -156,6 +168,11 @@ public class CreateRaceController {
         }
     }
 
+    /**
+     * Pro validaci dat z formuláře pro vytvoření závodu.
+     * @param createRaceForm kontejner s daty pro validaci
+     * @return false - chyba, true - v pořádku
+     */
     private boolean validCreateEventData(CreateRaceForm createRaceForm) {
         if (createRaceForm.getTeamRadio().equals("defaultValue")) {
             if (createRaceForm.getDefTeamCategoryId() == null) {
@@ -196,6 +213,11 @@ public class CreateRaceController {
         return true;
     }
 
+    /**
+     * Kontrola existence všech parametrů požadavku na vytvoření závodu.
+     * @param request
+     * @return false - chyba, true - v pořádku
+     */
     private boolean validCreateRaceParameters(HttpServletRequest request) {
         if (!request.getParameterMap().containsKey("race.teamSize")) {
             return false;
@@ -212,6 +234,12 @@ public class CreateRaceController {
         return true;
     }
 
+    /**
+     * Přiřazení kategorie závodníka listu podkategorii závodníka
+     * @param conSubcategory list podkategorií závodníka
+     * @param id ID kategorie závodníka
+     * @return list podkategorií závodníka
+     */
     private List<ContestantSubcategory> setConCategoryIdToList(List<ContestantSubcategory> conSubcategory, int id) {
         List<ContestantSubcategory> newList = new ArrayList<>();
         for (ContestantSubcategory list : conSubcategory) {
@@ -221,6 +249,12 @@ public class CreateRaceController {
         return newList;
     }
 
+    /**
+     * Přiřazení kategorie týmu listu podkategorií týmu
+     * @param teamSubcategory list podkategorií týmu
+     * @param id ID kategorie týmu
+     * @return list podkategorií týmu
+     */
     private List<TeamSubcategory> setTeamCategoryIdToList(List<TeamSubcategory> teamSubcategory, int id) {
         List<TeamSubcategory> newList = new ArrayList<>();
         for (TeamSubcategory list : teamSubcategory) {
@@ -230,6 +264,11 @@ public class CreateRaceController {
         return newList;
     }
 
+    /**
+     * Pro vyescapování listu týmových podkategorií s ověřením požadované délky
+     * @param teamSubcategory list podkategorií
+     * @return list podkategorií, null - při chybě
+     */
     private List<TeamSubcategory> escapeTeamSubCategories(List<TeamSubcategory> teamSubcategory) {
         List<TeamSubcategory> newList = new ArrayList<>();
         for (TeamSubcategory list : teamSubcategory) {
@@ -244,6 +283,11 @@ public class CreateRaceController {
         return newList;
     }
 
+    /**
+     * Vyescapování listu podkategorií závodníka s ověřením požadované délky
+     * @param conSubcategory list podkategorií
+     * @return list podkategorií, null - při chybě
+     */
     private List<ContestantSubcategory> escapeConSubCategories(List<ContestantSubcategory> conSubcategory) {
         List<ContestantSubcategory> newList = new ArrayList<>();
         for (ContestantSubcategory list : conSubcategory) {

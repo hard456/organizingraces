@@ -1,3 +1,7 @@
+/**
+ * Ajax pro zakázání a povolení registrace do závodu.
+ * @param raceId ID závodu
+ */
 function changeRegistration(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -23,6 +27,10 @@ function changeRegistration(raceId) {
         });
 }
 
+/**
+ * Ajax pro označení závodu jako vyhodnocený nebo naopak.
+ * @param raceId ID závodu
+ */
 function changeEvaluation(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");

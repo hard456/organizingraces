@@ -53,6 +53,7 @@
         <security:intercept-url pattern="/create_event" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/registration" access="isAuthenticated()"/>
         <security:intercept-url pattern="/race/{id}/exportTeams" access="none" method="GET"/>
+        <security:intercept-url pattern="/race/{id}/exportContestants" access="none" method="GET"/>
 
         <security:intercept-url pattern="/race/{id}/addSoloContestant" access="none" method="GET"/>
         <security:intercept-url pattern="/race/{id}/teamRegistration" access="none" method="GET"/>

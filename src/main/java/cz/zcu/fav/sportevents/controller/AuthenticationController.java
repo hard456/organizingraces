@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class AuthenticationController {
 
+    /**
+     * Zobrazení šablony pro přihlášení.
+     * @return
+     */
     @RequestMapping(value = {"/login"}, method = RequestMethod.GET)
     public ModelAndView loginPage() {
         ModelAndView model = new ModelAndView();
@@ -21,6 +25,10 @@ public class AuthenticationController {
         return model;
     }
 
+    /**
+     * Zobrazení šablony přístup zamítnut.
+     * @return
+     */
     @RequestMapping(value = {"/accessdenied"}, method = RequestMethod.GET)
     public ModelAndView accessDeniedPage() {
         ModelAndView model = new ModelAndView();
@@ -28,6 +36,12 @@ public class AuthenticationController {
         return model;
     }
 
+    /**
+     * Odhlášení uživatele a přesměrování na úvodní stránku.
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

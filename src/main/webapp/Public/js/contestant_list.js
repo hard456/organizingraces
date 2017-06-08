@@ -1,3 +1,8 @@
+/**
+ * Pro změnu hodnoty PAID u závodníka
+ * @param race_id ID závodu
+ * @param contestant ID závodníka
+ */
 function changePaidValue(race_id, contestant) {
 
     var token = $("meta[name='_csrf']").attr("content");
@@ -30,6 +35,11 @@ function changePaidValue(race_id, contestant) {
     }
 }
 
+/**
+ * Pro změny osobních údajů závodníka.
+ * @param race_id ID závodu
+ * @param contestant ID závodníka
+ */
 function updateContestant(race_id, contestant) {
 
     var form = $("#C" + contestant).serialize();

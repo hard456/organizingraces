@@ -1,5 +1,9 @@
 var counter = 0;
 
+/**
+ * Přidání dalšíko závodníka do formuláte (max 2 navíc)
+ * @param team_size definovaná velikost týmu
+ */
 function addContestant(team_size) {
     if (counter != team_size + 2) {
         if (counter == 0) {
@@ -19,6 +23,10 @@ function addContestant(team_size) {
     }
 }
 
+/**
+ * Odebrání závodníka z formuláře.
+ * @param team_size definovaná velikost týmu.
+ */
 function removeContestant(team_size) {
     if (counter != 0 && counter != team_size) {
         document.getElementById('T' + (counter - 1)).style.display = "none";

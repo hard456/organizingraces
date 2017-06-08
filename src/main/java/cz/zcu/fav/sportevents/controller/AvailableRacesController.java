@@ -16,6 +16,10 @@ public class AvailableRacesController {
     @Autowired
     RaceService raceService;
 
+    /**
+     * Zobrazení aktuálně dostupných závodů.
+     * @return
+     */
     @RequestMapping(value = "/avaible_races", method = RequestMethod.GET)
     public ModelAndView avaibleRaces() {
         ModelAndView model = new ModelAndView();

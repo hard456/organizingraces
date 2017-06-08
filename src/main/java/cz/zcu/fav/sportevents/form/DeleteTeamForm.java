@@ -3,7 +3,6 @@ package cz.zcu.fav.sportevents.form;
 public class DeleteTeamForm {
 
     Integer teamId;
-
     Boolean deleteContestants;
 
     public Integer getTeamId() {

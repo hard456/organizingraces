@@ -28,6 +28,10 @@ public class MyRacesController {
     @Autowired
     RaceCooperationService raceCooperationService;
 
+    /**
+     * Zobrazí šablonu uživatelovo závodů včetně závodů, kde je jako správce.
+     * @return
+     */
     @RequestMapping(value = "/my_races", method = RequestMethod.GET)
     public ModelAndView myRaces() {
         User user = userService.getLoginUser();

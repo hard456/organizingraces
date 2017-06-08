@@ -9,6 +9,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ErrorController {
 
+    /**
+     * Zobrazení chybové šablony s errorovým kódem
+     * @param error_code kód, který se zobrazí v šabloně
+     * @return
+     */
     @RequestMapping(value = {"/error/{error_code}"}, method = RequestMethod.GET)
     public ModelAndView loginPage(@PathVariable int error_code) {
         ModelAndView model = new ModelAndView();

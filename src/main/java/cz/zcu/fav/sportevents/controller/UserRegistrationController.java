@@ -21,6 +21,10 @@ public class UserRegistrationController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Zobrazení šablony pro registraci uživatele.
+     * @return
+     */
     @RequestMapping(value = {"/registration"}, method = RequestMethod.GET)
     public ModelAndView registrationPage() {
         ModelAndView model = new ModelAndView();
@@ -29,6 +33,13 @@ public class UserRegistrationController {
         return model;
     }
 
+    /**
+     * Přidání uživatele do systému.
+     * @param request
+     * @param userRegistrationForm data z formuláře
+     * @param bindingResult
+     * @return
+     */
     @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
     public ModelAndView addUser(HttpServletRequest request, @ModelAttribute("userRegistrationForm") UserRegistrationForm userRegistrationForm, BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
@@ -90,6 +101,11 @@ public class UserRegistrationController {
 
     }
 
+    /**
+     * Valiadce dat uživatele získané z formuláře.
+     * @param user data uživatele
+     * @return false - chyba, true - ok
+     */
     private boolean validUserParametersSize(User user) {
         if (user.getLogin().length() > 32 || user.getLogin().length() < 3) {
             return false;
@@ -105,6 +121,11 @@ public class UserRegistrationController {
         return true;
     }
 
+    /**
+     * Ověření existence potřebných atributů požadavku pro registraci uživatele.
+     * @param request
+     * @return false - chyba, true - ok
+     */
     private boolean validUserParameters(HttpServletRequest request) {
         if (!request.getParameterMap().containsKey("user.login")) {
             return false;

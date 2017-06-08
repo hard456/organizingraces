@@ -1,3 +1,7 @@
+/**
+ * Ajax pro registraci týmu správcem závodu.
+ * @param race_id ID závodu
+ */
 function adminTeamRegistrationAjax(race_id) {
 
     var form = $("#adminTeamRegistrationForm").serialize();
@@ -33,7 +37,10 @@ function adminTeamRegistrationAjax(race_id) {
     });
 }
 
-
+/**
+ * Ajax pro registraci uživatele bez týmu správcem závodu.
+ * @param race_id ID závodu
+ */
 function adminSoloRegistration(race_id) {
     var form = $("#adminSoloContestantForm").serialize();
 
@@ -63,6 +70,10 @@ function adminSoloRegistration(race_id) {
     });
 }
 
+/**
+ * Ajax pro registraci uživatele jako závodníka bez týmu.
+ * @param race_id ID závodu
+ */
 function soloRegistration(race_id) {
     var form = $("#soloContestantForm").serialize();
 
@@ -92,6 +103,10 @@ function soloRegistration(race_id) {
     });
 }
 
+/**
+ * Ajax pro registraci týmu uživatelem.
+ * @param race_id ID závodu
+ */
 function teamRegistration(race_id) {
     var form = $("#teamRegistrationForm").serialize();
 

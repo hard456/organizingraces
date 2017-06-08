@@ -55,7 +55,8 @@
                             </select>
                         </c:if>
 
-                        <div class="loader" id="loaderDeadline" style="margin: 20px auto 20px auto; display: none"></div>
+                        <div class="loader" id="loaderDeadline"
+                             style="margin: 20px auto 20px auto; display: none"></div>
 
                     </div>
                     <div class="modal-footer">
@@ -93,7 +94,8 @@
                             </select>
                         </c:if>
 
-                        <div class="loader" id="loaderStartTime" style="margin: 20px auto 20px auto; display: none"></div>
+                        <div class="loader" id="loaderStartTime"
+                             style="margin: 20px auto 20px auto; display: none"></div>
 
                     </div>
                     <div class="modal-footer">
@@ -268,18 +270,18 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <input type="text" id="startGlobalTime" class="form-control" value="${now_format}"
-                                       placeholder="${now_format}"/>
+                                       placeholder="${now_format}" style="margin-bottom: 5px;"/>
                             </div>
                             <div class="col-sm-3">
                                 <input type="button" value="Set start time" class="btn btn-success" data-toggle="modal"
-                                       data-target="#startTimeTeamsModal" style="width: 100%;"/>
+                                       data-target="#startTimeTeamsModal" style="width: 100%; margin-bottom: 5px;"/>
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" id="deadLineTime" class="form-control" placeholder="In minutes"/>
+                                <input type="text" id="deadLineTime" class="form-control" placeholder="In minutes" style="margin-bottom: 5px;"/>
                             </div>
                             <div class="col-sm-3">
                                 <input type="button" value="Deadline time" class="btn btn-success" data-toggle="modal"
-                                       data-target="#deadlineTimeModal" style="width: 100%;"/>
+                                       data-target="#deadlineTimeModal" style="width: 100%; margin-bottom: 5px;"/>
                             </div>
                         </div>
 
@@ -288,7 +290,7 @@
                         <div class="row" style="margin-bottom: 15px; text-align: right;">
                             <c:if test="${race.teamCategory ne null}">
                                 <div class="col-sm-3">
-                                    <select id="categorySelect" class="form-control" style="width: 100%">
+                                    <select id="categorySelect" class="form-control" style="width: 100%; margin-bottom: 5px;">
                                         <option value="None"></option>
                                         <c:forEach items="${team_categories}" var="c">
                                             <option value="${c.name}">${c.name}</option>
@@ -297,13 +299,16 @@
                                 </div>
                             </c:if>
                             <div class="col-sm-3">
-                                <input type="button" id="buttonShowAll" value="All" class="form-control" style="width: 100%">
+                                <input type="button" id="buttonShowAll" value="All" class="form-control"
+                                       style="width: 100%; margin-bottom: 5px;">
                             </div>
                             <div class="col-sm-3">
-                                <input type="button" id="buttonNotFinished" value="Not finished" class="form-control" style="width: 100%">
+                                <input type="button" id="buttonNotFinished" value="Not finished" class="form-control"
+                                       style="width: 100%; margin-bottom: 5px;">
                             </div>
                             <div class="col-sm-3">
-                                <input type="button" id="buttonFinished" value="Finished" class="form-control" style="width: 100%">
+                                <input type="button" id="buttonFinished" value="Finished" class="form-control"
+                                       style="width: 100%; margin-bottom: 5px;">
                             </div>
                         </div>
 
@@ -389,9 +394,12 @@
                                     return ((str1 < str2) ? 1 : ((str1 > str2) ? -1 : 0));
                                 }
                             });
+                            var token = $("meta[name='_csrf']").attr("content");
+                            var header = $("meta[name='_csrf_header']").attr("content");
                             $(document).ready(function () {
                                 $('#myTable').DataTable(
                                         {
+                                            <%--ajax: BASE_URL + "/race/${race.id}/results/refreshTable",--%>
                                             "pagingType": "first_last_numbers",
                                             "sScrollX": "100%",
                                             "bPaginate": false,
@@ -424,7 +432,7 @@
 
                             $('#myTable tbody').on('click', 'td', function () {
                                 var table = $('#myTable').DataTable();
-                                if ( table.data().length != 0 ) {
+                                if (table.data().length != 0) {
                                     rowIndex = table.cell(this).index().row;
                                 }
                             });
@@ -438,9 +446,9 @@
                                     table.columns(2).search(this.value, true, false).draw();
                                 }
                             });
-                            setInterval( function () {
+                            setInterval(function () {
                                 reloadTable(${race.id});
-                            }, 5000 );
+                            }, 5000);
                         </script>
 
                     </c:when>

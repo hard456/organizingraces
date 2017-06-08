@@ -1,3 +1,8 @@
+/**
+ * Pro změnu ID u funkce na tlačítko DELETE v modálním okně podle máčknutí příslušného tlačítka DELETE v seznamu týmů.
+ * @param raceId ID závodu
+ * @param team ID týmu
+ */
 function tagDeleteButtons(raceId, team) {
     if (document.getElementById('delete_team')) {
         $("#delete_team").attr('onclick', 'deleteTeam(' + raceId + ', ' + team + ', false)');
@@ -7,6 +12,12 @@ function tagDeleteButtons(raceId, team) {
     }
 }
 
+/**
+ * Ajax pro smazání týmu.
+ * @param raceId ID závodu
+ * @param team ID týmu
+ * @param deleteContestans true - smazat včetně závodníů, false - smazat bez závodníků
+ */
 function deleteTeam(raceId, team, deleteContestans) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -39,6 +50,11 @@ function deleteTeam(raceId, team, deleteContestans) {
     });
 }
 
+/**
+ * Ajax pro úpravu jména týmu a podkategorie.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function updateTeam(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");

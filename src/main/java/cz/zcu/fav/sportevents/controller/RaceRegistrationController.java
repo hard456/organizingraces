@@ -42,6 +42,11 @@ public class RaceRegistrationController {
     @Autowired
     private TeamService teamService;
 
+    /**
+     * Zobrazení šablony pro registraci týmů a závodníků do závodu.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/registration", method = RequestMethod.GET)
     public ModelAndView race_registration(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -82,6 +87,16 @@ public class RaceRegistrationController {
 
     }
 
+    /**
+     * Přidání uživatele jako závodníka bez týmu možno jen pro velikost týmu větší než jedna.
+     * @param r
+     * @param soloRegForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, registered_already - uživatel už registrován do závodu,
+     * "registration_disabled" - registrace do závodu je zablokována, "ok" - registrace proběhla v pořádku,
+     * "values" - špatně zadané hodnoty z formuláře
+     */
     @RequestMapping(value = "/race/{id}/addSoloContestant", method = RequestMethod.POST)
     public @ResponseBody String addSoloContestant(HttpServletRequest r, @Valid @ModelAttribute SoloRegForm soloRegForm,
                                           BindingResult bindingResult, @PathVariable("id") int race_id) {
@@ -139,18 +154,22 @@ public class RaceRegistrationController {
         return "ok";
     }
 
+    /**
+     * Registrace týmů uživatelem do závodu.
+     * @param r
+     * @param teamRegForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, registered_already - uživatel už registrován do závodu,
+     * "registration_disabled" - registrace do závodu je zablokována, "ok" - registrace proběhla v pořádku,
+     * "values" - špatně zadané hodnoty z formuláře, "wrong_team_name" - špatně velikost názvu týmu
+     */
     @RequestMapping(value = "/race/{id}/teamRegistration", method = RequestMethod.POST)
     public @ResponseBody String teamRegistration(HttpServletRequest r, @ModelAttribute("teamRegForm") TeamRegForm teamRegForm,
                                          BindingResult bindingResult, @PathVariable("id") int race_id) {
 
-        ModelAndView model = new ModelAndView();
-        model.setViewName("race/race_reg_result");
-
         Race race = raceService.getRaceById(race_id);
         User user = userService.getLoginUser();
-
-        model.addObject("race", race);
-        model.addObject("user", user);
 
         if (bindingResult.hasErrors()) {
            return "something_went_wrong";
@@ -163,13 +182,11 @@ public class RaceRegistrationController {
             return "something_went_wrong";
         }
 
-        if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race_id,user.getId())){
+        if(race.getUser().getId() != user.getId() && !raceCooperationService.isUserRaceCooperator(race.getId(),user.getId())){
             if (contestantService.getListByUserAndRaceId(user.getId(), race.getId()).size() != 0) {
                 return "registered_already";
             }
             if(!race.isRegistration()){
-                model.addObject("invalid", true);
-                model.addObject("result", "Registration disabled.");
                 return "registration_disabled";
             }
         }
@@ -243,8 +260,6 @@ public class RaceRegistrationController {
                     return "wrong_team_name";
                 }
                 if(teamService.getByRaceIdTeamName(race_id,team.getName()) != null){
-                    model.addObject("invalid", true);
-                    model.addObject("result", "Team with this name already exists.");
                     return "team_exists";
                 }
             }
@@ -268,6 +283,11 @@ public class RaceRegistrationController {
         return "ok";
     }
 
+    /**
+     * Validace zadaných hodnot závodníků z registračního formuláře včetně escapovaní hodnot.
+     * @param c list závodníků
+     * @return null - chyba, list závodníků - v pořádku
+     */
     private List<Contestant> validContestantList(List<Contestant> c) {
 
         for (int i = 0; i < c.size(); i++) {
@@ -297,6 +317,13 @@ public class RaceRegistrationController {
 
     }
 
+    /**
+     * Ověření parametrů požadavků na registraci závodníků z formuláře.
+     * @param request
+     * @param listSize velikost listu závodníků
+     * @param category true - kontrola kategorie, false - nekontrolovat
+     * @return false - chyba, true - v pořádku
+     */
     private boolean validConListParameters(HttpServletRequest request, int listSize, boolean category) {
         for (int i = 0; i < listSize; i++) {
             if (!request.getParameterMap().containsKey("contestants[" + i + "].firstname")) {
@@ -320,6 +347,13 @@ public class RaceRegistrationController {
         return true;
     }
 
+    /**
+     * Přiřazení závodnických podkategorií závodníkům podle ID podkategorie získané z formuláře.
+     * @param c list závodníků
+     * @param conSub list ID podkategorií odpovídající indexem závodníkům
+     * @param category_id
+     * @return null - chyba (kategorie neexistuje), list závodníků - v pořádku
+     */
     private List<Contestant> setCategoriesToConList(List<Contestant> c, List<Integer> conSub, int category_id) {
         List<ContestantSubcategory> list;
         list = contestantSubcategoryService.getListByCategoryId(category_id);
@@ -335,6 +369,12 @@ public class RaceRegistrationController {
         return c;
     }
 
+    /**
+     * Kontrola závodníkovo podkategorie, jestli je v listu závodnických podkategorií.
+     * @param l list podkategorií
+     * @param f podkategorie
+     * @return true - v pořádku, false - není v listu
+     */
     private boolean isConSubCategoryInList(List<ContestantSubcategory> l, ContestantSubcategory f) {
         for (ContestantSubcategory item : l) {
             if (item.getName().equals(f.getName())) {
@@ -345,6 +385,12 @@ public class RaceRegistrationController {
         return false;
     }
 
+    /**
+     * Vrátí týmovou podkategorii z listu týmových podkategorií podle ID
+     * @param list list podkategorií
+     * @param id id podkategorie
+     * @return null - chyba, podkategorie - v pořádku
+     */
     private TeamSubcategory getTeamCategoryFromList(List<TeamSubcategory> list, int id) {
         for (TeamSubcategory item : list) {
             if (item.getId() == id) {
@@ -354,6 +400,12 @@ public class RaceRegistrationController {
         return null;
     }
 
+    /**
+     * Vrátí podkategorii z listu závodnických podkategorií podle ID podkategorie
+     * @param list list podkategorií
+     * @param id ID podkategorie
+     * @return null - chyba, podkategorie - v pořádku
+     */
     private ContestantSubcategory getConCategoryFromList(List<ContestantSubcategory> list, int id) {
         for (ContestantSubcategory item : list) {
             if (item.getId() == id) {
@@ -363,6 +415,12 @@ public class RaceRegistrationController {
         return null;
     }
 
+    /**
+     * Přiřazení hodnoty zaplatil pro závodníky, kde bylo zaškrtnuto, že zaplatil.
+     * @param r request
+     * @param c list závodníků
+     * @return list zívodníků
+     */
     private List<Contestant> setPaidAttributeToConList(HttpServletRequest r, List<Contestant> c) {
         for (int i = 0; i < c.size(); i++) {
             if (r.getParameterMap().containsKey("contestants[" + i + "].paid")) {
@@ -372,6 +430,14 @@ public class RaceRegistrationController {
         return c;
     }
 
+    /**
+     * Pro registraci závodníka bez týmu správcem závodu. Jen pro velikost týmu větší než jedna.
+     * @param request
+     * @param adminSoloRegForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "fail" - obecná chyba, "invalid" - špatná data, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/adminSoloRegistration", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -430,6 +496,12 @@ public class RaceRegistrationController {
         return "ok";
     }
 
+    /**
+     * Ověření parametrů požadavku při registraci závodníka bez týmu správcem závodu. Jen pro tým o velikost větší než jedna.
+     * @param r
+     * @param contestantCategory true - kontrola podkategorie, false - nekontrolovat
+     * @return false - chyba, true - v pořádku
+     */
     public boolean validAdminSoloRequestParameters(HttpServletRequest r, boolean contestantCategory) {
         if (!r.getParameterMap().containsKey("contestant.firstname")) {
             return false;
@@ -451,6 +523,11 @@ public class RaceRegistrationController {
         return true;
     }
 
+    /**
+     * Validace dat získaných při registraci závodníka bez týmu.
+     * @param contestant závodník
+     * @return false - chyba, true - v pořádku
+     */
     public boolean validAdminSoloData(Contestant contestant) {
         if (contestant.getLastname().length() > 32 || contestant.getLastname().length() < 3) {
             return false;
@@ -471,6 +548,15 @@ public class RaceRegistrationController {
         return true;
     }
 
+    /**
+     * Registrace týmu správcem závodu.
+     * @param request
+     * @param adminTeamRegForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "fail" - obecná chyba, "invalid" - špatná data, "team_exists" - tým s tímto jménem už existuje,
+     * "team_name" - chyba velikosti názvu týmu, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/adminTeamRegistration", method = RequestMethod.POST)
     public
     @ResponseBody

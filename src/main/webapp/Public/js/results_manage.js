@@ -1,3 +1,8 @@
+/**
+ * Připravení modálního okna pro zadání času dokončení závodu u týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setModalForFinishTime(raceId, teamId) {
     $('#finishTimeModalInput').val($.trim($('#finishTime' + teamId).text()));
     $('#finishTimeModalHidden').val($.trim($('#finishTime' + teamId).text()));
@@ -8,6 +13,11 @@ function setModalForFinishTime(raceId, teamId) {
     }, 100);
 }
 
+/**
+ * Připravení modálního okna pro zadání bodů týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setPointsToModal(raceId, teamId) {
     $('#pointsModalInput').val($.trim($('#points' + teamId).text()));
     $('#bonusModalInput').val($.trim($('#bonus' + teamId).text()));
@@ -20,6 +30,11 @@ function setPointsToModal(raceId, teamId) {
     }, 100);
 }
 
+/**
+ * Připravení modálního okna pro zadání startovního času u týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setStartTimeToModal(raceId, teamId) {
     $('#startTimeModalInput').val($.trim($('#startTime' + teamId).text()));
     $('#startTimeModalHidden').val($.trim($('#startTime' + teamId).text()));
@@ -31,6 +46,11 @@ function setStartTimeToModal(raceId, teamId) {
     }, 100);
 }
 
+/**
+ * Ajax pro přiřazení bodů k týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setPoints(raceId, teamId) {
 
     var token = $("meta[name='_csrf']").attr("content");
@@ -52,7 +72,6 @@ function setPoints(raceId, teamId) {
         data: data,
         dataType: "html",
         success: function (response) {
-            console.log("now");
             $('#pointsModal').modal('hide');
             if (response.localeCompare("ok") == 0) {
                 var table = $('#myTable').DataTable();
@@ -84,13 +103,20 @@ function setPoints(raceId, teamId) {
 
 }
 
+/**
+ * Ajax pro přiřazeního času týmu z globalního okna pro zadání startovního času.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setGlobalStartTime(raceId, teamId) {
 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {dateTime: $("#startTimeModalHidden").val(), teamId: teamId,
-                newDateTime: $("#startGlobalTime").val()};
+    var data = {
+        dateTime: $("#startTimeModalHidden").val(), teamId: teamId,
+        newDateTime: $("#startGlobalTime").val()
+    };
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -133,13 +159,20 @@ function setGlobalStartTime(raceId, teamId) {
 
 }
 
+/**
+ * Ajax pro přiřazení startovního času týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setStartTime(raceId, teamId) {
 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {newDateTime: $("#startTimeModalInput").val(), teamId: teamId,
-                dateTime: $("#startTimeModalHidden").val()};
+    var data = {
+        newDateTime: $("#startTimeModalInput").val(), teamId: teamId,
+        dateTime: $("#startTimeModalHidden").val()
+    };
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -182,6 +215,10 @@ function setStartTime(raceId, teamId) {
 
 }
 
+/**
+ * Ajax pro přiřazení startovního času všem týmům podle kategorie
+ * @param raceId ID závodu
+ */
 function setStartTimeToCategory(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -229,6 +266,10 @@ function setStartTimeToCategory(raceId) {
     });
 }
 
+/**
+ * Ajax pro přiřazení globálního startovního času všem týmům.
+ * @param raceId ID závodu
+ */
 function setStartTimeForAll(raceId) {
 
     var token = $("meta[name='_csrf']").attr("content");
@@ -277,6 +318,10 @@ function setStartTimeForAll(raceId) {
 
 }
 
+/**
+ * Ajax pro přiřazení startovního času dalším 10 týmům bez času.
+ * @param raceId ID závodu
+ */
 function setStartTimeNextTen(raceId) {
 
     var token = $("meta[name='_csrf']").attr("content");
@@ -326,6 +371,11 @@ function setStartTimeNextTen(raceId) {
 
 }
 
+/**
+ * Ajax pro přiřazení týmu aktuální čas jako čas dokončení.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function teamFinished(raceId, teamId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -370,14 +420,20 @@ function teamFinished(raceId, teamId) {
 
 }
 
+/**
+ * Ajax pro přiřazeního času dokončení týmu.
+ * @param raceId ID závodu
+ * @param teamId ID týmu
+ */
 function setFinishTime(raceId, teamId) {
 
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
 
-    var data = {newDateTime: $("#finishTimeModalInput").val(), teamId: teamId,
-                dateTime:$("#finishTimeModalHidden").val()
-                };
+    var data = {
+        newDateTime: $("#finishTimeModalInput").val(), teamId: teamId,
+        dateTime: $("#finishTimeModalHidden").val()
+    };
 
     $(document).ajaxSend(function (e, xhr, options) {
         xhr.setRequestHeader(header, token);
@@ -419,6 +475,10 @@ function setFinishTime(raceId, teamId) {
     });
 }
 
+/**
+ * Ajax pro přiřazení času pro dokončení závodu (v minutách) podle podkategorie (týmové).
+ * @param raceId ID závodu
+ */
 function setDeadlineToCategory(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -468,6 +528,10 @@ function setDeadlineToCategory(raceId) {
     });
 }
 
+/**
+ * Ajax pro přiřazení času na dokončení závodu pro všechny týmy.
+ * @param raceId ID závodu
+ */
 function setDeadlineForAll(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -513,6 +577,10 @@ function setDeadlineForAll(raceId) {
     });
 }
 
+/**
+ * Ajax pro obnovení dat v tabulce
+ * @param raceId ID závodu
+ */
 function reloadTable(raceId) {
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -524,23 +592,103 @@ function reloadTable(raceId) {
         url: BASE_URL + "/race/" + raceId + "/results/refreshTable",
         dataType: "json",
         success: function (response) {
-            var table = $('#myTable').DataTable();
+            var table = $('#myTable').DataTable().draw();
             if (response.length != 0) {
                 //Kontrola řádků - případné přidání řádku nakonec
-                $.each(response, function (k, v) {
-                    if (!loopTableRows(v)) {
-                        addRow(v);
+                //$.each(response, function (k, v) {
+                //    if (!loopTableRows(v, k)) {
+                //        addRow(v);
+                //    }
+                //});
+                //var numberOfRows = table.data().length;
+                ////Odebrání smazaných týmů
+                //for (var i = 0; i < numberOfRows; i++) {
+                //    var row = table.row(i).data();
+                //    if (!isRowExists(row, response)) {
+                //        table.row(i).remove().draw();
+                //        numberOfRows--;
+                //        i--;
+                //    }
+                //}
+                var countOfItems = 0;
+                var numberOfRows = table.data().length;
+                $.each(response, function (k, team) {
+                    countOfItems++;
+                    if (k < numberOfRows) {
+                        var notActual = false;
+                        var row = table.row(k).data();
+                        if (row[0].toString().localeCompare(team.id) == 0) {
+                            if (row[1].localeCompare(team.name) != 0) {
+                                row[1] = team.name;
+                                notActual = true;
+                            }
+                            if (row[2].localeCompare(team.category.name) != 0) {
+                                row[2] = team.category.name;
+                                notActual = true;
+                            }
+                            if (team.points.toString().localeCompare(row[3]) != 0) {
+                                row[3] = team.points;
+                                notActual = true;
+                            }
+                            if (team.bonus.toString().localeCompare(row[4]) != 0) {
+                                row[4] = team.bonus;
+                                notActual = true;
+                            }
+                            if (team.startTime == null) {
+                                if (row[5].localeCompare("") != 0) {
+                                    row[5] = "";
+                                    notActual = true;
+                                }
+                            }
+                            else {
+                                var startTime = formatDateTime(team.startTime.millis);
+                                if (row[5].localeCompare(startTime) != 0) {
+                                    row[5] = startTime;
+                                    notActual = true;
+                                }
+                            }
+                            if (team.finishTime == null) {
+                                if (row[6].localeCompare("") != 0) {
+                                    row[6] = "";
+                                    notActual = true;
+                                }
+                            }
+                            else {
+                                var finishTime = formatDateTime(team.finishTime.millis);
+                                if (row[6].localeCompare(finishTime) != 0) {
+                                    row[6] = finishTime;
+                                    notActual = true;
+                                }
+                            }
+                            if (team.deadlineTime == null) {
+                                if (row[7].localeCompare("") != 0) {
+                                    row[7] = "";
+                                    notActual = true;
+                                }
+                            }
+                            else {
+                                if (team.deadlineTime.toString().localeCompare(row[7]) != 0) {
+                                    row[7] = team.deadlineTime;
+                                    notActual = true;
+                                }
+                            }
+                            if (notActual == true) {
+                                table.row(k).data(row).draw();
+                            }
+                        }
+                        else {
+                            table.row(k).remove().draw();
+                            numberOfRows--;
+                        }
+                    }
+                    else {
+                        addRow(team);
                     }
                 });
-
-                var numberOfRows = table.data().length;
-                //Odebrání smazaných týmů
-                for (var i = 0; i < numberOfRows; i++) {
-                    var row = table.row(i).data();
-                    if (!isRowExists(row, response)) {
+                if(numberOfRows > countOfItems){
+                    for (var i = countOfItems; i <= numberOfRows; i++){
                         table.row(i).remove().draw();
                         numberOfRows--;
-                        i--;
                     }
                 }
             }
@@ -551,45 +699,11 @@ function reloadTable(raceId) {
     });
 }
 
-function isRowExists(row, actualTable) {
-    for (var i = 0; i < actualTable.length; i++) {
-        if (row[0] == actualTable[i].id) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function loopTableRows(team) {
-    var table = $('#myTable').DataTable();
-    var numberOfRows = table.data().length;
-    for (var i = 0; i < numberOfRows; i++) {
-        var row = table.row(i).data();
-        if (row[0] == team.id) {
-            row[1] = team.name;
-            row[2] = team.category.name;
-            row[3] = team.points;
-            row[4] = team.bonus;
-            if (team.startTime != null) {
-                row[5] = formatDateTime(team.startTime.millis);
-            }
-            else {
-                row[5] = "";
-            }
-            if (team.finishTime != null) {
-                row[6] = formatDateTime(team.finishTime.millis);
-            }
-            else {
-                row[6] = "";
-            }
-            row[7] = team.deadlineTime;
-            table.row(i).data(row).draw();
-            return true;
-        }
-    }
-    return false;
-}
-
+/**
+ * Pro formátování data do potřebného formátu pro zobrazení v tabulce.
+ * @param millis čas v milisekundách
+ * @returns {string} naformátovaný čas v podobě stringu
+ */
 function formatDateTime(millis) {
     var starttime = new Date(new Date(millis));
     var isotime = new Date((new Date(starttime)).toISOString());
@@ -597,6 +711,10 @@ function formatDateTime(millis) {
     return fixedtime.toISOString().slice(0, 19).replace('T', ' ');
 }
 
+/**
+ * Pro přidání nového týmu do tabulky.
+ * @param team tým
+ */
 function addRow(team) {
     var table = $('#myTable').DataTable();
     var row = table.row.add([

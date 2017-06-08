@@ -13,6 +13,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Zobrazení šablony osobních údajů uživatele.
+     * @return
+     */
     @RequestMapping(value = {"/userpage"}, method = RequestMethod.GET)
     public ModelAndView userPage() {
         ModelAndView model = new ModelAndView();

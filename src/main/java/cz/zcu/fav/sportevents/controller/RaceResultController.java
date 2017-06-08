@@ -43,6 +43,11 @@ public class RaceResultController {
     @Autowired
     TeamSubcategoryService teamSubcategoryService;
 
+    /**
+     * Zobrazení šablony s výsledky.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/results", method = RequestMethod.GET)
     public ModelAndView results(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -90,6 +95,11 @@ public class RaceResultController {
         }
     }
 
+    /**
+     * Pro výpočet finálních bodů spojového seznamu týmů.
+     * @param teamLinkedList spojový seznam týmů
+     * @return spojový seznam týmů
+     */
     private LinkedList<Team> countFinalPoints(LinkedList<Team> teamLinkedList) {
         for (Team team : teamLinkedList) {
             if (team.getStartTime() != null && team.getFinishTime() != null) {
@@ -105,6 +115,11 @@ public class RaceResultController {
         return teamLinkedList;
     }
 
+    /**
+     * Spočítá výsledný čas všem týmům spojového seznamu týmů.
+     * @param teams spojový seznam týmů
+     * @return spojový seznam týmů
+     */
     private LinkedList<Team> countResultTime(LinkedList<Team> teams) {
         Team team;
         final PeriodFormatter periodFormat =
@@ -141,6 +156,11 @@ public class RaceResultController {
         return teams;
     }
 
+    /**
+     * Vypočítá penalizační body týmů
+     * @param team tým
+     * @return počet penalizačních bodů
+     */
     private int countPenalizationPoints(Team team) {
         int penalizationPoints = 0;
         Duration interval = null;
@@ -167,6 +187,11 @@ public class RaceResultController {
         return penalizationPoints;
     }
 
+    /**
+     * Zobrazení šablony pro zadávání výsledků závodů.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/results/manage", method = RequestMethod.GET)
     public ModelAndView resultsManage(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -205,6 +230,13 @@ public class RaceResultController {
         }
     }
 
+    /**
+     * Přidá za týmové jméno do závody závodníky týmů. V případě, že není týmové jméno definovaná, tak bude týmové
+     * jménovat obsahovat závodníky oddělené čárkou.
+     * @param teams list týmů
+     * @param contestants list závodníků
+     * @return list týmů
+     */
     private List<Team> editTeamName(List<Team> teams, List<Contestant> contestants) {
         String teamName;
         int counter;
@@ -240,6 +272,15 @@ public class RaceResultController {
         return teams;
     }
 
+    /**
+     * Nastavení startovního času pro všechny týmy podle vybrané kategorie.
+     * @param dateTimeCategoryIdForm kontejner s daty
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "not_team" - seznam týmů je prázdný,
+     * "empty_datetime" - zadaná prázdná hodnota, "wrong_format" - špatný formát data,
+     * "start_time_before" - startovní čas není před časem dokončení, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setStartTimeToCategory", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
@@ -305,6 +346,14 @@ public class RaceResultController {
         return response;
     }
 
+    /**
+     * Nastavení dalším 10 (maximálně - může být i méně) týmům startovní čas.
+     * @param dateTime startovní čas
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "not_team" - seznam týmů je prázdný,
+     * "empty_datetime" - zadaná prázdná hodnota, "wrong_format" - špatný formát data,
+     * "start_time_before" - startovní čas není před časem dokončení, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setStartTimeNextTen", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
@@ -367,7 +416,14 @@ public class RaceResultController {
         return response;
     }
 
-
+    /**
+     * Nastavení startovního času všem týmům.
+     * @param dateTime startovní čas
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "not_team" - seznam týmů je prázdný,
+     * "not_null_finishtime" - nelze nastavit prázdná hodnota (někde je vyplněn čas dokončení),
+     * "wrong_format" - špatný formát data, "start_time_before" - startovní čas není před časem dokončení, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setStartTimeAll", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
@@ -417,6 +473,15 @@ public class RaceResultController {
         return "ok";
     }
 
+    /**
+     * Nastavení startovního času konkrétnímu týmu.
+     * @param dateTimeTeamForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "team" - tým neexistuje, "collision" - kolize dat,
+     * "cant_be_empty" - finální čas je vyplněn (nemůže být prázdný), "wrong_format" - špatný formát data,
+     * "start_time_before" - startovní čas není před časem dokončení, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setStartTime", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -476,6 +541,13 @@ public class RaceResultController {
         return "ok";
     }
 
+    /**
+     * Přiřadí týmu jako čas dokončené aktuální čas a ten vrátí zpět pro potřeby nastavení do tabulky DataTables.
+     * @param dateTimeTeamForm kontejner s daty
+     * @param bindingResult
+     * @param race_id
+     * @return list řetězců - na pozici nula stav, na pozici dva když to bude v pořádku čas dokončení
+     */
     @RequestMapping(value = "/race/{id}/results/finished", method = RequestMethod.POST, produces = "application/json")
     public
     @ResponseBody
@@ -538,6 +610,16 @@ public class RaceResultController {
         return response;
     }
 
+    /**
+     * Nastavení času dokončení ručně.
+     * @param dateTimeTeamForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "team" - tým neexistuje, "collision" - kolize dat,
+     * "cant_be_empty" - finální čas je vyplněn (nemůže být prázdný), "wrong_format" - špatný formát data,
+     * "start_time_before" - startovní čas není před časem dokončení, "ok" - v pořádku,
+     * "start_time_missing" - nelze zadat finální čas když není zadán čas startu
+     */
     @RequestMapping(value = "/race/{id}/results/setFinishTime", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -602,6 +684,14 @@ public class RaceResultController {
         return "ok";
     }
 
+    /**
+     * Nastavení bodů a bonusových bodů týmu.
+     * @param pointsForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "not_number" - není číslo, "collision" - kolize dat,
+     * "team" - tým neexistuje, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setPoints", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -646,6 +736,11 @@ public class RaceResultController {
         return "ok";
     }
 
+    /**
+     * Kontrola hodnota kontejneru, jestli je nějaké null.
+     * @param pointsForm kontejner s daty z formuláře
+     * @return true - nějaké je null, false - žádná není null
+     */
     private boolean hasUpdatePointsFormNullVar(PointsForm pointsForm){
         if(pointsForm.getTeamId() == null){
             return true;
@@ -665,6 +760,15 @@ public class RaceResultController {
         return false;
     }
 
+    /**
+     * Nastavení času pro dokončení závodu v minutách podle týmové podkategorie.
+     * @param dateTimeCategoryIdForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "number_format" - není číslo, "something_went_wrong" - obecná chyba,
+     * "empty_time" - zadaná prázdná hodnota, "negative_number" - záparné číslo,
+     * "not_team" - prázdný list týmů, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setDeadlineToCategory", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -720,6 +824,13 @@ public class RaceResultController {
         return response;
     }
 
+    /**
+     * Nastavení času pro dokončení závodu v minutách pro všechny týmy.
+     * @param deadline čas v minutách pro dokončení závodu
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "empty_time" - prázdná hodnota, "number_format" - není číslo,
+     * "negative_format" - je záporné číslo, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/results/setDeadlineForAll", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -756,6 +867,11 @@ public class RaceResultController {
         return "ok";
     }
 
+    /**
+     * Data pro refreshování tabulky DataTables.
+     * @param race_id
+     * @return list týmů
+     */
     @RequestMapping(value = "/race/{id}/results/refreshTable", method = RequestMethod.POST)
     public
     @ResponseBody

@@ -1,3 +1,7 @@
+/**
+ * Ajax pro přidání uživatele do správců závodu.
+ * @param race_id ID závodu
+ */
 function addCooperator(race_id) {
     var form = $("#addCooperatorForm").serialize();
     var tmp;
@@ -38,6 +42,11 @@ function addCooperator(race_id) {
     });
 }
 
+/**
+ * Ajax pro smazání správce závodu.
+ * @param race_id ID závodu
+ * @param login uživatelské jméno uživatele
+ */
 function deleteCooperator(race_id, login) {
     //nutnost pro poslání CSRF
     var token = $("meta[name='_csrf']").attr("content");

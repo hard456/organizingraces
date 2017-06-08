@@ -51,6 +51,11 @@ public class TeamController {
     @Autowired
     ContestantSubcategoryService contestantSubcategoryService;
 
+    /**
+     * Zobrazení šablony seznamu týmů závodů
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/teams", method = RequestMethod.GET)
     public ModelAndView teams(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -85,6 +90,11 @@ public class TeamController {
         }
     }
 
+    /**
+     * Vytvoři list členů týmů odpovidající pozici podle listu týmů.
+     * @param teams list týmů
+     * @return list členů týmů
+     */
     private List<String> createListOfTeamMembers(List<Team> teams) {
         List<Contestant> contestants = contestantService.getContestantsByRaceId(teams.get(0).getRace().getId());
         List<String> listOfMembers = new ArrayList<>();
@@ -109,6 +119,14 @@ public class TeamController {
         return listOfMembers;
     }
 
+    /**
+     * Pro smazání týmu.
+     * @param r request
+     * @param deleteTeamForm kontejner s daty z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return -1 - obecná chyba, ID týmu - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/teams/deleteTeam", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -148,6 +166,12 @@ public class TeamController {
 
     }
 
+    /**
+     * Vyexportuje seznam týmů do excelu pro velikost týmu větší než jedna.
+     * @param race_id
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/exportTeams", method = RequestMethod.POST)
     public String exportTeams(@PathVariable("id") int race_id, HttpServletResponse response) {
 
@@ -328,6 +352,12 @@ public class TeamController {
         return "";
     }
 
+    /**
+     * Vyexpotuje seznam závodníků do Excelu pro velikost týmu rovno jedna.
+     * @param race_id
+     * @param response
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/exportContestants", method = RequestMethod.POST)
     public String exportContestants(@PathVariable("id") int race_id, HttpServletResponse response) {
 
@@ -441,6 +471,15 @@ public class TeamController {
         return "";
     }
 
+    /**
+     * Importování závodník pro velikost týmu rovno jedna.
+     * @param request
+     * @param file soubor se závodníky
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "empty" - file neexistuje, "not xlsx format" - špatná přípona souboru,
+     * "captions" - špatné nadpisy, "ok" - v pořádku, "Contestants sheet is not exists" - sheet neexistuje,
+     * další návratovou hodnotou je typ chyby a řádek
+     */
     @RequestMapping(value = "/race/{id}/importOnePersonTeam", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -649,6 +688,15 @@ public class TeamController {
         return "ok";
     }
 
+    /**
+     * Importování týmu o definované velikosti týmu větší než jedna.
+     * @param request
+     * @param file soubor
+     * @param race_id
+     * @return "something went wrong" - obecná chyba, "not xlsx format" - špatný formát, "empty" - file neexistuje,
+     * "Teams sheet is not exists" - sheet neexistuje, "captions" - špatné nadpisy, "ok" - v pořádku,
+     * další návratovou hodnotou je typ chyby a řádek
+     */
     @RequestMapping(value = "/race/{id}/importTeams", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -880,6 +928,12 @@ public class TeamController {
         return "ok";
     }
 
+    /**
+     * Validace dat získaných z importu z XLSX souboru. Jen pro definovou velikost týmu větší než jedna.
+     * @param teamsImport kontejner získaných dat z XLSX souboru
+     * @param race závod
+     * @return "" - v pořádku, jinak typ chyby a řádka
+     */
     private String validationTeamImportData(List<TeamImportExcel> teamsImport, Race race) {
         String phoneRegEx = "^(\\+420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$";
         List<TeamSubcategory> teamCategories = null;
@@ -929,6 +983,12 @@ public class TeamController {
         return "";
     }
 
+    /**
+     * Kontrola existence týmové podkategorie v list týmových podkategorií
+     * @param categories list podkategorií
+     * @param teamCategory podkategorie
+     * @return true - podkategorie je v seznamu, false - není v seznamu
+     */
     private boolean validTeamCategory(List<TeamSubcategory> categories, String teamCategory) {
         for (TeamSubcategory category : categories) {
             if (category.getName().equals(teamCategory)) {
@@ -938,6 +998,12 @@ public class TeamController {
         return false;
     }
 
+    /**
+     * Kontrola existence závodnické podkategorie v list závodnických podkategorií.
+     * @param categories list podkategorií
+     * @param conCategory podkategorie
+     * @return true - podkategorie v listu existuje, false - není v listu
+     */
     private boolean validConCategory(List<ContestantSubcategory> categories, String conCategory) {
         for (ContestantSubcategory category : categories) {
             if (category.getName().equals(conCategory)) {
@@ -947,6 +1013,11 @@ public class TeamController {
         return false;
     }
 
+    /**
+     * Generování nadpisu pro exportu XLSX souboru pro definovou velikost týmu větší než jedna.
+     * @param teamSize definovaná velikost týmů
+     * @return list nadpisů
+     */
     private List<String> generateTeamCaptionList(int teamSize) {
         List<String> captions = new ArrayList<>();
         captions.add("SOLO");
@@ -963,6 +1034,10 @@ public class TeamController {
         return captions;
     }
 
+    /**
+     * Generování nadpisů pro exportu XLSX souboru pro velikost týmu rovno jedna.
+     * @return list nadpisů
+     */
     private List<String> generateContestantCaptionList() {
         List<String> captions = new ArrayList<>();
         captions.add("FIRSTNAME");
@@ -975,6 +1050,12 @@ public class TeamController {
         return captions;
     }
 
+    /**
+     * Validace nadpisů v XLSX souboru.
+     * @param captions list nadpisů
+     * @param row řádek z XLSX souboru
+     * @return "" - v pořádku, jinak chyba s indexem sloupce
+     */
     private String validCaptions(List<String> captions, XSSFRow row) {
         Iterator<Cell> cells = row.cellIterator();
         XSSFCell cell;
@@ -991,6 +1072,12 @@ public class TeamController {
         return "";
     }
 
+    /**
+     * Kontrola, jestli je řádek prázdný.
+     * @param row řádek z XLSX souboru
+     * @param rowSize počet sloupců
+     * @return true - prázdný řádek, false - není prázdný
+     */
     private boolean isRowEmpty(XSSFRow row, int rowSize) {
         Iterator<Cell> cells = row.cellIterator();
         XSSFCell cell;
@@ -1005,6 +1092,15 @@ public class TeamController {
         return true;
     }
 
+    /**
+     * Pro úpravu jména týmu a týmové podkategorie.
+     * @param r request
+     * @param updateTeamForm kontejner dat z formuláře
+     * @param bindingResult
+     * @param race_id
+     * @return "something_went_wrong" - obecná chyba, "team_exists" - tým s tímto jménem už existuje,
+     * "team_name" - špatná velikost názvu týmu, "ok" - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/teams/updateTeam", method = RequestMethod.POST)
     public
     @ResponseBody

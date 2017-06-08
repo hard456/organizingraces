@@ -3,6 +3,10 @@ var counter_team = 0;
 var div_con = "con";
 var div_team = "team";
 
+/**
+ * Pro přidávání další podkategorií do formuláře pro registraci závodu
+ * @param counter_type typ podkategorie, con - podkategorie pro závodníky, team - podkategorie pro týmy
+ */
 function addCategory(counter_type) {
     if (counter_type.toString() == "con") {
         if (counter_con < 18) {
@@ -25,6 +29,10 @@ function addCategory(counter_type) {
 
 }
 
+/**
+ * Pro odebrání podkategorií z formuláře pro registraci závodu
+ * @param counter_type typ podkategorie, con - podkategorie pro závodníky, team - podkategorie pro týmy
+ */
 function removeCategory(counter_type) {
     if (counter_type.toString() == "con") {
         if (counter_con > 0) {
@@ -43,6 +51,9 @@ function removeCategory(counter_type) {
 
 }
 
+/**
+ * Ajax pro vytvoření závodu
+ */
 function createRace() {
 
     var form = $("#createEventForm").serialize();

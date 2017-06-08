@@ -38,6 +38,11 @@ public class ContestantController {
     @Autowired
     TeamService teamService;
 
+    /**
+     * Zobrazení šablony seznamu všechny závodníků daného závodu (jen pro velikost týmu větší než jedna).
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/contestants/full_list", method = RequestMethod.GET)
     public ModelAndView contestants_list(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -70,7 +75,11 @@ public class ContestantController {
         }
     }
 
-
+    /**
+     * Zobrazení šablony se závodníky pro velikost týmu jedna.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/contestants", method = RequestMethod.GET)
     public ModelAndView showOnePersonTeam(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -103,6 +112,14 @@ public class ContestantController {
         }
     }
 
+    /**
+     * Změna hodnoty Paid u závodníka.
+     * @param r
+     * @param contestantId ID závodníka
+     * @param bindingResult
+     * @param race_id
+     * @return 0 byla nastavena hodnota false, 1 byla nastavena hodnota true, -1 chyba
+     */
     @RequestMapping(value = "/race/{id}/contestants/changePaidValue", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -144,6 +161,14 @@ public class ContestantController {
 
     }
 
+    /**
+     * Pro úpravu hodnota u závodníka
+     * @param r
+     * @param updateContestantForm Kontejner s datyy
+     * @param bindingResult
+     * @param race_id
+     * @return "ok" - proběhlo, "something_went_wrong" - obecná chyba, "data" - chyba základních údajů, "phone" - chyba telefon
+     */
     @RequestMapping(value = "/race/{id}/contestants/updateContestant", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -232,6 +257,11 @@ public class ContestantController {
         return "ok";
     }
 
+    /**
+     * Pro validaci dat závodníka.
+     * @param contestant
+     * @return
+     */
     private boolean validContestantData(Contestant contestant) {
         if(contestant.getFirstname().length() > 32 || contestant.getFirstname().length() < 3){
             return false;
@@ -250,6 +280,12 @@ public class ContestantController {
         return true;
     }
 
+    /**
+     * Validace existence parametru požadavku při úpravě dat závodníka
+     * @param r request
+     * @param conCategory true pro validaci existence kategorie závodníka
+     * @return false chyba, true v pořádku
+     */
     private boolean validUpdateContestantParameters(HttpServletRequest r, boolean conCategory) {
         if(!r.getParameterMap().containsKey("contestant.firstname")){
             return false;

@@ -16,6 +16,10 @@ public class EvaluatedRacesController {
     @Autowired
     RaceService raceService;
 
+    /**
+     * Zobrazí šablony vyhodnocených závodů.
+     * @return
+     */
     @RequestMapping(value = "/evaluated_races", method = RequestMethod.GET)
     public ModelAndView evaluatedRaces() {
         ModelAndView model = new ModelAndView();

@@ -1,5 +1,9 @@
 var list = [];
 
+/**
+ * Pro přidání závodníka do listu pro vytvoření týmu
+ * @param id ID závodníka
+ */
 function addToTeamList(id){
     $("#B"+id).css("background-color","#d9534f");
     $("#B"+id).attr("value","-");
@@ -7,6 +11,10 @@ function addToTeamList(id){
     list.push(id);
 }
 
+/**
+ * Pro odebrání závodníka z listu pro registraci týmu.
+ * @param id ID závodníka
+ */
 function removeFromTeamList(id){
     $("#B"+id).css("background-color","#5cb85c");
     $("#B"+id).attr("value","+");
@@ -21,6 +29,10 @@ function removeFromTeamList(id){
 
 }
 
+/**
+ * Ajax pro vytvoření týmu ze závodníků bez týmu.
+ * @param race_id ID závodu
+ */
 function createTeamAjax(race_id){
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
@@ -64,6 +76,11 @@ function createTeamAjax(race_id){
 
 }
 
+/**
+ * Ajax pro smazání závodníka bez týmu.
+ * @param id ID závodníka
+ * @param race_id ID závodu
+ */
 function deleteSoloContestant(id, race_id){
 
 //nutnost pro poslání CSRF

@@ -37,6 +37,11 @@ public class SoloContestantController {
     @Autowired
     TeamService teamService;
 
+    /**
+     * Zobrazení šablony závodníků bez týmů. Jen pro velikost týmu větší než jedna.
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/contestants/solo", method = RequestMethod.GET)
     public ModelAndView contestants(@PathVariable("id") int race_id) {
         ModelAndView model = new ModelAndView();
@@ -67,6 +72,14 @@ public class SoloContestantController {
         }
     }
 
+    /**
+     * Pro smazání závodníka bez týmu.
+     * @param r
+     * @param contestantId ID závodníka
+     * @param bindingResult
+     * @param race_id
+     * @return -1 - obecná chyba, ID závodníka - v pořádku
+     */
     @RequestMapping(value = "/race/{id}/contestants/deleteSoloContestant", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -108,6 +121,13 @@ public class SoloContestantController {
 
     }
 
+    /**
+     * Vytvoření týmu ze závodníků bez týmu.
+     * @param r rquest
+     * @param createTeamForm kontejner s daty z formuláře
+     * @param race_id
+     * @return
+     */
     @RequestMapping(value = "/race/{id}/createTeam", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -196,6 +216,11 @@ public class SoloContestantController {
         return response;
     }
 
+    /**
+     * Vrátí list závodníků z listu s indentifikačními číslý závodníků
+     * @param ids list ID's závodníků
+     * @return null - chyba, list závodníků - v pořádku
+     */
     private List<Contestant> getContestantsByIds(List<Integer> ids) {
         List<Contestant> contestants = new ArrayList<>();
         for (Integer i : ids) {
@@ -208,6 +233,11 @@ public class SoloContestantController {
         return contestants;
     }
 
+    /**
+     * Validace listu závodníků, jestli už není závodník v jiném týmů.
+     * @param contestants list závodníků
+     * @return
+     */
     private boolean validContestants(List<Contestant> contestants) {
         for (Contestant c : contestants) {
             if (c.getTeam() != null) {
@@ -217,6 +247,11 @@ public class SoloContestantController {
         return true;
     }
 
+    /**
+     * Přiřazení týmu k listu závodníků
+     * @param contestants list závodníků
+     * @param team tým
+     */
     private void assignTeamToContestants(List<Contestant> contestants, Team team) {
         for (Contestant c : contestants) {
             c.setTeam(team);
