@@ -117,8 +117,6 @@
         <property name="url" value="jdbc:mysql://localhost:3306/races?useUnicode=yes&amp;characterEncoding=UTF-8" />
         <property name="username" value="root" />
         <property name="password" value="" />
-        <!--<property name="username" value="Honzik" />-->
-        <!--<property name="password" value="PalecPrincezna" />-->
     </bean>
 
     <bean id="sessionFactory"
